@@ -17,7 +17,7 @@ import {
   getSeasons,
   getShowImages,
   getSingleShow,
-} from '../lib/external-api';
+} from '../services/external-api';
 import InfoTab from '../components/details/InfoTab';
 import EpisodesTab from '../components/details/EpisodesTab';
 

@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,11 +13,7 @@ const RootNavigation = () => {
   const Stack = createStackNavigator();
 
   const screenOptions = {
-    headerShown: true,
-    headerStyle: {
-      backgroundColor: '#360e5c',
-    },
-    headerTintColor: '#fff',
+    headerShown: false,
   };
 
   return (
@@ -29,13 +24,10 @@ const RootNavigation = () => {
       >
         <Stack.Screen
           name="HomeScreen"
-          // component={Home}
           component={Tabs}
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Details" component={Details} />
-        {/* <Stack.Screen name="Profile" component={Profile} /> */}
-        {/* <Stack.Screen name="Search" component={Search} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

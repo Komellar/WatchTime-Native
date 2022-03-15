@@ -1,10 +1,23 @@
 import 'react-native-gesture-handler';
-import { StyleSheet, View, Platform, StatusBar } from 'react-native';
+import { StyleSheet, View, Platform, StatusBar, Text } from 'react-native';
 import RootNavigation, { OnboardNavigation } from './navigation';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { COLORS } from './constants/index';
+import {
+  useFonts,
+  Roboto_400Regular,
+  Roboto_700Bold,
+  Roboto_500Medium,
+} from '@expo-google-fonts/roboto';
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    Roboto_400Regular,
+    Roboto_700Bold,
+    Roboto_500Medium,
+  });
+
   const [isFirstLaunch, setIsFirstLaunch] = useState(null);
 
   useEffect(() => {
@@ -18,27 +31,36 @@ export default function App() {
     });
   }, []);
 
-  if (isFirstLaunch === null) {
-    return null;
-  } else if (isFirstLaunch === true) {
+  if (!fontsLoaded) {
     return (
-      <View style={styles.container}>
-        <OnboardNavigation />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Text>Loading</Text>
       </View>
     );
   } else {
-    return (
-      <View style={styles.container}>
-        <RootNavigation />
-      </View>
-    );
+    if (isFirstLaunch === null) {
+      return null;
+    } else if (isFirstLaunch === true) {
+      return (
+        <View style={styles.container}>
+          <OnboardNavigation />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <RootNavigation />
+        </View>
+      );
+    }
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#555',
+    backgroundColor: COLORS.darkGray,
+    // backgroundColor: COLORS.background,
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });

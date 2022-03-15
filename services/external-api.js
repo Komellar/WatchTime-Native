@@ -79,6 +79,10 @@ export async function getShowImages(requestData) {
     return show.type === 'background';
   });
 
+  const posterImg = loadedImages.filter((show) => {
+    return show.type === 'poster';
+  });
+
   return {
     backgroundImg:
       backgroundImg.length === 0
@@ -86,6 +90,12 @@ export async function getShowImages(requestData) {
             url: imageNotFound,
           }
         : backgroundImg[0],
+    posterImg:
+      posterImg.length === 0
+        ? {
+            url: imageNotFound,
+          }
+        : posterImg[0],
     allImages: loadedImages,
   };
 }

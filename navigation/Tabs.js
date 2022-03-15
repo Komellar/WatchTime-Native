@@ -4,6 +4,7 @@ import Profile from '../screens/Profile';
 import Search from '../screens/Search';
 import About from '../screens/About';
 import { FontAwesome } from '@expo/vector-icons';
+import { COLORS } from '../constants';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +21,7 @@ const Tabs = () => {
           right: 0,
           elevation: 0,
           height: 50,
-          backgroundColor: '#360e5c',
+          backgroundColor: COLORS.background,
           borderTopColor: 'transparent',
         },
       }}
@@ -33,7 +34,7 @@ const Tabs = () => {
             <FontAwesome
               name="home"
               size={30}
-              color={focused ? '#fff' : '#aaa'}
+              color={focused ? COLORS.primary : COLORS.lightGray}
               focused={focused}
             />
           ),
@@ -47,7 +48,7 @@ const Tabs = () => {
             <FontAwesome
               name="search"
               size={30}
-              color={focused ? '#fff' : '#aaa'}
+              color={focused ? COLORS.primary : COLORS.lightGray}
               focused={focused}
             />
           ),
@@ -61,8 +62,7 @@ const Tabs = () => {
             <FontAwesome
               name="globe"
               size={30}
-              color={focused ? '#fff' : '#aaa'}
-              //   focused={focused}
+              color={focused ? COLORS.primary : COLORS.lightGray}
             />
           ),
         }}
@@ -75,7 +75,7 @@ const Tabs = () => {
             <FontAwesome
               name="user"
               size={30}
-              color={focused ? '#fff' : '#aaa'}
+              color={focused ? COLORS.primary : COLORS.lightGray}
               focused={focused}
             />
           ),

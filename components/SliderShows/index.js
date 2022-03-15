@@ -1,19 +1,20 @@
 import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
+import { COLORS, FONTS, SIZES } from '../../constants/theme';
 
 const SliderShows = ({ data, title, navigation }) => {
   return (
     <View
       style={{
-        marginTop: 30,
+        marginTop: SIZES.xxl,
       }}
     >
       <Text
         style={{
-          color: '#fff',
-          fontSize: 24,
-          paddingLeft: 12,
-          paddingBottom: 10,
+          color: COLORS.onDark,
+          paddingLeft: SIZES.l,
+          paddingBottom: SIZES.s,
+          ...FONTS.h3,
         }}
       >
         {title}
@@ -31,22 +32,18 @@ const SliderShows = ({ data, title, navigation }) => {
           >
             <View
               style={{
-                marginHorizontal: 5,
+                marginHorizontal: SIZES.xs,
                 alignItems: 'center',
               }}
             >
               <Image
                 source={{ uri: item.image }}
-                resizeMode="cover"
                 style={{
-                  height: 200,
-                  width: 140,
-                  marginBottom: 5,
+                  height: 225,
+                  width: 160,
+                  resizeMode: 'contain',
                 }}
               />
-              {/* <Text style={{ fontSize: 18, fontWeight: '600', color: '#fff' }}>
-                {item.title}
-              </Text> */}
             </View>
           </TouchableOpacity>
         )}

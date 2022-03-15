@@ -9,9 +9,15 @@ import {
 } from 'react-native';
 import React from 'react';
 import { useFetch } from '../hooks/useFetch';
-import { getAllShows, getSingleShow, getShowImages } from '../lib/external-api';
-import SliderShows from '../components/Onboard/SliderShows';
-import ImageConcert from '../assets/concert.jpg';
+import {
+  getAllShows,
+  getSingleShow,
+  getShowImages,
+} from '../services/external-api';
+import SliderShows from '../components/SliderShows';
+import { COLORS, SIZES, FONTS, homeData } from '../constants';
+import Hero from '../components/home/Hero';
+import Recommended from '../components/home/Recommended';
 
 const Home = ({ navigation }) => {
   const { data: shows, loading, error } = useFetch(getAllShows);
@@ -30,7 +36,7 @@ const Home = ({ navigation }) => {
     error: imagesError,
   } = useFetch(getShowImages, randomId);
 
-  let convertedGenres = loadedShow?.genres.join(' • ');
+  // let convertedGenres = loadedShow?.genres.join(' • ');
 
   const ofTheDayShows = shows?.slice(70, 90);
   let popularShows = shows?.filter((show) => show.popularity > 97);
@@ -45,104 +51,32 @@ const Home = ({ navigation }) => {
         flex: 1,
         width: '100%',
         height: '100%',
-        backgroundColor: '#313131',
+        backgroundColor: COLORS.background,
       }}
     >
       {loading && (
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
-          <Text style={{ fontSize: 30, textAlign: 'center', color: '#ccc' }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              color: COLORS.onDark,
+              ...FONTS.h1,
+            }}
+          >
             Loading data...
           </Text>
         </View>
       )}
       {!loading && shows && !error && (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={true}>
           {/* Hero */}
-          <View
-            style={{
-              width: '100%',
-              height: 300,
-            }}
-          >
-            <ImageBackground
-              source={{ uri: loadedImages?.backgroundImg.url }}
-              style={{ width: '100%', height: '100%' }}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: 'rgba(0,0,0,0.7)',
-                }}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    paddingHorizontal: 20,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 34,
-                      fontWeight: '700',
-                      color: '#fff',
-                      textAlign: 'center',
-                      paddingBottom: 2,
-                      textShadowColor: 'rgb(0, 0, 0)',
-                      textShadowOffset: { width: 0, height: 0 },
-                      textShadowRadius: 30,
-                    }}
-                  >
-                    {loadedShow?.title}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontWeight: '500',
-                      color: '#ccc',
-                      textAlign: 'center',
-                      paddingBottom: 15,
-                      textShadowColor: 'rgb(0, 0, 0)',
-                      textShadowOffset: { width: 0, height: 0 },
-                      textShadowRadius: 20,
-                    }}
-                  >
-                    {convertedGenres}
-                  </Text>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: '#5e1b9e',
-                      paddingHorizontal: 30,
-                      paddingVertical: 9,
-                      borderRadius: 8,
-                    }}
-                    onPress={() =>
-                      navigation.navigate('Details', {
-                        selectedShow: loadedShow,
-                      })
-                    }
-                  >
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: '#fff',
-                        textAlign: 'center',
-                        fontWeight: '700',
-                        letterSpacing: 0.3,
-                      }}
-                    >
-                      SHOW
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ImageBackground>
-          </View>
+          <Hero
+            loadedImages={loadedImages}
+            loadedShow={loadedShow}
+            navigation={navigation}
+          />
 
           {/* Sliders */}
           <SliderShows
@@ -156,8 +90,11 @@ const Home = ({ navigation }) => {
             navigation={navigation}
           />
 
+          {/* Recommended Mandalorian */}
+          <Recommended data={homeData.mandalorian} navigation={navigation} />
+
           {/* The Witcher Trailer */}
-          <View
+          {/* <View
             style={{
               backgroundColor: '#999999',
               width: '100%',
@@ -175,7 +112,7 @@ const Home = ({ navigation }) => {
                 aspectRatio: 16 / 9,
               }}
             />
-          </View>
+          </View> */}
 
           {/* Sliders  */}
           <SliderShows
@@ -189,8 +126,11 @@ const Home = ({ navigation }) => {
             navigation={navigation}
           />
 
+          {/* Recommended Witcher */}
+          <Recommended data={homeData.witcher} navigation={navigation} />
+
           {/* Recommended */}
-          <View
+          {/* <View
             style={{
               backgroundColor: '#352047',
               alignItems: 'center',
@@ -201,7 +141,6 @@ const Home = ({ navigation }) => {
             <Text style={{ color: '#fff', fontSize: 24, paddingBottom: 24 }}>
               Recommended
             </Text>
-            {/* <TouchableOpacity style={{ width: '100%' }}> */}
             <TouchableOpacity
               style={{ marginBottom: 20 }}
               onPress={() =>
@@ -215,7 +154,6 @@ const Home = ({ navigation }) => {
                   uri: 'https://static.tvmaze.com/uploads/images/original_untouched/72/180098.jpg',
                 }}
                 style={{
-                  // width: '80%',
                   width: 300,
                   height: 150,
                   resizeMode: 'cover',
@@ -258,7 +196,6 @@ const Home = ({ navigation }) => {
                   uri: 'https://static.tvmaze.com/uploads/images/original_untouched/219/547788.jpg',
                 }}
                 style={{
-                  // width: '80%',
                   width: 300,
                   height: 150,
                   resizeMode: 'cover',
@@ -289,7 +226,7 @@ const Home = ({ navigation }) => {
                 </View>
               </ImageBackground>
             </TouchableOpacity>
-          </View>
+          </View> */}
 
           {/* Sliders  */}
           <SliderShows

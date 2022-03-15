@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 const EpisodesTab = ({ seasons, show }) => {
   const [pickedSeason, setPickedSeason] = useState(1);
 
-  //   if (seasons) console.log(seasons[0]);
+  // if (seasons) console.log(seasons);
 
   return (
     <View style={{ flex: 1, height: '100%' }}>
@@ -24,7 +24,7 @@ const EpisodesTab = ({ seasons, show }) => {
           >
             <FlatList
               data={seasons}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item[0]?.season}
               horizontal
               showsHorizontalScrollIndicator={false}
               ListHeaderComponent={
