@@ -8,11 +8,10 @@ const Hero = ({ loadedImages, loadedShow, navigation }) => {
   const trimmedDesc = loadedShow?.description
     ?.replace(/<[^>]+>/g, '')
     .substr(0, 100);
+
   const convertedDesc = trimmedDesc
     ?.substr(0, Math.min(trimmedDesc?.length, trimmedDesc?.lastIndexOf(' ')))
     .concat(' ...');
-
-  // if (loadedShow) console.log(loadedShow);
 
   return (
     <View
@@ -82,7 +81,7 @@ const Hero = ({ loadedImages, loadedShow, navigation }) => {
                   textShadowOffset: { width: 0, height: 0 },
                   textShadowRadius: 20,
                   ...FONTS.body4,
-                  lineHeight: 16,
+                  lineHeight: 17,
                 }}
               >
                 {convertedDesc}

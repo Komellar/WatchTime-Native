@@ -5,6 +5,7 @@ export const COLORS = {
   primary: '#5A06AA',
   primaryDark: '#352047',
   primaryLight: '#AF5FFD',
+  primaryLighter: '#D783FF',
 
   secondary: '#007CF9',
   secondaryDark: '#0053E0',
@@ -51,53 +52,53 @@ export const FONTS = {
   h1: {
     fontFamily: 'Roboto_700Bold',
     fontSize: SIZES.h1,
-    lineHeight: 36,
+    lineHeight: 41,
   },
   h2: {
     fontFamily: 'Roboto_700Bold',
     fontSize: SIZES.h2,
-    lineHeight: 36,
+    lineHeight: 35,
   },
   h3: {
     fontFamily: 'Roboto_500Medium',
     fontSize: SIZES.h3,
-    lineHeight: 24,
+    lineHeight: 27,
   },
   h4: {
     fontFamily: 'Roboto_500Medium',
     fontSize: SIZES.h4,
-    lineHeight: 22,
+    lineHeight: 21,
   },
   h5: {
     fontFamily: 'Roboto_700Bold',
     fontSize: SIZES.h5,
-    lineHeight: 22,
+    lineHeight: 19,
   },
 
   body1: {
     fontFamily: 'Roboto_400Regular',
     fontSize: SIZES.body1,
-    lineHeight: 36,
+    lineHeight: 34,
   },
   body2: {
     fontFamily: 'Roboto_400Regular',
     fontSize: SIZES.body2,
-    lineHeight: 30,
+    lineHeight: 24,
   },
   body3: {
     fontFamily: 'Roboto_400Regular',
     fontSize: SIZES.body3,
-    lineHeight: 22,
+    lineHeight: 20,
   },
   body4: {
     fontFamily: 'Roboto_400Regular',
     fontSize: SIZES.body4,
-    lineHeight: 22,
+    lineHeight: 18,
   },
   body5: {
     fontFamily: 'Roboto_400Regular',
     fontSize: SIZES.body5,
-    lineHeight: 22,
+    lineHeight: 16,
   },
 };
 

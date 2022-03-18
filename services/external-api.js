@@ -149,19 +149,17 @@ export async function getCast(requestData) {
     throw new Error(data.error.message || 'Could not get products.');
   }
 
-  const loadedCast = data
-    .map((result) => {
-      return {
-        id: result.person.id,
-        idCharacter: result.character.id,
-        actorName: result.person.name,
-        actorImage: result.person.image?.original ?? imageNotFound,
-        actorBirthday: result.person.birthday,
-        characterName: result.character.name,
-        characterImage: result.character.image?.original ?? imageNotFound,
-      };
-    })
-    .filter((p) => p.actorImage !== '' && p.characterImage !== '');
+  const loadedCast = data.map((result) => {
+    return {
+      id: result.person.id,
+      idCharacter: result.character.id,
+      actorName: result.person.name,
+      actorImage: result.person.image?.original ?? imageNotFound,
+      actorBirthday: result.person.birthday,
+      characterName: result.character.name,
+      characterImage: result.character.image?.original ?? imageNotFound,
+    };
+  });
 
   // const charactersIds = loadedCast.map((character) => {
   //   return character.idCharacter;

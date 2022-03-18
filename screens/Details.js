@@ -59,30 +59,45 @@ const Details = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        {/* Hero */}
-        <HeroDetails
-          loadedImages={loadedImages}
-          loadedSeasons={loadedSeasons}
-          loadedShow={loadedShow}
-        />
+      {(showLoading || seasonsLoading || castLoading || imagesLoading) && (
+        <Text>Loading...</Text>
+      )}
+      {(showError || seasonsError || castError || imagesError) && (
+        <Text>{showError || seasonsError || castError || imagesError}</Text>
+      )}
+      {loadedShow &&
+        loadedSeasons &&
+        loadedImages &&
+        loadedCast &&
+        !showLoading &&
+        !imagesLoading &&
+        !seasonsLoading &&
+        !castLoading && (
+          <ScrollView>
+            {/* Hero */}
+            <HeroDetails
+              loadedImages={loadedImages}
+              loadedSeasons={loadedSeasons}
+              loadedShow={loadedShow}
+            />
 
-        {/* Tabs to navigate between details sections */}
-        <Tabs activeTab={activeTab} tabClickHandler={tabClickHandler} />
+            {/* Tabs to navigate between details sections */}
+            <Tabs activeTab={activeTab} tabClickHandler={tabClickHandler} />
 
-        {/* Tabs content */}
-        {activeTab === 'info' && (
-          <InfoTab
-            loadedShow={loadedShow}
-            loadedSeasons={loadedSeasons}
-            loadedCast={loadedCast}
-          />
+            {/* Tabs content */}
+            {activeTab === 'info' && (
+              <InfoTab
+                loadedShow={loadedShow}
+                loadedSeasons={loadedSeasons}
+                loadedCast={loadedCast}
+              />
+            )}
+            {activeTab === 'episodes' && (
+              <EpisodesTab seasons={loadedSeasons} show={loadedShow} />
+            )}
+            {activeTab === 'gallery' && <GalleryTab />}
+          </ScrollView>
         )}
-        {activeTab === 'episodes' && (
-          <EpisodesTab seasons={loadedSeasons} show={loadedShow} />
-        )}
-        {activeTab === 'gallery' && <GalleryTab />}
-      </ScrollView>
     </View>
   );
 };

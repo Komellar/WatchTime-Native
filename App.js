@@ -43,12 +43,14 @@ export default function App() {
     } else if (isFirstLaunch === true) {
       return (
         <View style={styles.container}>
+          <StatusBar barStyle="light-content" />
           <OnboardNavigation />
         </View>
       );
     } else {
       return (
         <View style={styles.container}>
+          <StatusBar barStyle="light-content" />
           <RootNavigation />
         </View>
       );
@@ -61,6 +63,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.darkGray,
     // backgroundColor: COLORS.background,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    // paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });

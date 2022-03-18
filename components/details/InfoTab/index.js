@@ -3,194 +3,107 @@ import {
   View,
   Text,
   Image,
-  ScrollView,
   FlatList,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import React from 'react';
-// import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState } from 'react';
+import { COLORS, FONTS, SIZES } from '../../../constants';
+import Info from './Info';
+import Genres from './Genres';
+import Characters from './Characters';
+import Actors from './Actors';
 
 const InfoTab = ({ loadedShow, loadedSeasons, loadedCast }) => {
-  const actors = loadedCast?.map((person) => {
-    return {
-      id: person.id,
-      image: person.actorImage,
-      name: person.actorName,
-      played: person.characterName,
-    };
-  });
+  const [storylineIsOpen, setStorylineIsOpen] = useState(false);
 
-  const characters = loadedCast?.map((person) => {
-    return {
-      id: person.idCharacter,
-      image: person.characterImage,
-      name: person.characterName,
-    };
-  });
+  // const actors = loadedCast?.map((person) => {
+  //   return {
+  //     id: person.id,
+  //     image: person.actorImage,
+  //     name: person.actorName,
+  //     played: person.characterName,
+  //   };
+  // });
 
-  let convertedDesc = loadedShow?.description.replace(/<[^>]+>/g, '');
-  let convertedGenres = loadedShow?.genres.join(' • ');
+  // const characters = loadedCast?.map((person) => {
+  //   return {
+  //     id: person.idCharacter,
+  //     image: person.characterImage,
+  //     name: person.characterName,
+  //   };
+  // });
+
+  // const convertedGenres = loadedShow?.genres.join(' • ');
+
+  const desc = loadedShow?.description?.replace(/<[^>]+>/g, '');
+  const trimmedDesc = desc?.substr(0, 230);
+  const convertedDesc = trimmedDesc
+    ?.substr(0, Math.min(trimmedDesc?.length, trimmedDesc?.lastIndexOf(' ')))
+    .concat(' ...');
+
   return (
     <View>
       <View
         style={{
-          paddingHorizontal: 16,
+          paddingHorizontal: SIZES.l,
         }}
       >
         {/* Storyline */}
-        <View style={{ marginVertical: 20 }}>
+        <View style={{ marginTop: SIZES.xl }}>
           <Text
-            style={[
-              styles.text,
-              {
-                fontWeight: '700',
-                fontSize: 22,
-                paddingBottom: 6,
-              },
-            ]}
+            style={{
+              color: COLORS.white,
+              ...FONTS.h2,
+            }}
           >
             Storyline
           </Text>
-          <Text style={styles.text}>{convertedDesc}</Text>
-        </View>
-
-        {/* Show Info  */}
-        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-          <View>
-            <View style={styles.row_item}>
-              <Text style={styles.stats_label}>Premiered:</Text>
-              <Text style={styles.text}>{loadedShow?.premiered}</Text>
-            </View>
-            <View style={styles.row_item}>
-              <Text style={styles.stats_label}>Seasons:</Text>
-              <Text style={styles.text}>{loadedSeasons?.length}</Text>
-            </View>
-            <View style={styles.row_item}>
-              <Text style={styles.stats_label}>Runtime:</Text>
-              <Text style={styles.text}>{loadedShow?.averageRuntime}min</Text>
-            </View>
-            <View style={styles.row_item}>
-              <Text style={styles.stats_label}>Rating:</Text>
-              <Text style={styles.text}>{loadedShow?.rating}</Text>
-            </View>
-            <View style={styles.row_item}>
-              <Text style={styles.stats_label}>Status:</Text>
-              <Text style={styles.text}>{loadedShow?.status}</Text>
-            </View>
-            <View style={styles.row_item}>
-              <Text style={styles.stats_label}>Popularity:</Text>
-              <Text style={styles.text}>{loadedShow?.popularity} / 100</Text>
-            </View>
-            <View style={styles.row_item}>
-              <Text style={styles.stats_label}>Language:</Text>
-              <Text style={styles.text}>{loadedShow?.language}</Text>
-            </View>
-            <View style={styles.row_item}>
-              <Text style={styles.stats_label}>Genres:</Text>
-              <Text style={styles.text}>{convertedGenres}</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Actors */}
-        {/* <View style={{ marginTop: 40 }}>
+          {!storylineIsOpen && (
+            <Text style={{ color: COLORS.white, ...FONTS.body4 }}>
+              {convertedDesc}
+            </Text>
+          )}
+          {storylineIsOpen && (
+            <Text style={{ color: COLORS.white, ...FONTS.body4 }}>{desc}</Text>
+          )}
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setStorylineIsOpen(!storylineIsOpen);
+            }}
+          >
             <Text
-              style={[
-                styles.text,
-                {
-                  fontWeight: '700',
-                  fontSize: 22,
-                  paddingBottom: 8,
-                },
-              ]}
-            >
-              Actors
-            </Text> */}
-        {/* <FlatList
-              data={actors}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <View
-                  style={{
-                    marginHorizontal: 5,
-                    alignItems: 'center',
-                  }}
-                >
-                  <Image
-                    source={{ uri: item.image }}
-                    resizeMode="cover"
-                    style={{
-                      height: 180,
-                      width: 130,
-                      marginBottom: 5,
-                    }}
-                  />
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontWeight: '400',
-                      color: '#fff',
-                      width: 130,
-                    }}
-                  >
-                    {item.name}
-                  </Text>
-                </View>
-              )}
-            /> */}
-        {/* </View> */}
-      </View>
-      {/* Characters */}
-      <View style={{ marginTop: 40 }}>
-        <Text
-          style={[
-            styles.text,
-            {
-              color: '#fff',
-              fontSize: 24,
-              paddingLeft: 12,
-              paddingBottom: 10,
-            },
-          ]}
-        >
-          Charaters from {loadedShow?.title}
-        </Text>
-        <FlatList
-          data={characters}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View
               style={{
-                marginHorizontal: 5,
-                alignItems: 'center',
+                paddingTop: SIZES.s,
+                paddingBottom: SIZES.l,
+                color: COLORS.primaryLight,
+                ...FONTS.h4,
               }}
             >
-              <Image
-                source={{ uri: item.image }}
-                resizeMode="cover"
-                style={{
-                  height: 180,
-                  width: 130,
-                  marginBottom: 5,
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: '400',
-                  color: '#fff',
-                  width: 130,
-                }}
-              >
-                {item.name}
-              </Text>
-            </View>
-          )}
+              {storylineIsOpen ? 'Read less' : 'Read more'}
+            </Text>
+          </TouchableWithoutFeedback>
+          <View
+            style={{ height: 1, width: '100%', backgroundColor: COLORS.gray }}
+          />
+        </View>
+
+        {/* Genres */}
+        <Genres loadedGenres={loadedShow?.genres} />
+
+        {/* Show Info  */}
+        <Info loadedShow={loadedShow ?? {}} />
+        <View
+          style={{ height: 1, width: '100%', backgroundColor: COLORS.gray }}
         />
       </View>
+
+      {/* Characters */}
+      <Characters cast={loadedCast} title={loadedShow?.title} />
+
+      {/* Actors */}
+      <Actors cast={loadedCast} />
+
+      {/* Empty space */}
       <View style={{ height: 50 }}></View>
     </View>
   );
@@ -204,8 +117,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
   },
   text: {
-    color: '#fff',
-    fontSize: 16,
+    // color: '#fff',
+    // fontSize: 16,
   },
   row_item: {
     flexDirection: 'row',

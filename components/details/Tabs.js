@@ -1,18 +1,12 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
+import { COLORS, SIZES } from '../../constants';
 
 const Tabs = ({ activeTab, tabClickHandler }) => {
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 12,
-      }}
-    >
+    <View style={styles.container}>
       <TouchableOpacity
-        style={styles.tab}
+        style={[styles.tab, activeTab === 'info' ? styles.tab_active : '']}
         onPress={() => {
           tabClickHandler('info');
         }}
@@ -20,14 +14,14 @@ const Tabs = ({ activeTab, tabClickHandler }) => {
         <Text
           style={[
             styles.tab_text,
-            activeTab === 'info' ? styles.tab_active : '',
+            activeTab === 'info' ? styles.tab_active_text : '',
           ]}
         >
           Info
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={styles.tab}
+        style={[styles.tab, activeTab === 'episodes' ? styles.tab_active : '']}
         onPress={() => {
           tabClickHandler('episodes');
         }}
@@ -35,14 +29,14 @@ const Tabs = ({ activeTab, tabClickHandler }) => {
         <Text
           style={[
             styles.tab_text,
-            activeTab === 'episodes' ? styles.tab_active : '',
+            activeTab === 'episodes' ? styles.tab_active_text : '',
           ]}
         >
           Episodes
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={styles.tab}
+        style={[styles.tab, activeTab === 'gallery' ? styles.tab_active : '']}
         onPress={() => {
           tabClickHandler('gallery');
         }}
@@ -50,7 +44,7 @@ const Tabs = ({ activeTab, tabClickHandler }) => {
         <Text
           style={[
             styles.tab_text,
-            activeTab === 'gallery' ? styles.tab_active : '',
+            activeTab === 'gallery' ? styles.tab_active_text : '',
           ]}
         >
           Gallery
@@ -62,37 +56,28 @@ const Tabs = ({ activeTab, tabClickHandler }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#333',
-  },
-  text: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  row_item: {
     flexDirection: 'row',
-    paddingVertical: 1,
-  },
-  stats_label: {
-    width: 110,
-    fontSize: 16,
-    color: '#fff',
-    fontWeight: '700',
+    // justifyContent: 'center',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 12,
   },
   tab: {
-    backgroundColor: '#222',
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    marginHorizontal: 3,
-    borderRadius: 23,
+    paddingVertical: SIZES.s,
+    width: '33%',
   },
   tab_text: {
+    textAlign: 'center',
     fontSize: 16,
     fontWeight: '700',
     color: '#ccc',
   },
   tab_active: {
-    color: '#661188',
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.onDark,
+  },
+  tab_active_text: {
+    color: COLORS.primaryLight,
   },
 });
 
