@@ -2,15 +2,7 @@ import { View, Text, FlatList, Image } from 'react-native';
 import React from 'react';
 import { COLORS, FONTS, SIZES } from '../../../constants';
 
-const Characters = ({ cast, title }) => {
-  const characters = cast?.map((person) => {
-    return {
-      id: person.idCharacter,
-      image: person.characterImage,
-      name: person.characterName,
-    };
-  });
-
+const Characters = ({ characters, title }) => {
   return (
     <View style={{ marginTop: SIZES.xl }}>
       <Text
@@ -27,7 +19,7 @@ const Characters = ({ cast, title }) => {
         data={characters}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.idCharacter}
         renderItem={({ item, index }) => (
           <View
             style={{
@@ -36,7 +28,7 @@ const Characters = ({ cast, title }) => {
             }}
           >
             <Image
-              source={{ uri: item.image }}
+              source={{ uri: item.characterImage }}
               resizeMode="cover"
               style={{
                 height: 200,
@@ -53,7 +45,7 @@ const Characters = ({ cast, title }) => {
                 ...FONTS.body4,
               }}
             >
-              {item.name}
+              {item.characterName}
             </Text>
           </View>
         )}

@@ -21,18 +21,18 @@ const Tabs = ({ activeTab, tabClickHandler }) => {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.tab, activeTab === 'episodes' ? styles.tab_active : '']}
+        style={[styles.tab, activeTab === 'seasons' ? styles.tab_active : '']}
         onPress={() => {
-          tabClickHandler('episodes');
+          tabClickHandler('seasons');
         }}
       >
         <Text
           style={[
             styles.tab_text,
-            activeTab === 'episodes' ? styles.tab_active_text : '',
+            activeTab === 'seasons' ? styles.tab_active_text : '',
           ]}
         >
-          Episodes
+          Seasons
         </Text>
       </TouchableOpacity>
       <TouchableOpacity

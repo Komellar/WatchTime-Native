@@ -93,27 +93,6 @@ const Home = ({ navigation }) => {
           {/* Recommended Mandalorian */}
           <Recommended data={homeData.mandalorian} navigation={navigation} />
 
-          {/* The Witcher Trailer */}
-          {/* <View
-            style={{
-              backgroundColor: '#999999',
-              width: '100%',
-              alignItems: 'center',
-              paddingVertical: 40,
-              marginTop: 40,
-            }}
-          >
-            <Image
-              source={require('../assets/concert.jpg')}
-              style={{
-                width: '90%',
-                height: 'auto',
-                resizeMode: 'cover',
-                aspectRatio: 16 / 9,
-              }}
-            />
-          </View> */}
-
           {/* Sliders  */}
           <SliderShows
             data={comedyShows}
@@ -128,105 +107,6 @@ const Home = ({ navigation }) => {
 
           {/* Recommended Witcher */}
           <Recommended data={homeData.witcher} navigation={navigation} />
-
-          {/* Recommended */}
-          {/* <View
-            style={{
-              backgroundColor: '#352047',
-              alignItems: 'center',
-              paddingVertical: 40,
-              marginTop: 40,
-            }}
-          >
-            <Text style={{ color: '#fff', fontSize: 24, paddingBottom: 24 }}>
-              Recommended
-            </Text>
-            <TouchableOpacity
-              style={{ marginBottom: 20 }}
-              onPress={() =>
-                navigation.navigate('Details', {
-                  selectedShow: { id: 13 },
-                })
-              }
-            >
-              <ImageBackground
-                source={{
-                  uri: 'https://static.tvmaze.com/uploads/images/original_untouched/72/180098.jpg',
-                }}
-                style={{
-                  width: 300,
-                  height: 150,
-                  resizeMode: 'cover',
-                }}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'rgba(0,0,0,0.2)',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontSize: 32,
-                      fontWeight: '700',
-                      textShadowColor: 'rgb(0, 0, 0)',
-                      textShadowOffset: { width: 0, height: 0 },
-                      textShadowRadius: 30,
-                    }}
-                  >
-                    The Flash
-                  </Text>
-                </View>
-              </ImageBackground>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('Details', {
-                  selectedShow: { id: 335 },
-                })
-              }
-            >
-              <ImageBackground
-                source={{
-                  uri: 'https://static.tvmaze.com/uploads/images/original_untouched/219/547788.jpg',
-                }}
-                style={{
-                  width: 300,
-                  height: 150,
-                  resizeMode: 'cover',
-                }}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'rgba(0,0,0,0.2)',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontSize: 32,
-                      fontWeight: '700',
-                      textShadowColor: 'rgb(0, 0, 0)',
-                      textShadowOffset: { width: 0, height: 0 },
-                      textShadowRadius: 30,
-                    }}
-                  >
-                    Sherlock
-                  </Text>
-                </View>
-              </ImageBackground>
-            </TouchableOpacity>
-          </View> */}
 
           {/* Sliders  */}
           <SliderShows

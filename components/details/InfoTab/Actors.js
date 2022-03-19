@@ -2,16 +2,7 @@ import { View, Text, FlatList, Image } from 'react-native';
 import React from 'react';
 import { COLORS, FONTS, SIZES } from '../../../constants';
 
-const Actors = ({ cast }) => {
-  const actors = cast?.map((person) => {
-    return {
-      id: person.id,
-      image: person.actorImage,
-      name: person.actorName,
-      played: person.characterName,
-    };
-  });
-
+const Actors = ({ actors }) => {
   return (
     <View style={{ marginTop: SIZES.xl }}>
       <Text
@@ -37,7 +28,7 @@ const Actors = ({ cast }) => {
             }}
           >
             <Image
-              source={{ uri: item.image }}
+              source={{ uri: item.actorImage }}
               resizeMode="cover"
               style={{
                 height: 130,
@@ -51,11 +42,10 @@ const Actors = ({ cast }) => {
                 width: 90,
                 textAlign: 'center',
                 color: COLORS.lightGray,
-                // color: COLORS.onDark,
                 ...FONTS.body5,
               }}
             >
-              {item.name}
+              {item.actorName}
             </Text>
           </View>
         )}

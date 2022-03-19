@@ -16,22 +16,9 @@ import Actors from './Actors';
 const InfoTab = ({ loadedShow, loadedSeasons, loadedCast }) => {
   const [storylineIsOpen, setStorylineIsOpen] = useState(false);
 
-  // const actors = loadedCast?.map((person) => {
-  //   return {
-  //     id: person.id,
-  //     image: person.actorImage,
-  //     name: person.actorName,
-  //     played: person.characterName,
-  //   };
-  // });
+  const { actors, characters } = loadedCast;
 
-  // const characters = loadedCast?.map((person) => {
-  //   return {
-  //     id: person.idCharacter,
-  //     image: person.characterImage,
-  //     name: person.characterName,
-  //   };
-  // });
+  // console.log(characters);
 
   // const convertedGenres = loadedShow?.genres.join(' • ');
 
@@ -98,10 +85,10 @@ const InfoTab = ({ loadedShow, loadedSeasons, loadedCast }) => {
       </View>
 
       {/* Characters */}
-      <Characters cast={loadedCast} title={loadedShow?.title} />
+      <Characters characters={characters} title={loadedShow?.title} />
 
       {/* Actors */}
-      <Actors cast={loadedCast} />
+      <Actors actors={actors} />
 
       {/* Empty space */}
       <View style={{ height: 50 }}></View>

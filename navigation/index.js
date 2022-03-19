@@ -7,7 +7,9 @@ import Search from '../screens/Search';
 import Profile from '../screens/Profile';
 import Onboard from '../components/Onboard';
 import Details from '../screens/Details';
+import Episodes from '../screens/Episodes';
 import Tabs from './Tabs';
+import { COLORS } from '../constants';
 
 const RootNavigation = () => {
   const Stack = createStackNavigator();
@@ -22,12 +24,19 @@ const RootNavigation = () => {
         initialRouteName="HomeScreen"
         screenOptions={screenOptions}
       >
-        <Stack.Screen
-          name="HomeScreen"
-          component={Tabs}
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="HomeScreen" component={Tabs} />
         <Stack.Screen name="Details" component={Details} />
+        <Stack.Screen
+          name="Episodes"
+          component={Episodes}
+          // options={{
+          //   headerShown: true,
+          //   headerStyle: {
+          //     backgroundColor: COLORS.background,
+          //   },
+          //   headerTintColor: '#fff',
+          // }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

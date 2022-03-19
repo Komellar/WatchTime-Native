@@ -11,22 +11,18 @@ const Info = ({ loadedShow }) => {
       {/* Row 1 */}
       <View style={styles.row}>
         <View style={styles.row_item}>
-          <AntDesign name="star" size={20} color={COLORS.secondaryDark} />
+          <AntDesign name="star" size={20} color={COLORS.secondary} />
           <Text style={styles.stats_label}>{loadedShow?.rating}</Text>
         </View>
         <View style={styles.row_item}>
-          <Ionicons
-            name="globe-outline"
-            size={20}
-            color={COLORS.secondaryDark}
-          />
+          <Ionicons name="globe-outline" size={20} color={COLORS.secondary} />
           <Text style={styles.stats_label}>{loadedShow?.language}</Text>
         </View>
         <View style={styles.row_item}>
           <Ionicons
             name="ios-time-outline"
             size={20}
-            color={COLORS.secondaryDark}
+            color={COLORS.secondary}
           />
           <Text style={styles.stats_label}>
             {loadedShow?.averageRuntime}min
@@ -37,7 +33,7 @@ const Info = ({ loadedShow }) => {
       {/* Row 2 */}
       <View style={styles.row}>
         <View style={styles.row_item}>
-          <AntDesign name="calendar" size={20} color={COLORS.secondaryDark} />
+          <AntDesign name="calendar" size={20} color={COLORS.secondary} />
           <Text style={styles.stats_label}>{loadedShow?.premiered}</Text>
         </View>
         <View style={styles.row_item}>

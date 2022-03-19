@@ -1,4 +1,3 @@
-// import imageNotFound from '../assets/imgageNotFound.png';
 const imageNotFound =
   'https://firebasestorage.googleapis.com/v0/b/borrowathing.appspot.com/o/images%2F2022-01-24%2011%3A05%3A10?alt=media&token=d4bb7b15-721b-4e45-b2de-826b72990e88';
 
@@ -23,8 +22,6 @@ export async function getAllShows() {
     };
   });
 
-  // return loadedShows.slice(3, 20);
-  // return loadedShows.slice(17, 20);
   return loadedShows;
 }
 
@@ -120,7 +117,7 @@ export async function getSeasons(requestData) {
       runtime: show.runtime,
       desc: show.summary?.replace(/<[^>]+>/g, ''),
       premiered: show.airdate,
-      images: show.image ?? { original: imageNotFound },
+      images: show.image ?? { original: imageNotFound, medium: imageNotFound },
       rating: show.rating.average,
     };
   });
@@ -149,83 +146,45 @@ export async function getCast(requestData) {
     throw new Error(data.error.message || 'Could not get products.');
   }
 
-  const loadedCast = data.map((result) => {
+  const loadedData = data.map((result) => {
     return {
       id: result.person.id,
       idCharacter: result.character.id,
       actorName: result.person.name,
       actorImage: result.person.image?.original ?? imageNotFound,
-      actorBirthday: result.person.birthday,
       characterName: result.character.name,
       characterImage: result.character.image?.original ?? imageNotFound,
     };
   });
 
-  // const charactersIds = loadedCast.map((character) => {
-  //   return character.idCharacter;
-  // });
+  let characters = [];
+  let actors = [];
 
-  // let uniqueCharactersIds = [];
-  // charactersIds.forEach((id) => {
-  //   if (!uniqueCharactersIds.includes(id)) {
-  //     uniqueCharactersIds.push(id);
-  //   }
-  // });
-
-  // const actorsIds = loadedCast.map((actor) => {
-  //   return actor.id;
-  // });
-
-  // let uniqueActorsIds = [];
-  // actorsIds.forEach((id) => {
-  //   if (!uniqueActorsIds.includes(id)) {
-  //     uniqueActorsIds.push(id);
-  //   }
-  // });
-
-  // let convertedCast = [];
-
-  // loadedCast.forEach((person) => {
-  //   let repeated = false;
-  //   if (
-  //     uniqueCharactersIds.includes(person.idCharacter) &&
-  //     uniqueActorsIds.includes(person.id)
-  //   ) {
-  //     const indexChar = uniqueCharactersIds.indexOf(person.idCharacter);
-  //     uniqueCharactersIds.splice(indexChar, 1);
-  //     const indexAct = uniqueCharactersIds.indexOf(person.id);
-  //     uniqueCharactersIds.splice(indexAct, 1);
-  //     convertedCast.push(person);
-  //   }
-  //   // else if (uniqueActorsIds.includes(person.id)) {
-  //   //   const index = uniqueCharactersIds.indexOf(person.idCharacter);
-  //   //   uniqueCharactersIds.splice(index, 1);
-  //   //   convertedCast.push(person);
-  //   // }
-  // });
-
-  // console.log(convertedCast);
-
-  let convertedCast = [];
-
-  loadedCast.forEach((person) => {
+  loadedData.forEach((character) => {
     let repeated = false;
-    convertedCast.forEach((comparison) => {
-      repeated = false;
-      if (
-        comparison.characterName === person.characterName
-        // comparison.actorName === person.actorName
-        // comparison.id === person.id
-        // person.contains(comparison.id)
-      ) {
+    characters.forEach((comparison) => {
+      if (comparison.idCharacter === character.idCharacter) {
         repeated = true;
       }
     });
 
     if (!repeated) {
-      convertedCast.push(person);
+      characters.push(character);
     }
   });
 
-  return convertedCast;
+  loadedData.forEach((person) => {
+    let repeated = false;
+    actors.forEach((comparison) => {
+      if (comparison.id === person.id) {
+        repeated = true;
+      }
+    });
+
+    if (!repeated) {
+      actors.push(person);
+    }
+  });
+
+  return { actors, characters };
 }
