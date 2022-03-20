@@ -41,20 +41,6 @@ const HeroDetails = ({ loadedImages, loadedSeasons, loadedShow }) => {
             >
               {loadedSeasons?.length} seasons | {loadedShow?.status}
             </Text>
-            {/* <TouchableOpacity
-            style={{
-              borderWidth: 1,
-              borderColor: COLORS.primary,
-              borderRadius: SIZES.s,
-              paddingHorizontal: SIZES.l,
-              paddingVertical: SIZES.xs,
-            }}
-            onPress={() => {}}
-          >
-            <Text style={{ color: COLORS.primaryLight, ...FONTS.h4 }}>
-              Add to my shows
-            </Text>
-          </TouchableOpacity> */}
           </View>
         </LinearGradient>
       </ImageBackground>

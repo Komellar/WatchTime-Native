@@ -2,9 +2,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import Search from '../screens/Search';
-import About from '../screens/About';
 import { FontAwesome } from '@expo/vector-icons';
 import { COLORS } from '../constants';
+import Auth from '../screens/Auth';
 
 const Tab = createBottomTabNavigator();
 
@@ -55,21 +55,22 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="About"
-        component={About}
+        name="Profile"
+        component={Profile}
         options={{
           tabBarIcon: ({ focused }) => (
             <FontAwesome
-              name="globe"
+              name="user"
               size={30}
               color={focused ? COLORS.primary : COLORS.lightGray}
+              focused={focused}
             />
           ),
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="Auth"
+        component={Auth}
         options={{
           tabBarIcon: ({ focused }) => (
             <FontAwesome

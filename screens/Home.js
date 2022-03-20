@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import React from 'react';
-import { useFetch } from '../hooks/useFetch';
+import { useFetch } from '../hooks/use-fetch';
 import {
   getAllShows,
   getSingleShow,

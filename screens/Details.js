@@ -13,7 +13,7 @@ import {
   getShowImages,
   getSingleShow,
 } from '../services/external-api';
-import { useFetch } from '../hooks/useFetch';
+import { useFetch } from '../hooks/use-fetch';
 import { COLORS, SIZES } from '../constants/theme';
 
 const Details = ({ navigation, route }) => {

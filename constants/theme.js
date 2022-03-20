@@ -3,17 +3,13 @@ const { width, height } = Dimensions.get('window');
 
 export const COLORS = {
   primary: '#5A06AA',
-  primaryDark: '#510599',
+  primaryDark: '#340363',
   primaryLight: '#AF5FFD',
   primaryLighter: '#D783FF',
 
-  // secondary: '#007CF9',
-  // secondaryLight: '#327dfa',
-  // secondaryDark: '#0053E0',
   secondary: '#008D74',
   secondaryDark: '#005645',
   secondaryLight: '#53AE7D',
-  // secondaryDark: '#2D82A8',
 
   white: '#eee',
   onDark: '#ddd',
