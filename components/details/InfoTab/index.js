@@ -4,6 +4,7 @@ import {
   Text,
   Image,
   FlatList,
+  Button,
   TouchableWithoutFeedback,
 } from 'react-native';
 import React, { useState } from 'react';
@@ -20,8 +21,6 @@ const InfoTab = ({ loadedShow, loadedSeasons, loadedCast }) => {
 
   // console.log(characters);
 
-  // const convertedGenres = loadedShow?.genres.join(' • ');
-
   const desc = loadedShow?.description?.replace(/<[^>]+>/g, '');
   const trimmedDesc = desc?.substr(0, 230);
   const convertedDesc = trimmedDesc
@@ -29,7 +28,7 @@ const InfoTab = ({ loadedShow, loadedSeasons, loadedCast }) => {
     .concat(' ...');
 
   return (
-    <View>
+    <View style={{ marginBottom: SIZES.xxl }}>
       <View
         style={{
           paddingHorizontal: SIZES.l,
@@ -89,9 +88,6 @@ const InfoTab = ({ loadedShow, loadedSeasons, loadedCast }) => {
 
       {/* Actors */}
       <Actors actors={actors} />
-
-      {/* Empty space */}
-      <View style={{ height: 50 }}></View>
     </View>
   );
 };

@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 
 import Tabs from '../components/details/Tabs';
@@ -20,11 +14,11 @@ import {
   getSingleShow,
 } from '../services/external-api';
 import { useFetch } from '../hooks/useFetch';
-import { COLORS } from '../constants/theme';
+import { COLORS, SIZES } from '../constants/theme';
 
 const Details = ({ navigation, route }) => {
-  // const [activeTab, setActiveTab] = useState('info');
-  const [activeTab, setActiveTab] = useState('seasons');
+  const [activeTab, setActiveTab] = useState('info');
+  // const [activeTab, setActiveTab] = useState('seasons');
 
   const { selectedShow } = route.params;
 
@@ -83,6 +77,7 @@ const Details = ({ navigation, route }) => {
             />
             {/* Tabs to navigate between details sections */}
             <Tabs activeTab={activeTab} tabClickHandler={tabClickHandler} />
+
             {/* Tabs content */}
             {activeTab === 'info' && (
               <InfoTab
@@ -98,7 +93,7 @@ const Details = ({ navigation, route }) => {
                 navigation={navigation}
               />
             )}
-            {activeTab === 'gallery' && <GalleryTab />}
+            {activeTab === 'gallery' && <GalleryTab images={loadedImages} />}
           </ScrollView>
         )}
     </View>
