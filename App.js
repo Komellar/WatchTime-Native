@@ -10,6 +10,7 @@ import {
   Roboto_700Bold,
   Roboto_500Medium,
 } from '@expo-google-fonts/roboto';
+import './services/firebase';
 
 export default function App() {
   let [fontsLoaded] = useFonts({

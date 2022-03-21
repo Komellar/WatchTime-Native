@@ -5,17 +5,21 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { COLORS, FONTS, SIZES } from '../constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import useInput from '../hooks/use-intput';
+import {
+  getAuth,
+  updateProfile,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence,
+} from 'firebase/auth';
 
-const Auth = () => {
-  const nameInputRef = useRef();
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
-
+const Auth = ({ navigation }) => {
   const [isLogging, setIsLogging] = useState(true);
   const [formIsValid, setFormIsValid] = useState(false);
   const [authError, setAuthError] = useState(null);
@@ -62,8 +66,45 @@ const Auth = () => {
     checkValidity: passwordCheckHandler,
   } = useInput();
 
-  const submitFormHandler = async (event) => {
-    event.preventDefault();
+  useEffect(() => {
+    let mounted = true;
+
+    if (mounted) {
+      if (
+        isLogging &&
+        // emailIsTouched &&
+        emailIsValid &&
+        // passwordIsTouched &&
+        passwordIsValid
+      ) {
+        setFormIsValid(true);
+      } else if (
+        !isLogging &&
+        // nameIsTouched &&
+        nameIsValid &&
+        // emailIsTouched &&
+        emailIsValid &&
+        // passwordIsTouched &&
+        passwordIsValid
+      ) {
+        setFormIsValid(true);
+      } else {
+        setFormIsValid(false);
+      }
+    }
+
+    return () => (mounted = false);
+  }, [
+    isLogging,
+    // nameIsTouched,
+    nameIsValid,
+    // emailIsTouched,
+    emailIsValid,
+    // passwordIsTouched,
+    passwordIsValid,
+  ]);
+
+  const submitFormHandler = async () => {
     setAuthError(null);
 
     if (formIsValid) {
@@ -109,7 +150,10 @@ const Auth = () => {
         }
       } catch (err) {
         setAuthError('FAILED TO GET LOGIN');
+        console.log('error loging', err);
       }
+    } else {
+      if (inputError) console.log(inputError);
     }
   };
 
@@ -121,6 +165,8 @@ const Auth = () => {
   } else if (nameError) {
     inputError = `Username: ${nameError}`;
   }
+
+  if (authError) console.log(authError);
 
   return (
     <View style={styles.container}>
@@ -135,7 +181,13 @@ const Auth = () => {
             <TextInput
               style={styles.input}
               placeholder="Email"
-              onChangeText={() => {}}
+              // ref={emailInputRef}
+              value={enteredEmail}
+              onChangeText={(text) => emailChangeHandler(text)}
+              // onChangeText={() =>
+              //   emailChangeHandler(emailInputRef.current.value)
+              // }
+              onBlur={emailCheckHandler}
               placeholderTextColor={COLORS.lightGray}
             />
           </View>
@@ -146,11 +198,17 @@ const Auth = () => {
               placeholderTextColor={COLORS.lightGray}
               secureTextEntry={true}
               placeholder="Password"
-              onChangeText={() => {}}
+              // ref={passwordInputRef}
+              value={enteredPassword}
+              onChangeText={(text) => passwordChangeHandler(text)}
+              onBlur={passwordCheckHandler}
             />
           </View>
         </>
       )}
+      {/*  */}
+      {/*  */}
+      {/*  */}
       {!isLogging && (
         <>
           <View style={styles.form_control}>
@@ -158,7 +216,9 @@ const Auth = () => {
             <TextInput
               style={styles.input}
               placeholder="Username"
-              onChangeText={() => {}}
+              value={enteredName}
+              onChangeText={(text) => nameChangeHandler(text)}
+              onBlur={nameCheckHandler}
               placeholderTextColor={COLORS.lightGray}
             />
           </View>
@@ -167,7 +227,9 @@ const Auth = () => {
             <TextInput
               style={styles.input}
               placeholder="Email"
-              onChangeText={() => {}}
+              value={enteredEmail}
+              onChangeText={(text) => emailChangeHandler(text)}
+              onBlur={emailCheckHandler}
               placeholderTextColor={COLORS.lightGray}
             />
           </View>
@@ -178,10 +240,12 @@ const Auth = () => {
               placeholderTextColor={COLORS.lightGray}
               secureTextEntry={true}
               placeholder="Password"
-              onChangeText={() => {}}
+              value={enteredPassword}
+              onChangeText={(text) => passwordChangeHandler(text)}
+              onBlur={passwordCheckHandler}
             />
           </View>
-          <View style={styles.form_control}>
+          {/* <View style={styles.form_control}>
             <Ionicons name="ios-lock-closed" size={26} color="white" />
             <TextInput
               style={styles.input}
@@ -190,12 +254,12 @@ const Auth = () => {
               placeholder="Repeat Password"
               onChangeText={() => {}}
             />
-          </View>
+          </View> */}
         </>
       )}
       {/* Buttons */}
       <TouchableOpacity
-        onPress={submitFormHandler}
+        onPress={() => submitFormHandler()}
         style={{
           width: (SIZES.width * 80) / 100,
           backgroundColor: COLORS.primary,

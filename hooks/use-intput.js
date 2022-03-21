@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const validSymbols = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
 const hasValidSymbols = (value) => validSymbols.test(value);
-const isMinLength = (value) => value.trim().length > 5;
+const isMinLength = (value) => value?.trim().length > 5;
 
 const useInput = (
   enteredValidation = hasValidSymbols,
@@ -10,7 +10,7 @@ const useInput = (
 ) => {
   const [inputValue, setInputValue] = useState('');
   const [isTouched, setIsTouched] = useState(false);
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState(null);
 
   const changeValue = (enteredValue) => {
