@@ -1,14 +1,13 @@
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
-  TouchableOpacity,
+  ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
 import { COLORS, FONTS, SIZES } from '../constants/theme';
-import { Ionicons } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
 import useInput from '../hooks/use-intput';
 import {
   getAuth,
@@ -18,11 +17,15 @@ import {
   setPersistence,
   browserLocalPersistence,
 } from 'firebase/auth';
+import Login from '../components/auth/Login';
+import Register from '../components/auth/Register';
+import AuthButtons from '../components/auth/AuthButtons';
 
 const Auth = ({ navigation }) => {
   const [isLogging, setIsLogging] = useState(true);
   const [formIsValid, setFormIsValid] = useState(false);
   const [authError, setAuthError] = useState(null);
+  const [showErrors, setShowErrors] = useState(false);
 
   const [avatarImage, setAvatarImage] = useState(
     `https://avatars.dicebear.com/api/avataaars/smil4e12ya2.svg`
@@ -38,11 +41,9 @@ const Auth = ({ navigation }) => {
 
   const {
     inputValue: enteredName,
-    isTouched: nameIsTouched,
     isValid: nameIsValid,
     error: nameError,
     changeValue: nameChangeHandler,
-    checkValidity: nameCheckHandler,
   } = useInput(
     (value) => /^(?!\s)[A-Za-z_][A-Za-z0-9_():'"#^.?,!\s]+$/.test(value),
     'Invalid username'
@@ -50,42 +51,59 @@ const Auth = ({ navigation }) => {
 
   const {
     inputValue: enteredEmail,
-    isTouched: emailIsTouched,
     isValid: emailIsValid,
     error: emailError,
     changeValue: emailChangeHandler,
-    checkValidity: emailCheckHandler,
   } = useInput((value) => /^\S+@\S+\.\S+$/.test(value), 'Invalid email!');
 
   const {
     inputValue: enteredPassword,
-    isTouched: passwordIsTouched,
     isValid: passwordIsValid,
     error: passwordError,
     changeValue: passwordChangeHandler,
-    checkValidity: passwordCheckHandler,
   } = useInput();
+
+  const {
+    inputValue: enteredPassword2,
+    isValid: password2IsValid,
+    error: password2Error,
+    changeValue: password2ChangeHandler,
+  } = useInput();
+
+  const usernameCollection = {
+    enteredName,
+    nameChangeHandler,
+    nameError,
+  };
+  const emailCollection = {
+    enteredEmail,
+    emailChangeHandler,
+    emailError,
+  };
+  const passwordCollection = {
+    enteredPassword,
+    passwordChangeHandler,
+    passwordError,
+  };
+  const password2Collection = {
+    enteredPassword2,
+    password2ChangeHandler,
+    password2Error,
+  };
 
   useEffect(() => {
     let mounted = true;
 
     if (mounted) {
-      if (
-        isLogging &&
-        // emailIsTouched &&
-        emailIsValid &&
-        // passwordIsTouched &&
-        passwordIsValid
-      ) {
+      if (isLogging && emailIsValid && passwordIsValid) {
         setFormIsValid(true);
       } else if (
         !isLogging &&
-        // nameIsTouched &&
         nameIsValid &&
-        // emailIsTouched &&
         emailIsValid &&
-        // passwordIsTouched &&
-        passwordIsValid
+        passwordIsValid &&
+        password2IsValid &&
+        enteredPassword === enteredPassword2
       ) {
         setFormIsValid(true);
       } else {
@@ -94,18 +112,11 @@ const Auth = ({ navigation }) => {
     }
 
     return () => (mounted = false);
-  }, [
-    isLogging,
-    // nameIsTouched,
-    nameIsValid,
-    // emailIsTouched,
-    emailIsValid,
-    // passwordIsTouched,
-    passwordIsValid,
-  ]);
+  }, [isLogging, nameIsValid, emailIsValid, passwordIsValid, password2IsValid]);
 
   const submitFormHandler = async () => {
     setAuthError(null);
+    setShowErrors(true);
 
     if (formIsValid) {
       const auth = getAuth();
@@ -153,169 +164,71 @@ const Auth = ({ navigation }) => {
         console.log('error loging', err);
       }
     } else {
-      if (inputError) console.log(inputError);
+      if (!isLogging && enteredPassword !== enteredPassword2) {
+        setAuthError('PASSWORDS MUST BE THE SAME!');
+      }
     }
   };
-
-  let inputError = null;
-  if (passwordError) {
-    inputError = `Password: ${passwordError}`;
-  } else if (emailError) {
-    inputError = `Email: ${emailError}`;
-  } else if (nameError) {
-    inputError = `Username: ${nameError}`;
-  }
 
   if (authError) console.log(authError);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>
-        {isLogging ? 'Welcome back' : 'Create an account'}
-      </Text>
-      {/* Form inputs */}
-      {isLogging && (
-        <>
-          <View style={styles.form_control}>
-            <Ionicons name="mail" size={26} color="white" />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              // ref={emailInputRef}
-              value={enteredEmail}
-              onChangeText={(text) => emailChangeHandler(text)}
-              // onChangeText={() =>
-              //   emailChangeHandler(emailInputRef.current.value)
-              // }
-              onBlur={emailCheckHandler}
-              placeholderTextColor={COLORS.lightGray}
-            />
-          </View>
-          <View style={styles.form_control}>
-            <Ionicons name="ios-lock-closed" size={26} color="white" />
-            <TextInput
-              style={styles.input}
-              placeholderTextColor={COLORS.lightGray}
-              secureTextEntry={true}
-              placeholder="Password"
-              // ref={passwordInputRef}
-              value={enteredPassword}
-              onChangeText={(text) => passwordChangeHandler(text)}
-              onBlur={passwordCheckHandler}
-            />
-          </View>
-        </>
-      )}
-      {/*  */}
-      {/*  */}
-      {/*  */}
-      {!isLogging && (
-        <>
-          <View style={styles.form_control}>
-            <FontAwesome5 name="user-alt" size={24} color="white" />
-            <TextInput
-              style={styles.input}
-              placeholder="Username"
-              value={enteredName}
-              onChangeText={(text) => nameChangeHandler(text)}
-              onBlur={nameCheckHandler}
-              placeholderTextColor={COLORS.lightGray}
-            />
-          </View>
-          <View style={styles.form_control}>
-            <Ionicons name="mail" size={26} color="white" />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={enteredEmail}
-              onChangeText={(text) => emailChangeHandler(text)}
-              onBlur={emailCheckHandler}
-              placeholderTextColor={COLORS.lightGray}
-            />
-          </View>
-          <View style={styles.form_control}>
-            <Ionicons name="ios-lock-closed" size={26} color="white" />
-            <TextInput
-              style={styles.input}
-              placeholderTextColor={COLORS.lightGray}
-              secureTextEntry={true}
-              placeholder="Password"
-              value={enteredPassword}
-              onChangeText={(text) => passwordChangeHandler(text)}
-              onBlur={passwordCheckHandler}
-            />
-          </View>
-          {/* <View style={styles.form_control}>
-            <Ionicons name="ios-lock-closed" size={26} color="white" />
-            <TextInput
-              style={styles.input}
-              placeholderTextColor={COLORS.lightGray}
-              secureTextEntry={true}
-              placeholder="Repeat Password"
-              onChangeText={() => {}}
-            />
-          </View> */}
-        </>
-      )}
-      {/* Buttons */}
-      <TouchableOpacity
-        onPress={() => submitFormHandler()}
-        style={{
-          width: (SIZES.width * 80) / 100,
-          backgroundColor: COLORS.primary,
-          marginTop: SIZES.xxl,
-          paddingHorizontal: SIZES.xxxl,
-          paddingVertical: SIZES.m,
-          borderRadius: SIZES.xxl,
-        }}
+    <ScrollView style={styles.scroll}>
+      <TouchableWithoutFeedback
+        onPress={Keyboard.dismiss}
+        style={styles.wrapper}
       >
-        <Text
-          style={{
-            color: COLORS.white,
-            ...FONTS.h4,
-            fontSize: 22,
-            lineHeight: 24,
-            alignSelf: 'center',
-          }}
-        >
-          {isLogging ? 'Sign In' : 'Sign Up'}
-        </Text>
-      </TouchableOpacity>
-      <Text
-        style={{
-          color: COLORS.lightGray,
-          marginVertical: SIZES.m,
-          ...FONTS.body4,
-        }}
-      >
-        OR
-      </Text>
-      <TouchableOpacity
-        onPress={() => {
-          setIsLogging(!isLogging);
-        }}
-      >
-        <Text
-          style={{
-            color: COLORS.onDark,
-            ...FONTS.h4,
-            fontSize: 20,
-            lineHeight: 24,
-            alignSelf: 'center',
-          }}
-        >
-          {isLogging ? 'Create an account' : 'Already have an account'}
-        </Text>
-      </TouchableOpacity>
-    </View>
+        <View style={styles.container}>
+          <Text style={styles.header}>
+            {isLogging ? 'Welcome back' : 'Create an account'}
+          </Text>
+
+          {authError && <Text style={styles.auth_error}>{authError}</Text>}
+
+          {/* Input Forms */}
+          {isLogging && (
+            <Login
+              email={emailCollection}
+              password={passwordCollection}
+              showErrors={showErrors}
+              setShowErrors={setShowErrors}
+            />
+          )}
+          {!isLogging && (
+            <Register
+              username={usernameCollection}
+              email={emailCollection}
+              password={passwordCollection}
+              password2={password2Collection}
+              showErrors={showErrors}
+              setShowErrors={setShowErrors}
+            />
+          )}
+
+          <AuthButtons
+            submitFormHandler={submitFormHandler}
+            isLogging={isLogging}
+            setIsLogging={setIsLogging}
+          />
+        </View>
+      </TouchableWithoutFeedback>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  scroll: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
     alignItems: 'center',
+    paddingBottom: 80,
+  },
+  wrapper: {
+    flex: 1,
   },
   header: {
     color: COLORS.white,
@@ -323,20 +236,10 @@ const styles = StyleSheet.create({
     marginTop: SIZES.xxxl,
     marginBottom: SIZES.xxl,
   },
-  input: {
-    width: (SIZES.width * 80) / 100,
-    height: 40,
-    ...FONTS.body3,
-    letterSpacing: 0.2,
-    paddingLeft: SIZES.m,
-    color: COLORS.white,
-  },
-  form_control: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: SIZES.l,
-    borderBottomWidth: 1,
-    borderColor: COLORS.onDark,
+  auth_error: {
+    marginBottom: SIZES.m,
+    color: COLORS.error,
+    ...FONTS.h4,
   },
 });
 
