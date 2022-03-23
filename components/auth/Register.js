@@ -1,8 +1,16 @@
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import React, { useState } from 'react';
 import { SIZES, COLORS, FONTS } from '../../constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { SvgUri } from 'react-native-svg';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Register = ({
   username,
@@ -11,6 +19,9 @@ const Register = ({
   password2,
   showErrors,
   setShowErrors,
+  avatarImage,
+  changeAvatarHandler,
+  authError,
 }) => {
   const [nameActive, setNameActive] = useState(false);
   const [emailActive, setEmailActive] = useState(false);
@@ -19,6 +30,39 @@ const Register = ({
 
   return (
     <>
+      {/* Avatar picker */}
+      <View
+        style={{
+          padding: SIZES.s,
+          marginBottom: SIZES.xl,
+          width: 150,
+          height: 150,
+          alignItems: 'center',
+        }}
+      >
+        <SvgUri width="100%" height="100%" uri={avatarImage} />
+        <TouchableOpacity
+          onPress={() => changeAvatarHandler()}
+          style={{
+            marginTop: -14,
+            backgroundColor: COLORS.gray,
+            borderRadius: 50,
+            padding: 4,
+          }}
+        >
+          <MaterialCommunityIcons
+            name="reload"
+            size={24}
+            color={COLORS.onDark}
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* Authentication error */}
+      {authError && <Text style={styles.auth_error}>{authError}</Text>}
+
+      {/* Inputs */}
+      {/* Username */}
       <View style={styles.form_control}>
         <View
           style={{
@@ -44,6 +88,8 @@ const Register = ({
           />
         </View>
       </View>
+
+      {/* Email */}
       <View style={styles.form_control}>
         <View
           style={{
@@ -75,6 +121,8 @@ const Register = ({
           <Text style={styles.input_error}>{email.emailError}</Text>
         )}
       </View>
+
+      {/* Password */}
       <View style={styles.form_control}>
         <View
           style={{
@@ -104,6 +152,8 @@ const Register = ({
           <Text style={styles.input_error}>{password.passwordError}</Text>
         )}
       </View>
+
+      {/* Password Repeat */}
       <View style={styles.form_control}>
         <View
           style={{
@@ -150,6 +200,11 @@ const styles = StyleSheet.create({
     marginVertical: SIZES.m,
   },
   input_error: {
+    color: COLORS.error,
+    ...FONTS.h4,
+  },
+  auth_error: {
+    marginBottom: SIZES.m,
     color: COLORS.error,
     ...FONTS.h4,
   },

@@ -6,7 +6,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { COLORS, FONTS, SIZES } from '../constants/theme';
 import useInput from '../hooks/use-intput';
 import {
@@ -28,14 +28,14 @@ const Auth = ({ navigation }) => {
   const [showErrors, setShowErrors] = useState(false);
 
   const [avatarImage, setAvatarImage] = useState(
-    `https://avatars.dicebear.com/api/avataaars/smil4e12ya2.svg`
+    `https://avatars.dicebear.com/api/avataaars/smil4e12ya2.svg?background=%23AF5FFD&radius=50`
   );
 
   const changeAvatarHandler = () => {
     setAvatarImage(
       `https://avatars.dicebear.com/api/avataaars/${Math.random()
         .toString(36)
-        .substr(2, 5)}.svg`
+        .substr(2, 5)}.svg?background=%23AF5FFD&radius=50`
     );
   };
 
@@ -149,19 +149,21 @@ const Auth = ({ navigation }) => {
           }
         }
       }
-      try {
-        const user = auth.currentUser;
-        if (user !== null) {
-          const displayName = user.displayName;
-          const uid = user.uid;
-          const userImg = user.photoURL;
-          // dispatch(authActions.setCurrentUser({ displayName, uid, userImg }));
-          // isLogging ? history.push('/profile') : history.push('/choosing');
-          navigation.navigate('Profile');
+      if (!authError) {
+        try {
+          const user = auth.currentUser;
+          if (user !== null) {
+            const displayName = user.displayName;
+            const uid = user.uid;
+            const userImg = user.photoURL;
+            // dispatch(authActions.setCurrentUser({ displayName, uid, userImg }));
+            // isLogging ? history.push('/profile') : history.push('/choosing');
+            navigation.navigate('Profile');
+          }
+        } catch (err) {
+          setAuthError('FAILED TO GET LOGIN');
+          console.log('error loging', err);
         }
-      } catch (err) {
-        setAuthError('FAILED TO GET LOGIN');
-        console.log('error loging', err);
       }
     } else {
       if (!isLogging && enteredPassword !== enteredPassword2) {
@@ -183,8 +185,6 @@ const Auth = ({ navigation }) => {
             {isLogging ? 'Welcome back' : 'Create an account'}
           </Text>
 
-          {authError && <Text style={styles.auth_error}>{authError}</Text>}
-
           {/* Input Forms */}
           {isLogging && (
             <Login
@@ -192,6 +192,7 @@ const Auth = ({ navigation }) => {
               password={passwordCollection}
               showErrors={showErrors}
               setShowErrors={setShowErrors}
+              authError={authError}
             />
           )}
           {!isLogging && (
@@ -202,6 +203,9 @@ const Auth = ({ navigation }) => {
               password2={password2Collection}
               showErrors={showErrors}
               setShowErrors={setShowErrors}
+              avatarImage={avatarImage}
+              changeAvatarHandler={changeAvatarHandler}
+              authError={authError}
             />
           )}
 
@@ -235,11 +239,6 @@ const styles = StyleSheet.create({
     ...FONTS.h2,
     marginTop: SIZES.xxxl,
     marginBottom: SIZES.xxl,
-  },
-  auth_error: {
-    marginBottom: SIZES.m,
-    color: COLORS.error,
-    ...FONTS.h4,
   },
 });
 

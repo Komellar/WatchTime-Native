@@ -2,15 +2,18 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import { SIZES, COLORS, FONTS } from '../../constants/theme';
 import { Ionicons } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { borderBottomColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 
-const Login = ({ email, password, showErrors, setShowErrors }) => {
+const Login = ({ email, password, showErrors, setShowErrors, authError }) => {
   const [emailActive, setEmailActive] = useState(false);
   const [pwdActive, setPwdActive] = useState(false);
 
   return (
     <>
+      {/* Authentication error */}
+      {authError && <Text style={styles.auth_error}>{authError}</Text>}
+
+      {/* Inputs */}
+      {/* Email */}
       <View style={styles.form_control}>
         <View
           style={{
@@ -42,6 +45,8 @@ const Login = ({ email, password, showErrors, setShowErrors }) => {
           <Text style={styles.input_error}>{email.emailError}</Text>
         )}
       </View>
+
+      {/* Password */}
       <View style={styles.form_control}>
         <View
           style={{
@@ -88,6 +93,11 @@ const styles = StyleSheet.create({
     marginVertical: SIZES.m,
   },
   input_error: {
+    color: COLORS.error,
+    ...FONTS.h4,
+  },
+  auth_error: {
+    marginBottom: SIZES.m,
     color: COLORS.error,
     ...FONTS.h4,
   },
