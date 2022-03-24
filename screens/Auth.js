@@ -20,6 +20,8 @@ import {
 import Login from '../components/auth/Login';
 import Register from '../components/auth/Register';
 import AuthButtons from '../components/auth/AuthButtons';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../store/auth-slice';
 
 const Auth = ({ navigation }) => {
   const [isLogging, setIsLogging] = useState(true);
@@ -91,6 +93,8 @@ const Auth = ({ navigation }) => {
     password2Error,
   };
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     let mounted = true;
 
@@ -156,7 +160,7 @@ const Auth = ({ navigation }) => {
             const displayName = user.displayName;
             const uid = user.uid;
             const userImg = user.photoURL;
-            // dispatch(authActions.setCurrentUser({ displayName, uid, userImg }));
+            dispatch(authActions.setCurrentUser({ displayName, uid, userImg }));
             // isLogging ? history.push('/profile') : history.push('/choosing');
             navigation.navigate('Profile');
           }

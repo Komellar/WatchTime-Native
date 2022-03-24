@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import { StyleSheet, View, Platform, StatusBar, Text } from 'react-native';
+import { StyleSheet, View, StatusBar, Text } from 'react-native';
 import RootNavigation, { OnboardNavigation } from './navigation';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,6 +11,8 @@ import {
   Roboto_500Medium,
 } from '@expo-google-fonts/roboto';
 import './services/firebase';
+import { Provider } from 'react-redux';
+import store from './store';
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -39,21 +41,23 @@ export default function App() {
       </View>
     );
   } else {
-    if (isFirstLaunch === null) {
-      return null;
-    } else if (isFirstLaunch === true) {
+    if (isFirstLaunch === true) {
       return (
-        <View style={styles.container}>
-          <StatusBar barStyle="light-content" />
-          <OnboardNavigation />
-        </View>
+        <Provider store={store}>
+          <View style={styles.container}>
+            <StatusBar barStyle="light-content" />
+            <OnboardNavigation />
+          </View>
+        </Provider>
       );
     } else {
       return (
-        <View style={styles.container}>
-          <StatusBar barStyle="light-content" />
-          <RootNavigation />
-        </View>
+        <Provider store={store}>
+          <View style={styles.container}>
+            <StatusBar barStyle="light-content" />
+            <RootNavigation />
+          </View>
+        </Provider>
       );
     }
   }
@@ -63,7 +67,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.darkGray,
-    // backgroundColor: COLORS.background,
-    // paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });

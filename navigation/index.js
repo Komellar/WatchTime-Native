@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -10,8 +10,17 @@ import Details from '../screens/Details';
 import Episodes from '../screens/Episodes';
 import Tabs from './Tabs';
 import { COLORS } from '../constants';
+import { getCurrentUser } from '../services/auth-actions';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 
 const RootNavigation = () => {
+  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.auth.userId);
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+
   const Stack = createStackNavigator();
 
   const screenOptions = {
@@ -26,17 +35,7 @@ const RootNavigation = () => {
       >
         <Stack.Screen name="HomeScreen" component={Tabs} />
         <Stack.Screen name="Details" component={Details} />
-        <Stack.Screen
-          name="Episodes"
-          component={Episodes}
-          // options={{
-          //   headerShown: true,
-          //   headerStyle: {
-          //     backgroundColor: COLORS.background,
-          //   },
-          //   headerTintColor: '#fff',
-          // }}
-        />
+        <Stack.Screen name="Episodes" component={Episodes} />
       </Stack.Navigator>
     </NavigationContainer>
   );
