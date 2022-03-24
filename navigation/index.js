@@ -7,7 +7,7 @@ import Details from '../screens/Details';
 import Episodes from '../screens/Episodes';
 import Tabs from './Tabs';
 import { getCurrentUser } from '../services/auth-actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 const RootNavigation = ({ isFirstLaunch }) => {
   const dispatch = useDispatch();

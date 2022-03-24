@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { StyleSheet, View, StatusBar, Text } from 'react-native';
-import RootNavigation, { OnboardNavigation } from './navigation';
+import RootNavigation from './navigation';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS } from './constants/index';

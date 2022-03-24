@@ -5,10 +5,13 @@ import Search from '../screens/Search';
 import { FontAwesome } from '@expo/vector-icons';
 import { COLORS } from '../constants';
 import Auth from '../screens/Auth';
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
+  const userId = useSelector((state) => state.auth.userId);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -54,34 +57,38 @@ const Tabs = () => {
           ),
         }}
       />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <FontAwesome
-              name="user"
-              size={30}
-              color={focused ? COLORS.primary : COLORS.lightGray}
-              focused={focused}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Auth"
-        component={Auth}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <FontAwesome
-              name="user"
-              size={30}
-              color={focused ? COLORS.primary : COLORS.lightGray}
-              focused={focused}
-            />
-          ),
-        }}
-      />
+      {userId !== null && (
+        <Tab.Screen
+          name="Profile"
+          children={() => <Profile userId={userId} />}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome
+                name="user"
+                size={30}
+                color={focused ? COLORS.primary : COLORS.lightGray}
+                focused={focused}
+              />
+            ),
+          }}
+        />
+      )}
+      {userId === null && (
+        <Tab.Screen
+          name="Auth"
+          component={Auth}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome
+                name="user"
+                size={30}
+                color={focused ? COLORS.primary : COLORS.lightGray}
+                focused={focused}
+              />
+            ),
+          }}
+        />
+      )}
     </Tab.Navigator>
   );
 };
