@@ -41,25 +41,14 @@ export default function App() {
       </View>
     );
   } else {
-    if (isFirstLaunch === true) {
-      return (
-        <Provider store={store}>
-          <View style={styles.container}>
-            <StatusBar barStyle="light-content" />
-            <OnboardNavigation />
-          </View>
-        </Provider>
-      );
-    } else {
-      return (
-        <Provider store={store}>
-          <View style={styles.container}>
-            <StatusBar barStyle="light-content" />
-            <RootNavigation />
-          </View>
-        </Provider>
-      );
-    }
+    return (
+      <Provider store={store}>
+        <View style={styles.container}>
+          <StatusBar barStyle="light-content" />
+          <RootNavigation isFirstLaunch={isFirstLaunch} />
+        </View>
+      </Provider>
+    );
   }
 }
 

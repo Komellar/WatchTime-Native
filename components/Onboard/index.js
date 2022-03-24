@@ -37,8 +37,8 @@ const Onboard = ({ navigation }) => {
       containerStyles={{ justifyContent: 'center', flex: 1 }}
       titleStyles={{ marginTop: 30 }}
       bottomBarHighlight={false}
-      onSkip={() => navigation.navigate('Home')} // -------------- REMEBER TO CHANGE TO navigation.replace() -------------
-      onDone={() => navigation.navigate('Home')} // -------------- REMEBER TO CHANGE TO navigation.replace() -------------
+      onSkip={() => navigation.navigate('HomeScreen')} // -------------- REMEBER TO CHANGE TO navigation.replace() -------------
+      onDone={() => navigation.navigate('HomeScreen')} // -------------- REMEBER TO CHANGE TO navigation.replace() -------------
       pages={[
         {
           backgroundColor: '#59b2ab',
