@@ -20,7 +20,7 @@ const Details = ({ navigation, route }) => {
   const [activeTab, setActiveTab] = useState('info');
   // const [activeTab, setActiveTab] = useState('seasons');
 
-  const { selectedShow } = route.params;
+  const { selectedShow, userId } = route.params;
 
   const {
     data: loadedShow,
@@ -45,8 +45,6 @@ const Details = ({ navigation, route }) => {
     loading: castLoading,
     error: castError,
   } = useFetch(getCast, selectedShow?.id);
-
-  // console.log('loadedShow', loadedShow);
 
   const tabClickHandler = (tabName) => {
     setActiveTab(tabName);
@@ -74,6 +72,8 @@ const Details = ({ navigation, route }) => {
               loadedImages={loadedImages}
               loadedSeasons={loadedSeasons}
               loadedShow={loadedShow}
+              userId={userId}
+              navigation={navigation}
             />
             {/* Tabs to navigate between details sections */}
             <Tabs activeTab={activeTab} tabClickHandler={tabClickHandler} />

@@ -7,10 +7,16 @@ import Details from '../screens/Details';
 import Episodes from '../screens/Episodes';
 import Tabs from './Tabs';
 import { getCurrentUser } from '../services/auth-actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getShowsList } from '../services/shows-actions';
 
 const RootNavigation = ({ isFirstLaunch }) => {
+  const userId = useSelector((state) => state.auth.userId);
   const dispatch = useDispatch();
+
+  if (userId !== null) {
+    dispatch(getShowsList(userId));
+  }
 
   useEffect(() => {
     dispatch(getCurrentUser());
@@ -30,7 +36,11 @@ const RootNavigation = ({ isFirstLaunch }) => {
       >
         <Stack.Screen name="Onboard" component={Onboard} />
         <Stack.Screen name="HomeScreen" component={Tabs} />
-        <Stack.Screen name="Details" component={Details} />
+        <Stack.Screen
+          name="Details"
+          component={Details}
+          initialParams={{ userId: userId }}
+        />
         <Stack.Screen name="Episodes" component={Episodes} />
       </Stack.Navigator>
     </NavigationContainer>

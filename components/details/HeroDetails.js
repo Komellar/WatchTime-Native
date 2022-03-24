@@ -2,8 +2,49 @@ import { View, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, FONTS, SIZES } from '../../constants/theme';
+import { useDispatch, useSelector } from 'react-redux';
+import { addShowToDB, removeShowFromDB } from '../../services/shows-actions';
 
-const HeroDetails = ({ loadedImages, loadedSeasons, loadedShow }) => {
+const HeroDetails = ({
+  loadedImages,
+  loadedSeasons,
+  loadedShow,
+  userId,
+  navigation,
+}) => {
+  const dispatch = useDispatch();
+  const showsIdList = useSelector((state) => state.shows.showsIdList);
+
+  let followButton;
+  if (userId === null) {
+    followButton = {
+      title: 'Add to list',
+      action: () => navigation.navigate('Auth'),
+    };
+  } else if (showsIdList.includes(loadedShow.id)) {
+    followButton = {
+      title: 'Remove from my list',
+      action: () => dispatch(removeShowFromDB(userId, loadedShow)),
+    };
+  } else {
+    followButton = {
+      title: 'Add to my list',
+      action: () => dispatch(addShowToDB(userId, loadedShow)),
+    };
+  }
+  // const followButton =
+  //   userId === null
+  //     ? { title: 'Add to list', action: () => navigation.navigate('Auth') }
+  //     : showsIdList.includes(loadedShow.id)
+  //     ? {
+  //         title: 'Remove from my list',
+  //         action: () => dispatch(removeShowFromDB(userId, loadedShow)),
+  //       }
+  //     : {
+  //         title: 'Add to my list',
+  //         action: () => dispatch(addShowToDB(userId, loadedShow)),
+  //       };
+
   return (
     <View>
       <ImageBackground
@@ -57,10 +98,12 @@ const HeroDetails = ({ loadedImages, loadedSeasons, loadedShow }) => {
             backgroundColor: COLORS.primary,
             alignItems: 'center',
           }}
-          onPress={() => {}}
+          onPress={() => {
+            followButton.action();
+          }}
         >
           <Text style={{ color: COLORS.white, ...FONTS.h4 }}>
-            Add to my shows
+            {followButton.title}
           </Text>
         </TouchableOpacity>
       </View>
