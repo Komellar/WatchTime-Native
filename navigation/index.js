@@ -9,6 +9,8 @@ import Tabs from './Tabs';
 import { getCurrentUser } from '../services/auth-actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { getShowsList } from '../services/shows-actions';
+import Profile from '../screens/Profile';
+import UserShows from '../screens/UserShows';
 
 const RootNavigation = ({ isFirstLaunch }) => {
   const userId = useSelector((state) => state.auth.userId);
@@ -42,6 +44,7 @@ const RootNavigation = ({ isFirstLaunch }) => {
           initialParams={{ userId: userId }}
         />
         <Stack.Screen name="Episodes" component={Episodes} />
+        <Stack.Screen name="UserShows" component={UserShows} />
       </Stack.Navigator>
     </NavigationContainer>
   );

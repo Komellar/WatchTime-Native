@@ -60,7 +60,8 @@ const Tabs = () => {
       {userId !== null && (
         <Tab.Screen
           name="Profile"
-          children={() => <Profile userId={userId} />}
+          component={Profile}
+          initialParams={{ userId: userId }}
           options={{
             tabBarIcon: ({ focused }) => (
               <FontAwesome

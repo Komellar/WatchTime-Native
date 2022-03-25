@@ -13,6 +13,12 @@ import {
 import './services/firebase';
 import { Provider } from 'react-redux';
 import store from './store';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'Setting a timer for a long period of time',
+  'AsyncStorage has been extracted from react-native core',
+]);
 
 export default function App() {
   let [fontsLoaded] = useFonts({

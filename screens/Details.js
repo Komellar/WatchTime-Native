@@ -20,7 +20,7 @@ const Details = ({ navigation, route }) => {
   const [activeTab, setActiveTab] = useState('info');
   // const [activeTab, setActiveTab] = useState('seasons');
 
-  const { selectedShow, userId } = route.params;
+  const { selectedShow, userId, showId } = route.params;
 
   const {
     data: loadedShow,
