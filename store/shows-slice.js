@@ -5,6 +5,8 @@ const showsSlice = createSlice({
   initialState: {
     showsList: [],
     showsIdList: [],
+    favShowsList: [],
+    favShowsIdList: [],
   },
   reducers: {
     addToList(state, action) {
@@ -50,6 +52,45 @@ const showsSlice = createSlice({
     updateList(state, action) {
       state.showsList = action.payload.showList;
       state.showsIdList = action.payload.idList;
+    },
+    //
+    // Favourite
+    //
+    addToFav(state, action) {
+      const newShow = action.payload;
+      const existingShow = state.favShowsList.find(
+        (show) => show.id === newShow.id
+      );
+
+      // if show isn't in favShowsList, add it there
+      if (!existingShow) {
+        state.favShowsList.push({
+          id: newShow.id,
+          title: newShow.title,
+          image: newShow.image,
+        });
+        state.favShowsIdList.push(newShow.id);
+      }
+    },
+    removeFromFavList(state, action) {
+      const myShow = action.payload;
+      const existingShow = state.favShowsList.find(
+        (show) => show.id === myShow.id
+      );
+
+      // if show is in favShowsList, remove it
+      if (existingShow) {
+        state.favShowsList = state.favShowsList.filter(
+          (show) => show.id !== myShow.id
+        );
+        state.favShowsIdList = state.favShowsIdList.filter(
+          (showId) => showId !== myShow.id
+        );
+      }
+    },
+    updateFavList(state, action) {
+      state.favShowsList = action.payload.showList;
+      state.favShowsIdList = action.payload.idList;
     },
   },
 });

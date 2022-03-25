@@ -3,7 +3,13 @@ import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, FONTS, SIZES } from '../../constants/theme';
 import { useDispatch, useSelector } from 'react-redux';
-import { addShowToDB, removeShowFromDB } from '../../services/shows-actions';
+import {
+  addShowToDB,
+  addToFavourite,
+  removeShowFromDB,
+  removeShowFromFav,
+} from '../../services/shows-actions';
+import { Ionicons } from '@expo/vector-icons';
 
 const HeroDetails = ({
   loadedImages,
@@ -14,6 +20,9 @@ const HeroDetails = ({
 }) => {
   const dispatch = useDispatch();
   const showsIdList = useSelector((state) => state.shows.showsIdList);
+  const favShowsIdList = useSelector((state) => state.shows.favShowsIdList);
+
+  const isFavourite = favShowsIdList.includes(loadedShow.id);
 
   let followButton;
   if (userId === null) {
@@ -32,18 +41,14 @@ const HeroDetails = ({
       action: () => dispatch(addShowToDB(userId, loadedShow)),
     };
   }
-  // const followButton =
-  //   userId === null
-  //     ? { title: 'Add to list', action: () => navigation.navigate('Auth') }
-  //     : showsIdList.includes(loadedShow.id)
-  //     ? {
-  //         title: 'Remove from my list',
-  //         action: () => dispatch(removeShowFromDB(userId, loadedShow)),
-  //       }
-  //     : {
-  //         title: 'Add to my list',
-  //         action: () => dispatch(addShowToDB(userId, loadedShow)),
-  //       };
+
+  const favouriteClickHandler = () => {
+    if (isFavourite) {
+      dispatch(removeShowFromFav(userId, loadedShow));
+    } else {
+      dispatch(addToFavourite(userId, loadedShow));
+    }
+  };
 
   return (
     <View>
@@ -57,6 +62,18 @@ const HeroDetails = ({
           locations={[0.0, 0.9]}
           style={{ width: '100%', height: '100%' }}
         >
+          {showsIdList.includes(loadedShow.id) && (
+            <TouchableOpacity
+              onPress={() => favouriteClickHandler()}
+              style={{ alignSelf: 'flex-end', margin: SIZES.m }}
+            >
+              <Ionicons
+                name="heart"
+                size={36}
+                color={isFavourite ? COLORS.error : COLORS.white}
+              />
+            </TouchableOpacity>
+          )}
           <View
             style={{
               flex: 1,

@@ -9,6 +9,67 @@ import {
 import { showsActions } from '../store/shows-slice';
 
 //
+// FAVOURITE SHOW
+//
+export const addToFavourite = (userId, show) => {
+  return (dispatch) => {
+    // add show to favourite list in app state in store
+    dispatch(showsActions.addToFav(show));
+
+    // add to database
+    const db = getDatabase();
+    set(ref(db, `users/${userId}/favourite/${show.id}`), {
+      id: show.id,
+      title: show.title,
+      image: show.image,
+    });
+  };
+};
+
+export const removeShowFromFav = (userId, show) => {
+  return (dispatch) => {
+    // remove show from favourite list in app state in store
+    dispatch(showsActions.removeFromFavList(show));
+
+    // remove from database
+    const db = getDatabase();
+    remove(ref(db, `users/${userId}/favourite/${show.id}`));
+  };
+};
+
+export const getFavShowsList = (userId) => {
+  return (dispatch) => {
+    const db = getDatabase();
+    const userRef = ref(db, `users/${userId}/favourite`);
+
+    // get data from database reference
+    onValue(userRef, (snapshot) => {
+      const data = snapshot.val();
+
+      // if user has favourite shows
+      if (data) {
+        // convert data to array
+        const convertedData = Object.values(data);
+        const idList = [];
+
+        // get id list of favourite shows
+        convertedData.forEach((show) => {
+          idList.push(show.id);
+        });
+
+        // update favourite shows list in app state in store
+        dispatch(
+          showsActions.updateFavList({
+            showList: convertedData,
+            idList: idList,
+          })
+        );
+      }
+    });
+  };
+};
+
+//
 // FOLLOWED SHOWS
 //
 
@@ -37,6 +98,7 @@ export const removeShowFromDB = (userId, show) => {
     // remove show from database
     const db = getDatabase();
     remove(ref(db, `users/${userId}/followed/${show.id}`));
+    dispatch(removeShowFromFav(userId, show));
   };
 };
 
@@ -44,6 +106,8 @@ export const getShowsList = (userId) => {
   return (dispatch) => {
     const db = getDatabase();
     const userRef = ref(db, `users/${userId}/followed`);
+
+    // get data from database reference
     onValue(userRef, (snapshot) => {
       const data = snapshot.val();
 
