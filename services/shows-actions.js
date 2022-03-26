@@ -130,3 +130,80 @@ export const getShowsList = (userId) => {
     });
   };
 };
+
+//
+///////////// EPISODES ////////////
+//
+
+const updateWatchedCount = (userId, show, add) => {
+  const db = getDatabase();
+  let watchedCount = 0;
+  const watchedCountRef = ref(db, `users/${userId}/followed/${show.id}`);
+
+  // get data from show in user list in database
+  onValue(watchedCountRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      // if there is some data
+      watchedCount = parseInt(data.watchedCount);
+      add ? watchedCount++ : watchedCount--;
+    } else {
+      // if no data then watchedCount = 1
+      if (add) {
+        watchedCount = 1;
+      }
+    }
+  });
+
+  // update data in database
+  update(ref(db, `users/${userId}/followed/${show.id}`), {
+    watchedCount: watchedCount,
+  });
+};
+
+export const addEpisodeToDB = (userId, show, episode) => {
+  const db = getDatabase();
+
+  set(
+    ref(
+      db,
+      `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`
+    ),
+    {
+      id: episode.id,
+      episode: episode.episode,
+    }
+  );
+  updateWatchedCount(userId, show, true);
+};
+
+export const removeEpisodeFromDB = (userId, show, episode) => {
+  const db = getDatabase();
+  set(
+    ref(
+      db,
+      `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`
+    ),
+    {}
+  );
+  updateWatchedCount(userId, show, false);
+};
+
+export const addSeasonToDB = (userId, show, season) => {
+  const db = getDatabase();
+
+  // for each episode in season add it to database
+  season.forEach((episode) => {
+    set(
+      ref(
+        db,
+        `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`
+      ),
+      {
+        id: episode.id,
+        episode: episode.episode,
+      }
+    );
+    updateWatchedCount(userId, show, true);
+  });
+};
