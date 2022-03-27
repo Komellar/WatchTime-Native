@@ -1,24 +1,45 @@
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  Modal,
-} from 'react-native';
-import React, { useState } from 'react';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { COLORS, SIZES, FONTS } from '../constants';
 import EpisodeModal from '../components/episodes/EpisodeModal';
 import { Ionicons } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import {
+  addShowToDB,
+  addEpisodeToDB,
+  removeEpisodeFromDB,
+  getWatchedEpisodes,
+} from '../services/shows-actions';
 
 const Episodes = ({ navigation, route }) => {
-  const { season } = route.params;
+  const { season, show, userId, followed } = route.params;
+  const dispatch = useDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [pickedEpisode, setPickedEpisode] = useState(null);
+  const [watchedEpisodes, setWatchedEpisodes] = useState([]);
 
-  // console.log(season);
+  useEffect(() => {
+    setWatchedEpisodes(getWatchedEpisodes(userId, show, season[0].season));
+  }, [userId, show, season]);
+
+  const pickEpisodeHandler = (show, episode) => {
+    if (!followed) {
+      dispatch(addShowToDB(userId, show));
+    }
+    if (!watchedEpisodes.includes(episode.id)) {
+      addEpisodeToDB(userId, show, episode);
+      let tempWatchedEpisodes = [...watchedEpisodes];
+      tempWatchedEpisodes.push(episode.id);
+      setWatchedEpisodes(tempWatchedEpisodes);
+    } else {
+      removeEpisodeFromDB(userId, show, episode);
+      let tempWatchedEpisodes = watchedEpisodes.filter((id) => {
+        return id !== episode.id;
+      });
+      setWatchedEpisodes(tempWatchedEpisodes);
+    }
+  };
 
   return (
     <View
@@ -33,6 +54,10 @@ const Episodes = ({ navigation, route }) => {
         pickedEpisode={pickedEpisode}
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        watchedEpisodes={watchedEpisodes}
+        pickEpisodeHandler={pickEpisodeHandler}
+        userId={userId}
+        show={show}
       />
 
       {/* Header */}
@@ -111,13 +136,17 @@ const Episodes = ({ navigation, route }) => {
                   S{item?.season}E{item?.episode}
                 </Text>
               </TouchableOpacity>
-              <BouncyCheckbox
-                size={28}
-                onPress={(isChecked) => {
-                  console.log(isChecked);
-                }}
-                fillColor={COLORS.primaryLight}
-              />
+              <TouchableOpacity onPress={() => pickEpisodeHandler(show, item)}>
+                <Ionicons
+                  name="checkmark-circle"
+                  size={35}
+                  color={
+                    watchedEpisodes.includes(item.id)
+                      ? 'green'
+                      : COLORS.lightGray
+                  }
+                />
+              </TouchableOpacity>
             </View>
             <View
               style={{

@@ -5,10 +5,15 @@ import { COLORS, SIZES, FONTS } from '../../../constants';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-const SeasonsTab = ({ seasons, show, navigation }) => {
-  const [pickedSeason, setPickedSeason] = useState(1);
+const SeasonsTab = ({ seasons, show, navigation, userId, followed }) => {
+  // const [pickedSeason, setPickedSeason] = useState(1);
 
-  // if (seasons) console.log(seasons[0]);
+  const addAllEpisodesHandler = (season) => {
+    let unseenEpisodes = season.filter(
+      (episode) => !watchedEpisodes.includes(episode.id)
+    );
+    addSeasonToDB(userId, show, unseenEpisodes);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -28,12 +33,19 @@ const SeasonsTab = ({ seasons, show, navigation }) => {
                 }}
               >
                 <BouncyCheckbox
-                  onPress={(isChecked) => {}}
+                  onPress={(isChecked) => {
+                    addAllEpisodesHandler(season);
+                  }}
                   fillColor={COLORS.primaryLight}
                 />
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('Episodes', { season: season });
+                    navigation.navigate('Episodes', {
+                      season: season,
+                      show: show,
+                      userId: userId,
+                      followed: followed,
+                    });
                   }}
                   style={{
                     flexDirection: 'row',

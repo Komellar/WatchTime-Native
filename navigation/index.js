@@ -8,7 +8,7 @@ import Episodes from '../screens/Episodes';
 import Tabs from './Tabs';
 import { getCurrentUser } from '../services/auth-actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { getShowsList } from '../services/shows-actions';
+import { getFavShowsList, getShowsList } from '../services/shows-actions';
 import Profile from '../screens/Profile';
 import UserShows from '../screens/UserShows';
 
@@ -18,6 +18,7 @@ const RootNavigation = ({ isFirstLaunch }) => {
 
   if (userId !== null) {
     dispatch(getShowsList(userId));
+    dispatch(getFavShowsList(userId));
   }
 
   useEffect(() => {

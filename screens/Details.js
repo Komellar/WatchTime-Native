@@ -15,12 +15,14 @@ import {
 } from '../services/external-api';
 import { useFetch } from '../hooks/use-fetch';
 import { COLORS, SIZES } from '../constants/theme';
+import { useSelector } from 'react-redux';
 
 const Details = ({ navigation, route }) => {
   const [activeTab, setActiveTab] = useState('info');
   // const [activeTab, setActiveTab] = useState('seasons');
 
-  const { selectedShow, userId, showId } = route.params;
+  const { selectedShow, userId } = route.params;
+  const showsIdList = useSelector((state) => state.shows.showsIdList);
 
   const {
     data: loadedShow,
@@ -91,6 +93,8 @@ const Details = ({ navigation, route }) => {
                 seasons={loadedSeasons}
                 show={loadedShow}
                 navigation={navigation}
+                userId={userId}
+                followed={showsIdList.includes(selectedShow?.id)}
               />
             )}
             {activeTab === 'gallery' && <GalleryTab images={loadedImages} />}

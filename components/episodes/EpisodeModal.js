@@ -1,12 +1,18 @@
 import { View, Text, Modal, TouchableOpacity, Image } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SIZES, FONTS } from '../../constants';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
-const EpisodeModal = ({ pickedEpisode, modalVisible, setModalVisible }) => {
-  const isChecked = false;
+const EpisodeModal = ({
+  pickedEpisode,
+  modalVisible,
+  setModalVisible,
+  pickEpisodeHandler,
+  show,
+  watchedEpisodes,
+}) => {
+  const isChecked = watchedEpisodes?.includes(pickedEpisode?.id);
 
   return (
     <Modal
@@ -31,7 +37,6 @@ const EpisodeModal = ({ pickedEpisode, modalVisible, setModalVisible }) => {
         style={{
           justifyContent: 'flex-end',
           backgroundColor: COLORS.background,
-          // paddingHorizontal: SIZES.l,
         }}
       >
         <Image
@@ -69,7 +74,11 @@ const EpisodeModal = ({ pickedEpisode, modalVisible, setModalVisible }) => {
                 {pickedEpisode?.title}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => {
+                pickEpisodeHandler(show, pickedEpisode);
+              }}
+            >
               {!isChecked && (
                 <View
                   style={{
@@ -86,12 +95,12 @@ const EpisodeModal = ({ pickedEpisode, modalVisible, setModalVisible }) => {
                   style={{
                     backgroundColor: COLORS.primary,
                     borderRadius: 50,
-                    padding: SIZES.s,
+                    padding: SIZES.xs,
                   }}
                 >
                   <Ionicons
                     name="md-checkmark-sharp"
-                    size={30}
+                    size={35}
                     color={COLORS.onDark}
                   />
                 </View>
