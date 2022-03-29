@@ -18,10 +18,10 @@ import { COLORS, SIZES } from '../constants/theme';
 import { useSelector } from 'react-redux';
 
 const Details = ({ navigation, route }) => {
-  const [activeTab, setActiveTab] = useState('info');
-  // const [activeTab, setActiveTab] = useState('seasons');
+  // const [activeTab, setActiveTab] = useState('info');
+  const [activeTab, setActiveTab] = useState('seasons');
 
-  const { selectedShow, userId } = route.params;
+  const { selectedShow, userId, changedSeason, episodesChanged } = route.params;
   const showsIdList = useSelector((state) => state.shows.showsIdList);
 
   const {
@@ -95,6 +95,8 @@ const Details = ({ navigation, route }) => {
                 navigation={navigation}
                 userId={userId}
                 followed={showsIdList.includes(selectedShow?.id)}
+                changedSeason={changedSeason}
+                episodesChanged={episodesChanged}
               />
             )}
             {activeTab === 'gallery' && <GalleryTab images={loadedImages} />}

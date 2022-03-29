@@ -18,10 +18,12 @@ const Episodes = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [pickedEpisode, setPickedEpisode] = useState(null);
   const [watchedEpisodes, setWatchedEpisodes] = useState([]);
+  // const [episodesChanged, setEpisodesChanged] = useState(false);
 
   useEffect(() => {
     setWatchedEpisodes(getWatchedEpisodes(userId, show, season[0].season));
   }, [userId, show, season]);
+  // console.log(watchedEpisodes);
 
   const pickEpisodeHandler = (show, episode) => {
     if (!followed) {
@@ -69,7 +71,16 @@ const Episodes = ({ navigation, route }) => {
         }}
       >
         {/* Back button */}
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('Details', {
+              selectedShow: show,
+              changedSeason: season[0].season,
+              episodesChanged: watchedEpisodes.length,
+            })
+          }
+        >
+          {/* <TouchableOpacity onPress={() => navigation.goBack()}> */}
           <Ionicons name="arrow-back-sharp" size={30} color={COLORS.white} />
         </TouchableOpacity>
         <Text

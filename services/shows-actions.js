@@ -240,14 +240,8 @@ export const getWatchedEpisodes = (userId, show, season) => {
       convertedData.forEach((episode) => {
         idList.push(episode.id);
       });
-      // return idList;
       dataToReturn = idList;
-      // setWatchedEpisodes(idList);
     }
-    // else {
-    // return [];
-    // setWatchedEpisodes([]);
-    // }
   });
   // console.log('dataToReturn: ', dataToReturn);
   return dataToReturn;
