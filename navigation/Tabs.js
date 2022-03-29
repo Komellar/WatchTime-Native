@@ -11,6 +11,7 @@ const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
   const userId = useSelector((state) => state.auth.userId);
+  // console.log('nav', userId);
 
   return (
     <Tab.Navigator
@@ -57,11 +58,11 @@ const Tabs = () => {
           ),
         }}
       />
-      {userId !== null && (
+      {userId !== undefined && (
         <Tab.Screen
           name="Profile"
           component={Profile}
-          initialParams={{ userId: userId }}
+          // initialParams={{ userId: userId }}
           options={{
             tabBarIcon: ({ focused }) => (
               <FontAwesome
@@ -74,22 +75,23 @@ const Tabs = () => {
           }}
         />
       )}
-      {userId === null && (
-        <Tab.Screen
-          name="Auth"
-          component={Auth}
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <FontAwesome
-                name="user"
-                size={30}
-                color={focused ? COLORS.primary : COLORS.lightGray}
-                focused={focused}
-              />
-            ),
-          }}
-        />
-      )}
+      {userId === null ||
+        (userId === undefined && (
+          <Tab.Screen
+            name="Auth"
+            component={Auth}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <FontAwesome
+                  name="user"
+                  size={30}
+                  color={focused ? COLORS.primary : COLORS.lightGray}
+                  focused={focused}
+                />
+              ),
+            }}
+          />
+        ))}
     </Tab.Navigator>
   );
 };

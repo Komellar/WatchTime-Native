@@ -2,7 +2,6 @@ import {
   getDatabase,
   ref,
   set,
-  push,
   remove,
   onValue,
   update,
@@ -10,7 +9,7 @@ import {
 import { showsActions } from '../store/shows-slice';
 
 //
-// FAVOURITE SHOW
+///////////// FAVOURITE SHOWS ////////////
 //
 export const addToFavourite = (userId, show) => {
   return (dispatch) => {
@@ -71,7 +70,7 @@ export const getFavShowsList = (userId) => {
 };
 
 //
-// FOLLOWED SHOWS
+///////////// FOLLOWED SHOWS ////////////
 //
 
 export const addShowToDB = (userId, show) => {
@@ -177,22 +176,6 @@ export const addEpisodeToDB = (userId, show, episode) => {
   updateWatchedCount(userId, show, true);
 };
 
-// export const addEpisodeToDB = (userId, show, episode) => {
-//   const db = getDatabase();
-
-//   update(
-//     ref(
-//       db,
-//       `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`
-//     ),
-//     {
-//       id: episode.id,
-//       episode: episode.episode,
-//     }
-//   );
-//   updateWatchedCount(userId, show, true);
-// };
-
 export const removeEpisodeFromDB = (userId, show, episode) => {
   const db = getDatabase();
   set(
@@ -245,4 +228,26 @@ export const getWatchedEpisodes = (userId, show, season) => {
   });
   // console.log('dataToReturn: ', dataToReturn);
   return dataToReturn;
+};
+
+//
+///////////// STATISTICS ////////////
+//
+
+export const getWatchCount = (userId, show) => {
+  const db = getDatabase();
+  let watchedCount = 0;
+  let runtime = 0;
+  let timeSpent = 0;
+
+  const watchedCountRef = ref(db, `users/${userId}/followed/${show.id}`);
+  onValue(watchedCountRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      watchedCount = parseInt(data.watchedCount);
+      runtime = parseInt(data.runtime);
+      timeSpent = runtime * watchedCount;
+    }
+  });
+  return { watchedCount, timeSpent };
 };

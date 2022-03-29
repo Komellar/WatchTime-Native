@@ -69,8 +69,6 @@ const SeasonsTab = ({
     episodesChanged,
   ]);
 
-  console.log('SEASONS: ', watchedEpisodes);
-
   return (
     <View style={{ flex: 1 }}>
       {!seasons && <Text>No seasons</Text>}

@@ -6,9 +6,13 @@ import { SvgUri } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SIZES, FONTS, COLORS } from '../../constants/theme';
 
-const HeroProfile = () => {
+const HeroProfile = ({ statistics }) => {
   const userImg = useSelector((state) => state.auth.userImg);
   const userName = useSelector((state) => state.auth.userName);
+
+  const convertedTimeSpent = `${Math.floor(statistics.timeSpent / 60)}h ${
+    statistics.timeSpent % 60
+  }min`;
 
   return (
     <View
@@ -77,7 +81,7 @@ const HeroProfile = () => {
                 Watched episodes
               </Text>
               <Text style={{ ...FONTS.h1, color: COLORS.primaryLight }}>
-                462
+                {statistics.episodesCount}
               </Text>
             </View>
             {/*  */}
@@ -102,7 +106,7 @@ const HeroProfile = () => {
                 Time spent on watching
               </Text>
               <Text style={{ ...FONTS.h1, color: COLORS.primaryLight }}>
-                453h 21min
+                {convertedTimeSpent}
               </Text>
             </View>
           </View>
