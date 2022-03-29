@@ -1,19 +1,40 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import { COLORS, SIZES, FONTS } from '../../../constants';
-
 import { MaterialIcons } from '@expo/vector-icons';
+import {
+  getWatchedEpisodes,
+  addSeasonToDB,
+} from '../../../services/shows-actions';
 
 const SeasonsTab = ({ seasons, show, navigation, userId, followed }) => {
-  // const [pickedSeason, setPickedSeason] = useState(1);
+  const [watchedEpisodes, setWatchedEpisodes] = useState({});
 
-  const addAllEpisodesHandler = (season) => {
+  const addAllEpisodesHandler = (season, seasonNum) => {
     let unseenEpisodes = season.filter(
-      (episode) => !watchedEpisodes.includes(episode.id)
+      (episode) => !watchedEpisodes[`s${seasonNum}`].includes(episode.id)
     );
     addSeasonToDB(userId, show, unseenEpisodes);
+    setWatchedEpisodes({
+      ...watchedEpisodes,
+      [`s${seasonNum}`]: getWatchedEpisodes(userId, show, season[0].season),
+    });
   };
+
+  useEffect(() => {
+    let watchedSeasons = {};
+
+    seasons.forEach((season, index) => {
+      watchedSeasons = {
+        ...watchedSeasons,
+        [`s${index + 1}`]: getWatchedEpisodes(userId, show, season[0].season),
+      };
+    });
+
+    setWatchedEpisodes(watchedSeasons);
+  }, [userId, show, seasons]);
+  console.log(watchedEpisodes);
 
   return (
     <View style={{ flex: 1 }}>
@@ -34,7 +55,7 @@ const SeasonsTab = ({ seasons, show, navigation, userId, followed }) => {
               >
                 <BouncyCheckbox
                   onPress={(isChecked) => {
-                    addAllEpisodesHandler(season);
+                    addAllEpisodesHandler(season, index + 1);
                   }}
                   fillColor={COLORS.primaryLight}
                 />
@@ -88,7 +109,7 @@ const SeasonsTab = ({ seasons, show, navigation, userId, followed }) => {
                       ...FONTS.body3,
                     }}
                   >
-                    0/{season.length}
+                    {watchedEpisodes[`s${index + 1}`]?.length}/{season.length}
                   </Text>
                   <MaterialIcons
                     name="keyboard-arrow-right"
