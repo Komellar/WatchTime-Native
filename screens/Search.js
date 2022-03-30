@@ -45,8 +45,6 @@ const Search = ({ navigation }) => {
     };
   }, [getSearchResult, enteredQuery]);
 
-  console.log(searchData);
-
   return (
     <View
       style={{

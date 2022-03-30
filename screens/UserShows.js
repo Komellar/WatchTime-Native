@@ -5,11 +5,10 @@ import { SIZES, COLORS, FONTS } from '../constants/theme';
 const UserShows = ({ navigation, route }) => {
   const { shows, title } = route.params;
 
-  //   console.log(shows);
-
   return (
     <View
       style={{
+        flex: 1,
         alignItems: 'center',
         backgroundColor: COLORS.background,
       }}

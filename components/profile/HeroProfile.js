@@ -15,13 +15,25 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { getAuth, signOut } from 'firebase/auth';
 import { authActions } from '../../store/auth-slice';
 import { showsActions } from '../../store/shows-slice';
+import { getWatchCount } from '../../services/shows-actions';
 
-const HeroProfile = ({ statistics }) => {
+const HeroProfile = ({ userId, myShows }) => {
   const userImg = useSelector((state) => state.auth.userImg);
   const userName = useSelector((state) => state.auth.userName);
 
-  const convertedTimeSpent = `${Math.floor(statistics.timeSpent / 60)}h ${
-    statistics.timeSpent % 60
+  let statsEpisodesCount = 0;
+  let statsTimeSpent = 0;
+
+  if (myShows.length > 0) {
+    myShows.forEach((show) => {
+      const statistics = getWatchCount(userId, show);
+      statsEpisodesCount += statistics.watchedCount;
+      statsTimeSpent += statistics.timeSpent;
+    });
+  }
+
+  const convertedTimeSpent = `${Math.floor(statsTimeSpent / 60)}h ${
+    statsTimeSpent % 60
   }min`;
 
   const createTwoButtonAlert = () =>
@@ -127,7 +139,7 @@ const HeroProfile = ({ statistics }) => {
                 Watched episodes
               </Text>
               <Text style={{ ...FONTS.h1, color: COLORS.primaryLight }}>
-                {statistics.episodesCount}
+                {statsEpisodesCount}
               </Text>
             </View>
             {/*  */}
