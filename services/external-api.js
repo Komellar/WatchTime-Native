@@ -188,3 +188,26 @@ export async function getCast(requestData) {
 
   return { actors, characters };
 }
+
+export async function getSearchResult(requestData) {
+  const response = await fetch(
+    `https://api.tvmaze.com/search/shows?q=${requestData}`
+    // https://api.tvmaze.com/search/shows?q=girls
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error.message || 'Could not get products.');
+  }
+
+  const loadedShows = data.map((result) => {
+    return {
+      id: result.show.id,
+      title: result.show.name,
+      image: result.show.image?.medium ?? imageNotFound,
+    };
+  });
+
+  return loadedShows;
+}
