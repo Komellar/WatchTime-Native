@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  ImageBackground,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  SectionList,
-} from 'react-native';
+import { View, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { SIZES, FONTS, COLORS } from '../constants/theme';
@@ -27,20 +18,20 @@ const Profile = ({ navigation }) => {
   });
 
   useEffect(() => {
-    if (myShows.length > 0) {
-      myShows.forEach((show) => {
-        const showStatistics = getWatchCount(userId, show);
-        const showEpisodesCount = showStatistics.watchedCount;
-        const showTimeSpent = showStatistics.timeSpent;
-        setStatistics({
-          episodesCount: statistics.episodesCount + showEpisodesCount,
-          timeSpent: statistics.timeSpent + showTimeSpent,
-        });
+    // if (myShows) {
+    myShows.forEach((show) => {
+      const showStatistics = getWatchCount(userId, show);
+      const showEpisodesCount = showStatistics.watchedCount;
+      const showTimeSpent = showStatistics.timeSpent;
+      setStatistics({
+        episodesCount: statistics.episodesCount + showEpisodesCount,
+        timeSpent: statistics.timeSpent + showTimeSpent,
       });
-    }
+    });
+    // }
   }, [myShows, getWatchCount, userId]);
 
-  // console.log(statistics);
+  console.log(statistics);
 
   // watching, finished, not started
 

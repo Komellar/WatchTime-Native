@@ -1,10 +1,20 @@
-import { View, Text, ImageBackground } from 'react-native';
+import {
+  View,
+  Text,
+  ImageBackground,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import React from 'react';
 import heroImage from '../../assets/heroProfile.jpg';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SvgUri } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SIZES, FONTS, COLORS } from '../../constants/theme';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { getAuth, signOut } from 'firebase/auth';
+import { authActions } from '../../store/auth-slice';
+import { showsActions } from '../../store/shows-slice';
 
 const HeroProfile = ({ statistics }) => {
   const userImg = useSelector((state) => state.auth.userImg);
@@ -13,6 +23,34 @@ const HeroProfile = ({ statistics }) => {
   const convertedTimeSpent = `${Math.floor(statistics.timeSpent / 60)}h ${
     statistics.timeSpent % 60
   }min`;
+
+  const createTwoButtonAlert = () =>
+    Alert.alert(
+      'Warning',
+      'Are you sure you want to log out?',
+      [
+        {
+          text: 'NO',
+        },
+        { text: 'YES', onPress: () => logoutHandler() },
+      ],
+      {
+        cancelable: true,
+      }
+    );
+
+  const dispatch = useDispatch();
+
+  const logoutHandler = async () => {
+    try {
+      const auth = getAuth();
+      await signOut(auth);
+      dispatch(authActions.removeCurrentUser());
+      dispatch(showsActions.resetList());
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <View
@@ -43,6 +81,14 @@ const HeroProfile = ({ statistics }) => {
               justifyContent: 'center',
             }}
           >
+            <TouchableOpacity
+              onPress={() => {
+                createTwoButtonAlert();
+              }}
+              style={{ position: 'absolute', top: 30, right: 10 }}
+            >
+              <MaterialCommunityIcons name="logout" size={24} color="white" />
+            </TouchableOpacity>
             <View style={{ width: 120, height: 120 }}>
               {userImg && <SvgUri width="100%" height="100%" uri={userImg} />}
             </View>
