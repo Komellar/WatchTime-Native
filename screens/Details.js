@@ -18,11 +18,11 @@ import { COLORS, SIZES } from '../constants/theme';
 import { useSelector } from 'react-redux';
 
 const Details = ({ navigation, route }) => {
-  // const [activeTab, setActiveTab] = useState('info');
-  const [activeTab, setActiveTab] = useState('seasons');
-
-  const { selectedShow, userId, changedSeason, episodesChanged } = route.params;
+  const { selectedShow, userId, changedSeason, episodesChanged, isFollowed } =
+    route.params;
   const showsIdList = useSelector((state) => state.shows.showsIdList);
+
+  const [activeTab, setActiveTab] = useState(isFollowed ? 'seasons' : 'info');
 
   const {
     data: loadedShow,

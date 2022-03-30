@@ -39,11 +39,14 @@ const ProfileSlider = ({ title, showsList, navigation }) => {
         data={showsList}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item?.id}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('Details', { selectedShow: item })
+              navigation.navigate('Details', {
+                selectedShow: item,
+                isFollowed: true,
+              })
             }
           >
             <View
@@ -53,7 +56,7 @@ const ProfileSlider = ({ title, showsList, navigation }) => {
               }}
             >
               <Image
-                source={{ uri: item.image }}
+                source={{ uri: item?.image }}
                 style={{
                   height: 225,
                   width: 160,

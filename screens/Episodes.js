@@ -21,7 +21,7 @@ const Episodes = ({ navigation, route }) => {
   // const [episodesChanged, setEpisodesChanged] = useState(false);
 
   useEffect(() => {
-    setWatchedEpisodes(getWatchedEpisodes(userId, show, season[0].season));
+    setWatchedEpisodes(getWatchedEpisodes(userId, show, season[0]?.season));
   }, [userId, show, season]);
   // console.log(watchedEpisodes);
 
@@ -75,7 +75,7 @@ const Episodes = ({ navigation, route }) => {
           onPress={() =>
             navigation.navigate('Details', {
               selectedShow: show,
-              changedSeason: season[0].season,
+              changedSeason: season[0]?.season,
               episodesChanged: watchedEpisodes.length,
             })
           }
@@ -86,7 +86,7 @@ const Episodes = ({ navigation, route }) => {
         <Text
           style={{ paddingLeft: SIZES.m, color: COLORS.white, ...FONTS.h3 }}
         >
-          Season {season[0].season}
+          Season {season[0]?.season}
         </Text>
       </View>
 

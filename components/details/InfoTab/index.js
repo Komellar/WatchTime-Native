@@ -1,12 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  FlatList,
-  Button,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { StyleSheet, View, Text, TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
 import { COLORS, FONTS, SIZES } from '../../../constants';
 import Info from './Info';
@@ -14,12 +6,10 @@ import Genres from './Genres';
 import Characters from './Characters';
 import Actors from './Actors';
 
-const InfoTab = ({ loadedShow, loadedSeasons, loadedCast }) => {
+const InfoTab = ({ loadedShow, loadedCast }) => {
   const [storylineIsOpen, setStorylineIsOpen] = useState(false);
 
   const { actors, characters } = loadedCast;
-
-  // console.log(characters);
 
   const desc = loadedShow?.description?.replace(/<[^>]+>/g, '');
   const trimmedDesc = desc?.substr(0, 230);

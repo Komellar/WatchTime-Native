@@ -33,7 +33,7 @@ const Hero = ({ loadedImages, loadedShow, navigation }) => {
         }}
       >
         <ImageBackground
-          source={{ uri: loadedImages?.posterImg.url }}
+          source={{ uri: loadedImages?.posterImg?.url }}
           style={{
             width: '100%',
             height: '100%',

@@ -27,14 +27,13 @@ const SeasonsTab = ({
     if (!followed) {
       dispatch(addShowToDB(userId, show));
     }
-    // get only this episodes that aren't in watchedEpisodes object
     let unseenEpisodes = season.filter(
       (episode) => !watchedEpisodes[`s${seasonNum}`].includes(episode.id)
     );
     addSeasonToDB(userId, show, unseenEpisodes);
     setWatchedEpisodes({
       ...watchedEpisodes,
-      [`s${seasonNum}`]: getWatchedEpisodes(userId, show, season[0].season),
+      [`s${seasonNum}`]: getWatchedEpisodes(userId, show, season[0]?.season),
     });
   };
 
@@ -44,7 +43,7 @@ const SeasonsTab = ({
     seasons.forEach((season, index) => {
       watchedSeasons = {
         ...watchedSeasons,
-        [`s${index + 1}`]: getWatchedEpisodes(userId, show, season[0].season),
+        [`s${index + 1}`]: getWatchedEpisodes(userId, show, season[0]?.season),
       };
     });
     setWatchedEpisodes(watchedSeasons);
@@ -77,103 +76,107 @@ const SeasonsTab = ({
           {/* Seasons  */}
           {seasons.map((season, index) => (
             <View key={index}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginVertical: SIZES.l,
-                  paddingLeft: SIZES.xs,
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                }}
-              >
-                {/* Check Icon */}
-                <TouchableOpacity
-                  onPress={() => addAllEpisodesHandler(season, index + 1)}
-                  style={{ marginRight: SIZES.xs }}
-                >
-                  <Ionicons
-                    name="checkmark-circle"
-                    size={35}
-                    color={
-                      watchedEpisodes[`s${index + 1}`]?.length === season.length
-                        ? COLORS.primaryLight
-                        : COLORS.lightGray
-                    }
-                  />
-                </TouchableOpacity>
-
-                {/* Rest of season row */}
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Episodes', {
-                      season: season,
-                      show: show,
-                      userId: userId,
-                      followed: followed,
-                    });
-                  }}
+              {season[0] && (
+                <View
                   style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-evenly',
+                    marginVertical: SIZES.l,
+                    paddingLeft: SIZES.xs,
+                    justifyContent: 'flex-start',
                     alignItems: 'center',
                   }}
                 >
-                  <Text
-                    style={{
-                      color: COLORS.onDark,
-                      ...FONTS.body2,
-                      paddingRight: SIZES.l,
-                    }}
+                  {/* Check Icon */}
+                  <TouchableOpacity
+                    onPress={() => addAllEpisodesHandler(season, index + 1)}
+                    style={{ marginRight: SIZES.xs }}
                   >
-                    Season {index + 1}
-                  </Text>
+                    <Ionicons
+                      name="checkmark-circle"
+                      size={35}
+                      color={
+                        watchedEpisodes[`s${index + 1}`]?.length ===
+                        season.length
+                          ? COLORS.primaryLight
+                          : COLORS.lightGray
+                      }
+                    />
+                  </TouchableOpacity>
 
-                  {/* Progress bar */}
-                  <View
+                  {/* Rest of season row */}
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('Episodes', {
+                        season: season,
+                        show: show,
+                        userId: userId,
+                        followed: followed,
+                      });
+                    }}
                     style={{
-                      width: 110,
-                      height: SIZES.m,
-                      backgroundColor: COLORS.gray,
-                      borderRadius: SIZES.l,
-                      marginRight: SIZES.l,
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      alignItems: 'center',
                     }}
                   >
+                    <Text
+                      style={{
+                        color: COLORS.onDark,
+                        ...FONTS.body2,
+                        paddingRight: SIZES.l,
+                      }}
+                    >
+                      Season {index + 1}
+                    </Text>
+
+                    {/* Progress bar */}
                     <View
                       style={{
-                        width:
-                          (watchedEpisodes[`s${index + 1}`]?.length /
-                            season.length) *
-                            100 +
-                          '%',
+                        width: 110,
                         height: SIZES.m,
-                        backgroundColor: COLORS.primaryLight,
-                        borderRadius:
-                          watchedEpisodes[`s${index + 1}`]?.length ===
-                          season.length
-                            ? SIZES.l
-                            : 0,
-                        borderBottomLeftRadius: SIZES.l,
-                        borderTopLeftRadius: SIZES.l,
+                        backgroundColor: COLORS.gray,
+                        borderRadius: SIZES.l,
+                        marginRight: SIZES.l,
                       }}
-                    />
-                  </View>
+                    >
+                      <View
+                        style={{
+                          width:
+                            (watchedEpisodes[`s${index + 1}`]?.length /
+                              season?.length) *
+                              100 +
+                            '%',
+                          height: SIZES.m,
+                          backgroundColor: COLORS.primaryLight,
+                          borderRadius:
+                            watchedEpisodes[`s${index + 1}`]?.length ===
+                            season?.length
+                              ? SIZES.l
+                              : 0,
+                          borderBottomLeftRadius: SIZES.l,
+                          borderTopLeftRadius: SIZES.l,
+                        }}
+                      />
+                    </View>
 
-                  {/* Watched episodes */}
-                  <Text
-                    style={{
-                      color: COLORS.onDark,
-                      ...FONTS.body3,
-                    }}
-                  >
-                    {watchedEpisodes[`s${index + 1}`]?.length}/{season.length}
-                  </Text>
-                  <MaterialIcons
-                    name="keyboard-arrow-right"
-                    size={24}
-                    color={COLORS.lightGray}
-                  />
-                </TouchableOpacity>
-              </View>
+                    {/* Watched episodes */}
+                    <Text
+                      style={{
+                        color: COLORS.onDark,
+                        ...FONTS.body3,
+                      }}
+                    >
+                      {watchedEpisodes[`s${index + 1}`]?.length}/
+                      {season?.length}
+                    </Text>
+                    <MaterialIcons
+                      name="keyboard-arrow-right"
+                      size={24}
+                      color={COLORS.lightGray}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
 
               {/* Divider */}
               <View

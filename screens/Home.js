@@ -36,14 +36,12 @@ const Home = ({ navigation }) => {
     error: imagesError,
   } = useFetch(getShowImages, randomId);
 
-  // let convertedGenres = loadedShow?.genres.join(' • ');
-
   const ofTheDayShows = shows?.slice(70, 90);
-  let popularShows = shows?.filter((show) => show.popularity > 97);
-  let bestRatedShows = shows?.filter((show) => show.rating > 8.5);
-  let actionShows = shows?.filter((show) => show.genres.includes('Action'));
-  let comedyShows = shows?.filter((show) => show.genres.includes('Comedy'));
-  let familyShows = shows?.filter((show) => show.genres.includes('Family'));
+  const popularShows = shows?.filter((show) => show.popularity > 97);
+  const bestRatedShows = shows?.filter((show) => show.rating > 8.5);
+  const actionShows = shows?.filter((show) => show.genres?.includes('Action'));
+  const comedyShows = shows?.filter((show) => show.genres?.includes('Comedy'));
+  const familyShows = shows?.filter((show) => show.genres?.includes('Family'));
 
   return (
     <View

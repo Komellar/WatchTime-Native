@@ -16,7 +16,7 @@ const UserShows = ({ navigation, route }) => {
       <FlatList
         data={shows}
         numColumns={3}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item?.id}
         ListHeaderComponent={
           <Text
             style={{
@@ -33,12 +33,15 @@ const UserShows = ({ navigation, route }) => {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('Details', { selectedShow: item })
+              navigation.navigate('Details', {
+                selectedShow: item,
+                isFollowed: true,
+              })
             }
             style={{ paddingHorizontal: 2, paddingVertical: 2 }}
           >
             <Image
-              source={{ uri: item.image }}
+              source={{ uri: item?.image }}
               style={{
                 height: ((SIZES.width * 32) / 100) * 1.41,
                 width: (SIZES.width * 32) / 100,

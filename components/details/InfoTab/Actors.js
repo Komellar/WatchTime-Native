@@ -19,7 +19,7 @@ const Actors = ({ actors }) => {
         data={actors}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item?.id}
         renderItem={({ item, index }) => (
           <View
             style={{
@@ -28,7 +28,7 @@ const Actors = ({ actors }) => {
             }}
           >
             <Image
-              source={{ uri: item.actorImage }}
+              source={{ uri: item?.actorImage }}
               resizeMode="cover"
               style={{
                 height: 130,
@@ -45,7 +45,7 @@ const Actors = ({ actors }) => {
                 ...FONTS.body5,
               }}
             >
-              {item.actorName}
+              {item?.actorName}
             </Text>
           </View>
         )}

@@ -10,7 +10,7 @@ const Recommended = ({ data, navigation }) => {
       }}
     >
       <Image
-        source={{ uri: data.img }}
+        source={{ uri: data?.img }}
         style={{
           height: 200,
           width: '100%',
@@ -42,17 +42,17 @@ const Recommended = ({ data, navigation }) => {
             paddingVertical: SIZES.xs,
           }}
         >
-          {data.description}
+          {data?.description}
         </Text>
         <Text
           style={{ textAlign: 'center', color: COLORS.onDark, ...FONTS.body3 }}
         >
-          {data.title}
+          {data?.title}
         </Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Details', {
-              selectedShow: { id: data.showId },
+              selectedShow: { id: data?.showId },
             });
           }}
           style={{

@@ -23,7 +23,7 @@ const SliderShows = ({ data, title, navigation }) => {
         data={data}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item?.id}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() =>
@@ -37,7 +37,7 @@ const SliderShows = ({ data, title, navigation }) => {
               }}
             >
               <Image
-                source={{ uri: item.image }}
+                source={{ uri: item?.image }}
                 style={{
                   height: 225,
                   width: 160,

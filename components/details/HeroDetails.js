@@ -30,7 +30,7 @@ const HeroDetails = ({
       title: 'Add to list',
       action: () => navigation.navigate('Auth'),
     };
-  } else if (showsIdList.includes(loadedShow.id)) {
+  } else if (showsIdList?.includes(loadedShow.id)) {
     followButton = {
       title: 'Remove from my list',
       action: () => dispatch(removeShowFromDB(userId, loadedShow)),
@@ -53,7 +53,7 @@ const HeroDetails = ({
   return (
     <View>
       <ImageBackground
-        source={{ uri: loadedImages?.backgroundImg.url }}
+        source={{ uri: loadedImages?.backgroundImg?.url }}
         style={{ width: '100%', height: 220 }}
       >
         <LinearGradient
@@ -62,7 +62,7 @@ const HeroDetails = ({
           locations={[0.0, 0.9]}
           style={{ width: '100%', height: '100%' }}
         >
-          {showsIdList.includes(loadedShow.id) && (
+          {showsIdList.includes(loadedShow?.id) && (
             <TouchableOpacity
               onPress={() => favouriteClickHandler()}
               style={{ alignSelf: 'flex-end', margin: SIZES.m }}

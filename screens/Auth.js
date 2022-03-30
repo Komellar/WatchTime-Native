@@ -14,8 +14,6 @@ import {
   updateProfile,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  setPersistence,
-  browserLocalPersistence,
 } from 'firebase/auth';
 import Login from '../components/auth/Login';
 import Register from '../components/auth/Register';
@@ -126,7 +124,6 @@ const Auth = ({ navigation }) => {
       const auth = getAuth();
       if (isLogging) {
         try {
-          // await setPersistence(auth, browserLocalPersistence);
           await signInWithEmailAndPassword(auth, enteredEmail, enteredPassword);
         } catch (err) {
           if (err.code === 'auth/user-not-found') {
@@ -137,7 +134,6 @@ const Auth = ({ navigation }) => {
         }
       } else {
         try {
-          // await setPersistence(auth, browserLocalPersistence);
           await createUserWithEmailAndPassword(
             auth,
             enteredEmail,
@@ -161,7 +157,7 @@ const Auth = ({ navigation }) => {
             const uid = user.uid;
             const userImg = user.photoURL;
             dispatch(authActions.setCurrentUser({ displayName, uid, userImg }));
-            // isLogging ? history.push('/profile') : history.push('/choosing');
+            // isLogging ? navigation.navigate('Profile') : navigation.navigate('Choosing');
             navigation.navigate('Profile');
           }
         } catch (err) {

@@ -57,7 +57,8 @@ const Search = ({ navigation }) => {
         style={{
           backgroundColor: '#1a1a1a',
           borderRadius: SIZES.xs,
-          marginVertical: SIZES.m,
+          marginTop: SIZES.xl,
+          marginBottom: SIZES.m,
           paddingVertical: SIZES.xs,
           paddingHorizontal: SIZES.l,
           flexDirection: 'row',
@@ -97,7 +98,7 @@ const Search = ({ navigation }) => {
             data={searchData}
             numColumns={2}
             ListFooterComponent={<View style={{ height: 120 }} />}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item?.id}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() =>
@@ -106,7 +107,7 @@ const Search = ({ navigation }) => {
                 style={{ paddingHorizontal: 2, paddingVertical: 2 }}
               >
                 <Image
-                  source={{ uri: item.image }}
+                  source={{ uri: item?.image }}
                   style={{
                     height: ((SIZES.width * 50) / 100) * 1.41,
                     width: (SIZES.width * 50) / 100,

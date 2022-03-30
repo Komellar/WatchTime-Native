@@ -3,10 +3,8 @@ import React from 'react';
 import { SIZES, COLORS, FONTS } from '../../../constants';
 
 const GalleryTab = ({ images }) => {
-  // console.log(images);
-
-  const posters = images.allImages.filter((img) => img.type === 'poster');
-  const backgrounds = images.allImages.filter(
+  const posters = images?.allImages?.filter((img) => img.type === 'poster');
+  const backgrounds = images?.allImages?.filter(
     (img) => img.type === 'background'
   );
 
@@ -27,10 +25,10 @@ const GalleryTab = ({ images }) => {
         data={posters}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.imgId}
+        keyExtractor={(item) => item?.imgId}
         renderItem={({ item }) => (
           <Image
-            source={{ uri: item.url }}
+            source={{ uri: item?.url }}
             style={{ width: 150, height: 220, marginHorizontal: 3 }}
           />
         )}
@@ -50,10 +48,10 @@ const GalleryTab = ({ images }) => {
         data={backgrounds}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.imgId}
+        keyExtractor={(item) => item?.imgId}
         renderItem={({ item }) => (
           <Image
-            source={{ uri: item.url }}
+            source={{ uri: item?.url }}
             style={{ width: 220, height: 150, marginHorizontal: 3 }}
           />
         )}

@@ -19,7 +19,7 @@ const Characters = ({ characters, title }) => {
         data={characters}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.idCharacter}
+        keyExtractor={(item) => item?.idCharacter}
         renderItem={({ item, index }) => (
           <View
             style={{
@@ -28,7 +28,7 @@ const Characters = ({ characters, title }) => {
             }}
           >
             <Image
-              source={{ uri: item.characterImage }}
+              source={{ uri: item?.characterImage }}
               resizeMode="cover"
               style={{
                 height: 200,
@@ -45,7 +45,7 @@ const Characters = ({ characters, title }) => {
                 ...FONTS.body4,
               }}
             >
-              {item.characterName}
+              {item?.characterName}
             </Text>
           </View>
         )}

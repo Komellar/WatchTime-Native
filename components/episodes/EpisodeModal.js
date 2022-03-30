@@ -106,14 +106,6 @@ const EpisodeModal = ({
                 </View>
               )}
             </TouchableOpacity>
-            {/* <BouncyCheckbox
-              size={28}
-              onPress={(isChecked) => {
-                console.log(isChecked);
-              }}
-              fillColor={COLORS.primaryLighter}
-              //   unfillColor="#FFFFFF"
-            /> */}
           </View>
           <View
             style={{
