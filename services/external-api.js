@@ -192,7 +192,6 @@ export async function getCast(requestData) {
 export async function getSearchResult(requestData) {
   const response = await fetch(
     `https://api.tvmaze.com/search/shows?q=${requestData}`
-    // https://api.tvmaze.com/search/shows?q=girls
   );
 
   const data = await response.json();

@@ -9,12 +9,10 @@ const useInput = (
   enteredValidationError = 'Use letters and numbers!'
 ) => {
   const [inputValue, setInputValue] = useState('');
-  // const [isTouched, setIsTouched] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState(null);
 
   const checkValidity = () => {
-    // console.log(inputValue);
     const validity =
       isMinLength(inputValue) && enteredValidation(inputValue) ? true : false;
 
@@ -30,7 +28,6 @@ const useInput = (
       }
     };
 
-    // setIsTouched(true);
     setIsValid(validity);
     setError(validationError);
   };
@@ -42,11 +39,9 @@ const useInput = (
 
   return {
     inputValue,
-    // isTouched,
     isValid,
     error,
     changeValue,
-    // checkValidity,
   };
 };
 

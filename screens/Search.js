@@ -4,25 +4,15 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
+  FlatList,
+  Image,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SIZES, COLORS, FONTS } from '../constants';
 import { Ionicons } from '@expo/vector-icons';
-import useInput from '../hooks/use-intput';
-import { useFetch } from '../hooks/use-fetch';
 import { getSearchResult } from '../services/external-api';
 
-const Search = () => {
-  // const {
-  //   inputValue: enteredQuery,
-  //   isValid: queryIsValid,
-  //   error: queryError,
-  //   changeValue: queryChangeHandler,
-  // } = useInput(
-  //   (value) => /^(?!\s)[A-Za-z_][A-Za-z0-9_():'"&.?,!\s]+$/.test(value),
-  //   'Invalid username',
-  //   (value) => value?.trim().length > 0
-  // );
+const Search = ({ navigation }) => {
   const [enteredQuery, setEnteredQuery] = useState('');
   const [searchData, setSearchData] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -82,25 +72,63 @@ const Search = () => {
           style={styles.input}
           placeholderTextColor={COLORS.lightGray}
           placeholder="Search for TV show..."
-          // value={enteredQuery}
           onChangeText={(text) => {
             queryChangeHandler(text);
           }}
         />
         <Ionicons name="search" size={24} color="white" />
       </View>
+      {searchError && (
+        <Text style={{ color: COLORS.white, ...FONTS.h2, textAlign: 'center' }}>
+          {searchError}
+        </Text>
+      )}
+      {searchLoading && (
+        <Text style={{ color: COLORS.white, ...FONTS.h2, textAlign: 'center' }}>
+          Loading...
+        </Text>
+      )}
+      {!searchLoading && !searchError && searchData && (
+        <View
+          style={{
+            alignItems: 'center',
+            backgroundColor: COLORS.background,
+          }}
+        >
+          <FlatList
+            data={searchData}
+            numColumns={2}
+            ListFooterComponent={<View style={{ height: 120 }} />}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Details', { selectedShow: item })
+                }
+                style={{ paddingHorizontal: 2, paddingVertical: 2 }}
+              >
+                <Image
+                  source={{ uri: item.image }}
+                  style={{
+                    height: ((SIZES.width * 50) / 100) * 1.41,
+                    width: (SIZES.width * 50) / 100,
+                  }}
+                />
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   input: {
-    // width: (SIZES.width * 80) / 100,
     width: '80%',
     height: 40,
     ...FONTS.body3,
     letterSpacing: 0.2,
-    // paddingLeft: SIZES.m,
     color: COLORS.white,
   },
 });

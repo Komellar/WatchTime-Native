@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { COLORS, FONTS, SIZES } from '../constants/theme';
-import useInput from '../hooks/use-intput';
+import useInput from '../hooks/use-input';
 import {
   getAuth,
   updateProfile,
