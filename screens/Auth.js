@@ -116,6 +116,7 @@ const Auth = ({ navigation }) => {
     return () => (mounted = false);
   }, [isLogging, nameIsValid, emailIsValid, passwordIsValid, password2IsValid]);
 
+  // Handle submitting the form
   const submitFormHandler = async () => {
     setAuthError(null);
     setShowErrors(true);
@@ -130,6 +131,8 @@ const Auth = ({ navigation }) => {
             setAuthError('USER NOT FOUND!!!');
           } else if (err.code === 'auth/wrong-password') {
             setAuthError('WRONG PASSWORD!!!');
+          } else {
+            setAuthError(err.message);
           }
         }
       } else {
@@ -146,6 +149,8 @@ const Auth = ({ navigation }) => {
         } catch (err) {
           if (err.code === 'auth/email-already-in-use') {
             setAuthError('EMAIL ALREADY EXISTS!!!');
+          } else {
+            setAuthError(err.message);
           }
         }
       }
@@ -157,8 +162,9 @@ const Auth = ({ navigation }) => {
             const uid = user.uid;
             const userImg = user.photoURL;
             dispatch(authActions.setCurrentUser({ displayName, uid, userImg }));
-            // isLogging ? navigation.navigate('Profile') : navigation.navigate('Choosing');
-            navigation.navigate('Profile');
+            isLogging
+              ? navigation.navigate('Profile')
+              : navigation.navigate('FirstShows');
           }
         } catch (err) {
           setAuthError('FAILED TO GET LOGIN');

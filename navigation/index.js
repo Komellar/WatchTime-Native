@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getFavShowsList, getShowsList } from '../services/shows-actions';
 import Profile from '../screens/Profile';
 import UserShows from '../screens/UserShows';
+import FirstShows from '../screens/FirstShows';
 
 const RootNavigation = ({ isFirstLaunch }) => {
   const userId = useSelector((state) => state.auth.userId);
@@ -46,6 +47,7 @@ const RootNavigation = ({ isFirstLaunch }) => {
         />
         <Stack.Screen name="Episodes" component={Episodes} />
         <Stack.Screen name="UserShows" component={UserShows} />
+        <Stack.Screen name="FirstShows" component={FirstShows} />
       </Stack.Navigator>
     </NavigationContainer>
   );

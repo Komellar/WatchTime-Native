@@ -6,6 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { COLORS } from '../constants';
 import Auth from '../screens/Auth';
 import { useSelector } from 'react-redux';
+import FirstShows from '../screens/FirstShows';
 
 const Tab = createBottomTabNavigator();
 
@@ -60,7 +61,8 @@ const Tabs = () => {
       {userId != undefined && (
         <Tab.Screen
           name="Profile"
-          component={Profile}
+          component={FirstShows}
+          // component={Profile}
           options={{
             tabBarIcon: ({ focused }) => (
               <FontAwesome
