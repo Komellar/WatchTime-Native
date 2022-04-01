@@ -12,22 +12,27 @@ import {
 } from '../services/shows-actions';
 
 const Episodes = ({ navigation, route }) => {
-  const { season, show, userId, followed } = route.params;
+  const {
+    season,
+    show,
+    userId,
+    followed,
+    totalWatchedEpisodes,
+    numberOfEpisodes,
+  } = route.params;
   const dispatch = useDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [pickedEpisode, setPickedEpisode] = useState(null);
   const [watchedEpisodes, setWatchedEpisodes] = useState([]);
-  // const [episodesChanged, setEpisodesChanged] = useState(false);
 
   useEffect(() => {
     setWatchedEpisodes(getWatchedEpisodes(userId, show, season[0]?.season));
   }, [userId, show, season]);
-  // console.log(watchedEpisodes);
 
   const pickEpisodeHandler = (show, episode) => {
     if (!followed) {
-      dispatch(addShowToDB(userId, show));
+      dispatch(addShowToDB(userId, show, numberOfEpisodes));
     }
     if (!watchedEpisodes.includes(episode.id)) {
       addEpisodeToDB(userId, show, episode);

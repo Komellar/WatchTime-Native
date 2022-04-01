@@ -17,6 +17,7 @@ const HeroDetails = ({
   loadedShow,
   userId,
   navigation,
+  numberOfEpisodes,
 }) => {
   const dispatch = useDispatch();
   const showsIdList = useSelector((state) => state.shows.showsIdList);
@@ -38,7 +39,7 @@ const HeroDetails = ({
   } else {
     followButton = {
       title: 'Add to my list',
-      action: () => dispatch(addShowToDB(userId, loadedShow)),
+      action: () => dispatch(addShowToDB(userId, loadedShow, numberOfEpisodes)),
     };
   }
 

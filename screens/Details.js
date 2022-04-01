@@ -82,6 +82,7 @@ const Details = ({ navigation, route }) => {
               loadedShow={loadedShow}
               userId={userId}
               navigation={navigation}
+              numberOfEpisodes={numberOfEpisodes}
             />
             {/* Tabs to navigate between details sections */}
             <Tabs activeTab={activeTab} tabClickHandler={tabClickHandler} />

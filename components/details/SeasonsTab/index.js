@@ -7,6 +7,8 @@ import {
   getWatchedEpisodes,
   addSeasonToDB,
   addShowToDB,
+  getWatchCount,
+  setShowAsFinished,
 } from '../../../services/shows-actions';
 import { useDispatch } from 'react-redux';
 
@@ -21,19 +23,22 @@ const SeasonsTab = ({
   numberOfEpisodes,
 }) => {
   const [watchedEpisodes, setWatchedEpisodes] = useState({});
-  // const [totalWatchedEpisodes, setTotalWatchedEpisodes] = useState(0);
+  const [totalWatchedEpisodes, setTotalWatchedEpisodes] = useState(0);
   const dispatch = useDispatch();
 
   // add whole season to database and watchedEpisodes object
   const addAllEpisodesHandler = (season, seasonNum) => {
     if (!followed) {
-      dispatch(addShowToDB(userId, show));
+      dispatch(addShowToDB(userId, show, numberOfEpisodes));
     }
 
     let unseenEpisodes = season.filter(
-      (episode) => !watchedEpisodes[`s${seasonNum}`].includes(episode.id)
+      (episode) => !watchedEpisodes[`s${seasonNum}`]?.includes(episode.id)
     );
     addSeasonToDB(userId, show, unseenEpisodes);
+
+    const { watchedCount } = getWatchCount(userId, show);
+    setTotalWatchedEpisodes(watchedCount);
 
     const episodes = getWatchedEpisodes(userId, show, season[0]?.season);
     setWatchedEpisodes({
@@ -41,10 +46,13 @@ const SeasonsTab = ({
       [`s${seasonNum}`]: episodes,
     });
 
-    // const newTotalEpisodes = totalWatchedEpisodes + unseenEpisodes.length;
-    // console.log('new', newTotalEpisodes);
-    // setTotalWatchedEpisodes(newTotalEpisodes);
-    // console.log(totalWatchedEpisodes);
+    // console.log(watchedCount);
+    // const temp = totalWatchedEpisodes + unseenEpisodes.length;
+    // setTotalWatchedEpisodes(temp);
+
+    // if (temp === numberOfEpisodes) {
+    //   setShowAsFinished(userId, show);
+    // }
   };
 
   // get watched episodes and assign them to watchedEpisodes object
@@ -57,9 +65,13 @@ const SeasonsTab = ({
       };
     });
     setWatchedEpisodes(watchedSeasons);
+
+    // total of watched episodes
+    const { watchedCount } = getWatchCount(userId, show);
+    setTotalWatchedEpisodes(watchedCount);
   }, [userId, show, seasons, getWatchedEpisodes]);
 
-  // if one user has watched episode in season - get the data and assign it to watchedEpisodes object
+  // if user has watched episode in season - get the data and assign it to watchedEpisodes object
   useEffect(() => {
     if (changedSeason) {
       let watchedSeasons = {};
@@ -68,6 +80,10 @@ const SeasonsTab = ({
         [`s${changedSeason}`]: getWatchedEpisodes(userId, show, changedSeason),
       };
       setWatchedEpisodes(watchedSeasons);
+
+      // total of watched episodes
+      const { watchedCount } = getWatchCount(userId, show);
+      setTotalWatchedEpisodes(watchedCount);
     }
   }, [
     userId,
@@ -121,6 +137,8 @@ const SeasonsTab = ({
                         show: show,
                         userId: userId,
                         followed: followed,
+                        totalWatchedEpisodes: totalWatchedEpisodes,
+                        numberOfEpisodes: numberOfEpisodes,
                       });
                     }}
                     style={{
@@ -152,7 +170,7 @@ const SeasonsTab = ({
                       <View
                         style={{
                           width:
-                            (watchedEpisodes[`s${index + 1}`]?.length /
+                            ((watchedEpisodes[`s${index + 1}`]?.length ?? 0) /
                               season?.length) *
                               100 +
                             '%',
@@ -176,7 +194,7 @@ const SeasonsTab = ({
                         ...FONTS.body3,
                       }}
                     >
-                      {watchedEpisodes[`s${index + 1}`]?.length}/
+                      {watchedEpisodes[`s${index + 1}`]?.length ?? 0}/
                       {season?.length}
                     </Text>
                     <MaterialIcons

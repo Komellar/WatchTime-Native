@@ -5,6 +5,8 @@ import {
   remove,
   onValue,
   update,
+  get,
+  child,
 } from 'firebase/database';
 import { showsActions } from '../store/shows-slice';
 
@@ -73,7 +75,7 @@ export const getFavShowsList = (userId) => {
 ///////////// FOLLOWED SHOWS ////////////
 //
 
-export const addShowToDB = (userId, show) => {
+export const addShowToDB = (userId, show, numberOfEpisodes) => {
   return (dispatch) => {
     // add show to app state in store
     dispatch(showsActions.addToList(show));
@@ -87,6 +89,7 @@ export const addShowToDB = (userId, show) => {
       watchedCount: 0,
       runtime: show.averageRuntime,
       watchStatus: 'notStarted',
+      episodes: numberOfEpisodes,
     });
   };
 };
@@ -136,46 +139,38 @@ export const getShowsList = (userId) => {
 ///////////// EPISODES ////////////
 //
 
-const updateWatchedCount = (userId, show, add) => {
+const updateWatchedCountAndStatus = (userId, show, add) => {
   const db = getDatabase();
   let watchedCount = 0;
+  let episodes = 0;
   const watchedCountRef = ref(db, `users/${userId}/followed/${show.id}`);
 
-  // get data from show in user list in database
+  // get show data from database
   onValue(watchedCountRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
       watchedCount = parseInt(data.watchedCount);
-      add ? watchedCount++ : watchedCount--;
-    } else {
-      if (add) {
-        watchedCount = 1;
-      }
+      episodes = parseInt(data.episodes);
+      add ? (watchedCount += 1) : (watchedCount -= 1);
     }
   });
 
   // update watchedCount in database
   update(ref(db, `users/${userId}/followed/${show.id}`), {
     watchedCount: watchedCount,
-  });
+  }).then(() => {
+    add ? watchedCount-- : watchedCount++;
 
-  // change watching status
-  if (watchedCount === 0) {
-    update(ref(db, `users/${userId}/followed/${show.id}`), {
-      watchStatus: 'notStarted',
-    });
-  } else {
-    update(ref(db, `users/${userId}/followed/${show.id}`), {
-      watchStatus: 'started',
-    });
-  }
-};
+    // change watching status
+    const updateRef = ref(db, `users/${userId}/followed/${show.id}`);
 
-export const setShowAsFinished = (userId, show) => {
-  const db = getDatabase();
-
-  update(ref(db, `users/${userId}/followed/${show.id}`), {
-    watchStatus: 'started',
+    if (watchedCount === episodes) {
+      update(updateRef, { watchStatus: 'finished' });
+    } else if (watchedCount === 0) {
+      update(updateRef, { watchStatus: 'notStarted' });
+    } else if (watchedCount > 0) {
+      update(updateRef, { watchStatus: 'started' });
+    }
   });
 };
 
@@ -191,7 +186,7 @@ export const addEpisodeToDB = (userId, show, episode) => {
       episode: episode.episode,
     }
   );
-  updateWatchedCount(userId, show, true);
+  updateWatchedCountAndStatus(userId, show, true);
 };
 
 export const removeEpisodeFromDB = (userId, show, episode) => {
@@ -203,7 +198,7 @@ export const removeEpisodeFromDB = (userId, show, episode) => {
     ),
     {}
   );
-  updateWatchedCount(userId, show, false);
+  updateWatchedCountAndStatus(userId, show, false);
 };
 
 export const addSeasonToDB = (userId, show, season) => {
@@ -221,7 +216,7 @@ export const addSeasonToDB = (userId, show, season) => {
         episode: episode.episode,
       }
     );
-    updateWatchedCount(userId, show, true);
+    updateWatchedCountAndStatus(userId, show, true);
   });
 };
 
@@ -244,7 +239,6 @@ export const getWatchedEpisodes = (userId, show, season) => {
       dataToReturn = idList;
     }
   });
-  // console.log('dataToReturn: ', dataToReturn);
   return dataToReturn;
 };
 
