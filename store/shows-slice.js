@@ -55,7 +55,16 @@ const showsSlice = createSlice({
       state.favShowsIdList = [];
     },
     updateList(state, action) {
-      state.showsList = action.payload.showList;
+      let newShowsList = [];
+      action.payload.showsList.forEach((show) => {
+        newShowsList.push({
+          id: show.id,
+          title: show.title,
+          image: show.image,
+          watchStatus: show.watchStatus,
+        });
+      });
+      state.showsList = newShowsList;
       state.showsIdList = action.payload.idList;
     },
     //

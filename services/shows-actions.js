@@ -128,7 +128,7 @@ export const getShowsList = (userId) => {
 
         // update shows list in app state in store
         dispatch(
-          showsActions.updateList({ showList: convertedData, idList: idList })
+          showsActions.updateList({ showsList: convertedData, idList: idList })
         );
       }
     });

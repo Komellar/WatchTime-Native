@@ -8,7 +8,6 @@ import {
   addSeasonToDB,
   addShowToDB,
   getWatchCount,
-  setShowAsFinished,
 } from '../../../services/shows-actions';
 import { useDispatch } from 'react-redux';
 
@@ -45,14 +44,6 @@ const SeasonsTab = ({
       ...watchedEpisodes,
       [`s${seasonNum}`]: episodes,
     });
-
-    // console.log(watchedCount);
-    // const temp = totalWatchedEpisodes + unseenEpisodes.length;
-    // setTotalWatchedEpisodes(temp);
-
-    // if (temp === numberOfEpisodes) {
-    //   setShowAsFinished(userId, show);
-    // }
   };
 
   // get watched episodes and assign them to watchedEpisodes object
