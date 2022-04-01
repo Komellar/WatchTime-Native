@@ -1,18 +1,43 @@
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  ImageBackground,
+  //   TouchableWithoutFeedback,
+  TouchableWithoutFeedback,
+  TouchableHighlight,
+} from 'react-native';
 import React from 'react';
 import { useFetch } from '../hooks/use-fetch';
 import { getAllShows } from '../services/external-api';
 import { COLORS, SIZES, FONTS } from '../constants';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addShowToDB, removeShowFromDB } from '../services/shows-actions';
+import { Ionicons } from '@expo/vector-icons';
 
 const FirstShows = ({ navigation }) => {
   const userName = useSelector((state) => state.auth.userName);
+  const userId = useSelector((state) => state.auth.userId);
+  const showsIdList = useSelector((state) => state.shows.showsIdList);
 
   const {
     data: loadedShows,
     error: showsError,
     loading: showsLoading,
   } = useFetch(getAllShows);
+
+  const bestRatedShows = loadedShows?.filter((show) => show?.popularity > 96);
+  const dispatch = useDispatch();
+
+  const pickShowHandler = (show) => {
+    if (!showsIdList?.includes(show?.id)) {
+      dispatch(addShowToDB(userId, show));
+    } else {
+      dispatch(removeShowFromDB(userId, show));
+    }
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -29,13 +54,14 @@ const FirstShows = ({ navigation }) => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginBottom: SIZES.m,
+                marginBottom: SIZES.s,
               }}
             >
               <Text
                 style={{
                   color: COLORS.white,
                   ...FONTS.h2,
+                  fontSize: 28,
                   textAlign: 'center',
                 }}
               >
@@ -46,16 +72,17 @@ const FirstShows = ({ navigation }) => {
                   paddingLeft: SIZES.xs,
                   color: COLORS.primaryLight,
                   ...FONTS.h2,
+                  fontSize: 28,
                   textAlign: 'center',
                 }}
               >
-                {userName ?? 'new user'}!
+                {userName ?? 'new user'}
               </Text>
             </View>
 
             <Text
               style={{
-                color: COLORS.white,
+                color: COLORS.onDark,
                 ...FONTS.h4,
                 textAlign: 'center',
                 marginBottom: SIZES.xs,
@@ -65,37 +92,87 @@ const FirstShows = ({ navigation }) => {
             </Text>
             <Text
               style={{
-                color: COLORS.onDark,
+                color: COLORS.lightGray,
                 ...FONTS.body4,
                 textAlign: 'center',
               }}
             >
               It will help us find TV shows you'll love!
             </Text>
+
+            {/* Continue button */}
+            {showsIdList.length > 2 && (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Profile');
+                }}
+                style={{
+                  backgroundColor: COLORS.primary,
+                  paddingVertical: SIZES.s,
+                  marginTop: SIZES.xl,
+                  width: '50%',
+                  alignSelf: 'center',
+                  borderRadius: SIZES.xs,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    color: COLORS.white,
+                    ...FONTS.h4,
+                  }}
+                >
+                  Continue
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
+
+          {/* Shows */}
           <FlatList
-            data={loadedShows}
+            data={bestRatedShows}
             numColumns={3}
+            ListFooterComponent={
+              <View
+                style={{ backgroundColor: COLORS.background, height: 60 }}
+              />
+            }
             keyExtractor={(item) => item?.id}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={
-                  () => {}
-                  // navigation.navigate('Details', {
-                  //   selectedShow: item,
-                  //   isFollowed: true,
-                  // })
-                }
+              <TouchableHighlight
+                activeOpacity={0.95}
                 style={{ paddingHorizontal: 2, paddingVertical: 2 }}
+                onPress={() => {
+                  pickShowHandler(item);
+                }}
               >
-                <Image
+                <ImageBackground
                   source={{ uri: item?.image }}
                   style={{
                     height: ((SIZES.width * 32) / 100) * 1.41,
                     width: (SIZES.width * 32) / 100,
                   }}
-                />
-              </TouchableOpacity>
+                >
+                  {/* if show is checked add shadow and icon */}
+                  {showsIdList.includes(item?.id) && (
+                    <View
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Ionicons
+                        name="ios-checkmark-circle"
+                        size={50}
+                        color="green"
+                      />
+                    </View>
+                  )}
+                </ImageBackground>
+              </TouchableHighlight>
             )}
           />
         </>
