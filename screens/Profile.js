@@ -16,11 +16,13 @@ const Profile = ({ navigation }) => {
     <ScrollView style={{ backgroundColor: COLORS.background }}>
       <View style={{ flex: 1, marginBottom: 60 }}>
         <HeroProfile userId={userId} myShows={myShows} />
-        <ProfileSlider
-          title="Favourite"
-          showsList={myFavShows}
-          navigation={navigation}
-        />
+        {myFavShows.length > 0 && (
+          <ProfileSlider
+            title="Favourite"
+            showsList={myFavShows}
+            navigation={navigation}
+          />
+        )}
         <ProfileSlider
           title="All shows"
           showsList={myShows}

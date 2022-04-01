@@ -86,6 +86,7 @@ export const addShowToDB = (userId, show) => {
       image: show.image,
       watchedCount: 0,
       runtime: show.averageRuntime,
+      watchStatus: 'notStarted',
     });
   };
 };
@@ -144,20 +145,37 @@ const updateWatchedCount = (userId, show, add) => {
   onValue(watchedCountRef, (snapshot) => {
     const data = snapshot.val();
     if (data) {
-      // if there is some data
       watchedCount = parseInt(data.watchedCount);
       add ? watchedCount++ : watchedCount--;
     } else {
-      // if no data then watchedCount = 1
       if (add) {
         watchedCount = 1;
       }
     }
   });
 
-  // update data in database
+  // update watchedCount in database
   update(ref(db, `users/${userId}/followed/${show.id}`), {
     watchedCount: watchedCount,
+  });
+
+  // change watching status
+  if (watchedCount === 0) {
+    update(ref(db, `users/${userId}/followed/${show.id}`), {
+      watchStatus: 'notStarted',
+    });
+  } else {
+    update(ref(db, `users/${userId}/followed/${show.id}`), {
+      watchStatus: 'started',
+    });
+  }
+};
+
+export const setShowAsFinished = (userId, show) => {
+  const db = getDatabase();
+
+  update(ref(db, `users/${userId}/followed/${show.id}`), {
+    watchStatus: 'started',
   });
 };
 

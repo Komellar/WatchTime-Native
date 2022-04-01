@@ -18,8 +18,10 @@ const SeasonsTab = ({
   followed,
   changedSeason,
   episodesChanged,
+  numberOfEpisodes,
 }) => {
   const [watchedEpisodes, setWatchedEpisodes] = useState({});
+  // const [totalWatchedEpisodes, setTotalWatchedEpisodes] = useState(0);
   const dispatch = useDispatch();
 
   // add whole season to database and watchedEpisodes object
@@ -27,14 +29,22 @@ const SeasonsTab = ({
     if (!followed) {
       dispatch(addShowToDB(userId, show));
     }
+
     let unseenEpisodes = season.filter(
       (episode) => !watchedEpisodes[`s${seasonNum}`].includes(episode.id)
     );
     addSeasonToDB(userId, show, unseenEpisodes);
+
+    const episodes = getWatchedEpisodes(userId, show, season[0]?.season);
     setWatchedEpisodes({
       ...watchedEpisodes,
-      [`s${seasonNum}`]: getWatchedEpisodes(userId, show, season[0]?.season),
+      [`s${seasonNum}`]: episodes,
     });
+
+    // const newTotalEpisodes = totalWatchedEpisodes + unseenEpisodes.length;
+    // console.log('new', newTotalEpisodes);
+    // setTotalWatchedEpisodes(newTotalEpisodes);
+    // console.log(totalWatchedEpisodes);
   };
 
   // get watched episodes and assign them to watchedEpisodes object

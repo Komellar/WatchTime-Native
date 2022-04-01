@@ -48,6 +48,12 @@ const Details = ({ navigation, route }) => {
     error: castError,
   } = useFetch(getCast, selectedShow?.id);
 
+  let numberOfEpisodes = 0;
+
+  loadedSeasons?.forEach((season) => {
+    numberOfEpisodes += season.length;
+  });
+
   const tabClickHandler = (tabName) => {
     setActiveTab(tabName);
   };
@@ -97,6 +103,7 @@ const Details = ({ navigation, route }) => {
                 followed={showsIdList.includes(selectedShow?.id)}
                 changedSeason={changedSeason}
                 episodesChanged={episodesChanged}
+                numberOfEpisodes={numberOfEpisodes}
               />
             )}
             {activeTab === 'gallery' && <GalleryTab images={loadedImages} />}
