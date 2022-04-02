@@ -51,15 +51,16 @@ const ProfileSlider = ({ title, showsList, navigation }) => {
           >
             <View
               style={{
-                marginHorizontal: SIZES.xs,
+                marginHorizontal: 3,
                 alignItems: 'center',
               }}
             >
               <Image
                 source={{ uri: item?.image }}
                 style={{
-                  height: 225,
-                  width: 160,
+                  height: ((SIZES.width * 32) / 100) * 1.41,
+                  width: (SIZES.width * 32) / 100,
+                  borderRadius: 3,
                   resizeMode: 'contain',
                 }}
               />

@@ -10,6 +10,42 @@ import {
 } from 'firebase/database';
 import { showsActions } from '../store/shows-slice';
 
+const updateGenres = (userId, genresList, add) => {
+  const db = getDatabase();
+  const dbRef = ref(db);
+
+  let loadedGenres = {};
+
+  // get number of shows with each genre
+  get(child(dbRef, `users/${userId}/stats/genres`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        loadedGenres = snapshot.val();
+      } else {
+        console.log('No data available');
+      }
+    })
+    .then(() => {
+      // for each genre in show - update count
+      genresList.forEach((genre) => {
+        let newValue;
+
+        if (loadedGenres[genre]) {
+          newValue = add ? loadedGenres[genre] + 1 : loadedGenres[genre] - 1;
+        } else {
+          newValue = add ? 1 : 0;
+        }
+
+        update(ref(db, `users/${userId}/stats/genres`), {
+          [genre]: newValue,
+        });
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 //
 ///////////// FAVOURITE SHOWS ////////////
 //
@@ -91,6 +127,8 @@ export const addShowToDB = (userId, show, numberOfEpisodes) => {
       watchStatus: 'notStarted',
       episodes: numberOfEpisodes,
     });
+
+    updateGenres(userId, show.genres, true);
   };
 };
 
@@ -103,6 +141,8 @@ export const removeShowFromDB = (userId, show) => {
     const db = getDatabase();
     remove(ref(db, `users/${userId}/followed/${show.id}`));
     dispatch(removeShowFromFav(userId, show));
+
+    updateGenres(userId, show.genres, false);
   };
 };
 

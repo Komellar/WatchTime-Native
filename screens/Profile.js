@@ -42,26 +42,34 @@ const Profile = ({ navigation }) => {
             navigation={navigation}
           />
         )}
-        <ProfileSlider
-          title="Watching"
-          showsList={watchingShows}
-          navigation={navigation}
-        />
-        <ProfileSlider
-          title="Finished"
-          showsList={finishedShows}
-          navigation={navigation}
-        />
-        <ProfileSlider
-          title="Not started yet"
-          showsList={notStartedShows}
-          navigation={navigation}
-        />
-        <ProfileSlider
-          title="All shows"
-          showsList={myShows}
-          navigation={navigation}
-        />
+        {watchingShows.length > 0 && (
+          <ProfileSlider
+            title="Watching"
+            showsList={watchingShows}
+            navigation={navigation}
+          />
+        )}
+        {finishedShows.length > 0 && (
+          <ProfileSlider
+            title="Finished"
+            showsList={finishedShows}
+            navigation={navigation}
+          />
+        )}
+        {notStartedShows.length > 0 && (
+          <ProfileSlider
+            title="Not started yet"
+            showsList={notStartedShows}
+            navigation={navigation}
+          />
+        )}
+        {myShows.length > 0 && (
+          <ProfileSlider
+            title="All shows"
+            showsList={myShows}
+            navigation={navigation}
+          />
+        )}
       </View>
     </ScrollView>
   );
