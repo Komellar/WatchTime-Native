@@ -3,17 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const statsSlice = createSlice({
   name: 'stats',
   initialState: {
-    genres: {},
+    genres: [],
   },
   reducers: {
     updateGenres(state, action) {
-      //   const givenGenres = action.payload;
-      //   let newGenresList = [];
-      //   for (const [key, value] of Object.entries(givenGenres)) {
-      //     newGenresList.push({ [key]: value });
-      //     console.log(`${key}: ${value}`);
-      //   }
-      state.genres = action.payload;
+      const givenGenres = action.payload;
+      let newGenresList = [];
+      for (const [key, value] of Object.entries(givenGenres)) {
+        newGenresList.push({ name: key, count: value });
+        // console.log(`${key}: ${value}`);
+      }
+      state.genres = newGenresList;
     },
     resetGenres(state) {
       state.genres = [];
