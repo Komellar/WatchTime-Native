@@ -61,6 +61,7 @@ const Tabs = () => {
         <Tab.Screen
           name="Profile"
           component={Profile}
+          initialParams={{ userId: userId }}
           options={{
             tabBarIcon: ({ focused }) => (
               <FontAwesome

@@ -9,6 +9,7 @@ import {
   child,
 } from 'firebase/database';
 import { showsActions } from '../store/shows-slice';
+import { statsActions } from '../store/stats-slice';
 
 const updateGenres = (userId, genresList, add) => {
   const db = getDatabase();
@@ -302,4 +303,29 @@ export const getWatchCount = (userId, show) => {
     }
   });
   return { watchedCount, timeSpent };
+};
+
+export const getGenres = (userId) => {
+  return (dispatch) => {
+    const db = getDatabase();
+    const dbRef = ref(db);
+
+    let loadedGenres;
+
+    // get number of shows with each genre
+    get(child(dbRef, `users/${userId}/stats/genres`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          loadedGenres = snapshot.val();
+        } else {
+          console.log('No data available');
+        }
+      })
+      .then(() => {
+        dispatch(statsActions.updateGenres(loadedGenres));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 };

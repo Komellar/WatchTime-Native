@@ -4,30 +4,34 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SIZES, FONTS, COLORS } from '../constants/theme';
 import HeroProfile from '../components/profile/HeroProfile';
 import ProfileSlider from '../components/profile/ProfileSlider';
-import { getShowsList } from '../services/shows-actions';
+import { getGenres, getShowsList } from '../services/shows-actions';
+import { useFetch } from '../hooks/use-fetch';
 
-const Profile = ({ navigation }) => {
-  const userId = useSelector((state) => state.auth.userId);
+const Profile = ({ navigation, route }) => {
+  const userId = route.params.userId;
   const myShows = useSelector((state) => state.shows.showsList);
   const myFavShows = useSelector((state) => state.shows.favShowsList);
-
+  const userGenres = useSelector((state) => state.stats.genres);
   const dispatch = useDispatch();
+
+  console.log(userGenres);
 
   useEffect(() => {
     if (userId !== null) {
       dispatch(getShowsList(userId));
+      dispatch(getGenres(userId));
     }
-  }, [userId, getShowsList]);
+  }, [userId, getShowsList, getGenres]);
 
-  const watchingShows = myShows.filter(
+  const watchingShows = myShows?.filter(
     (show) => show.watchStatus === 'started'
   );
 
-  const finishedShows = myShows.filter(
+  const finishedShows = myShows?.filter(
     (show) => show.watchStatus === 'finished'
   );
 
-  const notStartedShows = myShows.filter(
+  const notStartedShows = myShows?.filter(
     (show) => show.watchStatus === 'notStarted'
   );
 
