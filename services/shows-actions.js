@@ -37,9 +37,13 @@ const updateGenres = (userId, genresList, add) => {
           newValue = add ? 1 : 0;
         }
 
-        update(ref(db, `users/${userId}/stats/genres`), {
-          [genre]: newValue,
-        });
+        if (newValue !== 0) {
+          update(ref(db, `users/${userId}/stats/genres`), {
+            [genre]: newValue,
+          });
+        } else {
+          set(ref(db, `users/${userId}/stats/genres/${genre}`), {});
+        }
       });
     })
     .catch((error) => {
@@ -308,24 +312,14 @@ export const getWatchCount = (userId, show) => {
 export const getGenres = (userId) => {
   return (dispatch) => {
     const db = getDatabase();
-    const dbRef = ref(db);
+    const userRef = ref(db, `users/${userId}/stats/genres`);
 
-    let loadedGenres;
+    onValue(userRef, (snapshot) => {
+      const data = snapshot.val();
 
-    // get number of shows with each genre
-    get(child(dbRef, `users/${userId}/stats/genres`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          loadedGenres = snapshot.val();
-        } else {
-          console.log('No data available');
-        }
-      })
-      .then(() => {
-        dispatch(statsActions.updateGenres(loadedGenres));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      if (data) {
+        dispatch(statsActions.updateGenres(data));
+      }
+    });
   };
 };
