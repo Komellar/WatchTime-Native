@@ -7,6 +7,10 @@ import {
   update,
   get,
   child,
+  orderByChild,
+  query,
+  orderByValue,
+  orderByKey,
 } from 'firebase/database';
 import { showsActions } from '../store/shows-slice';
 import { statsActions } from '../store/stats-slice';
@@ -319,6 +323,30 @@ export const getGenres = (userId) => {
 
       if (data) {
         dispatch(statsActions.updateGenres(data));
+      }
+    });
+  };
+};
+
+export const getMostWatchedShow = (userId) => {
+  return (dispatch) => {
+    const db = getDatabase();
+
+    const sortedShowsRef = query(
+      ref(db, `users/${userId}/followed`),
+      orderByKey()
+      // orderByChild('watchedCount')
+      // orderByValue('watchedCount')
+    );
+    console.log(sortedShowsRef);
+
+    onValue(sortedShowsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        // const convertedData = Object.values(data);
+        const item = Object.values(data)[0];
+        console.log(item);
       }
     });
   };

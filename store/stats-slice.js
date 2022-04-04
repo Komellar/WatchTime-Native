@@ -4,25 +4,22 @@ const statsSlice = createSlice({
   name: 'stats',
   initialState: {
     genres: [],
+    mostWatched: null,
   },
   reducers: {
     updateGenres(state, action) {
       const givenGenres = action.payload;
       let newGenresList = [];
       for (const [key, value] of Object.entries(givenGenres)) {
-        // if (value === 0) {
-        //   continue;
-        // }
         newGenresList.push({ name: key, count: value });
-        // console.log(`${key}: ${value}`);
       }
       state.genres = newGenresList;
-      // const sortedGenres = objs.sort((a, b) =>
-      // a.last_nom.localeCompare(b.last_nom)
-      // );
     },
     resetGenres(state) {
       state.genres = [];
+    },
+    setMostWatched(state, action) {
+      state.mostWatched = action.payload;
     },
   },
 });

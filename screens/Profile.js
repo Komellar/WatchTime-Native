@@ -6,6 +6,7 @@ import HeroProfile from '../components/profile/HeroProfile';
 import ProfileSlider from '../components/profile/ProfileSlider';
 import { getGenres, getShowsList } from '../services/shows-actions';
 import GenresChart from '../components/profile/GenresChart';
+import MostWatched from '../components/profile/MostWatched';
 
 const Profile = ({ navigation, route }) => {
   const userId = route.params.userId;
@@ -35,6 +36,7 @@ const Profile = ({ navigation, route }) => {
     <ScrollView style={{ backgroundColor: COLORS.background }}>
       <View style={{ flex: 1, marginBottom: 60 }}>
         <HeroProfile userId={userId} myShows={myShows} />
+        <MostWatched userId={userId} />
         <GenresChart userId={userId} />
 
         {myFavShows.length > 0 && (

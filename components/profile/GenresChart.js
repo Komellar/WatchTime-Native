@@ -28,7 +28,7 @@ const GenresChart = ({ userId }) => {
       count: genre.count,
       name: genre.name,
       legendFontColor: COLORS.onDark,
-      legendFontSize: 15,
+      legendFontSize: 14,
       color: chartColors[index],
     };
   });
@@ -41,7 +41,7 @@ const GenresChart = ({ userId }) => {
     <View
       style={{
         borderRadius: 15,
-        backgroundColor: '#111',
+        backgroundColor: '#121212',
         alignItems: 'center',
       }}
     >
@@ -51,13 +51,13 @@ const GenresChart = ({ userId }) => {
       <PieChart
         data={sortedGenres}
         width={SIZES.width}
-        height={200}
+        height={180}
         chartConfig={{
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         }}
         accessor={'count'}
         backgroundColor={'transparent'}
-        paddingLeft={'15'}
+        // paddingLeft={'15'}
         absolute
       />
     </View>
