@@ -332,21 +332,38 @@ export const getMostWatchedShow = (userId) => {
   return (dispatch) => {
     const db = getDatabase();
 
-    const sortedShowsRef = query(
-      ref(db, `users/${userId}/followed`),
-      orderByKey()
-      // orderByChild('watchedCount')
-      // orderByValue('watchedCount')
-    );
-    console.log(sortedShowsRef);
+    const userRef = ref(db, `users/${userId}/followed`);
 
-    onValue(sortedShowsRef, (snapshot) => {
+    // get data from database reference
+    onValue(userRef, (snapshot) => {
       const data = snapshot.val();
 
+      // if user has followed shows
       if (data) {
-        // const convertedData = Object.values(data);
-        const item = Object.values(data)[0];
-        console.log(item);
+        // convert data to array
+        const convertedData = Object.values(data);
+
+        let mostWatchedShow;
+        let mostEpisodes = 0;
+
+        convertedData.forEach((show) => {
+          if (show.watchedCount > mostEpisodes) {
+            mostEpisodes = show.watchedCount;
+            // mostWatchedShow = {
+            //   id: show.id,
+            //   title: show.title,
+            //   image: show.image,
+            // };
+            mostWatchedShow = {
+              id: show.id,
+              watchedCount: show.watchedCount,
+              title: show.title,
+              image: show.image,
+            };
+          }
+        });
+
+        dispatch(statsActions.setMostWatched(mostWatchedShow));
       }
     });
   };

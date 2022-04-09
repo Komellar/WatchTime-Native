@@ -15,6 +15,7 @@ export const COLORS = {
   white: '#eee',
   onDark: '#ddd',
   background: '#0a0a0a',
+  backgroundLight: '#161616',
   gray: '#464646',
   darkGray: '#363636',
   lightGray: '#aaa',
