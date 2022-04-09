@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import Onboard from '../components/Onboard';
+import Onboard from '../screens/Onboard';
 import Details from '../screens/Details';
 import Episodes from '../screens/Episodes';
 import Tabs from './Tabs';
