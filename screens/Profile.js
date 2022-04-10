@@ -9,7 +9,7 @@ import GenresChart from '../components/profile/GenresChart';
 import MostWatched from '../components/profile/MostWatched';
 
 const Profile = ({ navigation, route }) => {
-  const userId = route.params.userId;
+  const userId = route?.params?.userId;
   const myShows = useSelector((state) => state.shows.showsList);
   const myFavShows = useSelector((state) => state.shows.favShowsList);
   const dispatch = useDispatch();

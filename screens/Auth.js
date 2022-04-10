@@ -163,7 +163,7 @@ const Auth = ({ navigation }) => {
             const userImg = user.photoURL;
             dispatch(authActions.setCurrentUser({ displayName, uid, userImg }));
             isLogging
-              ? navigation.navigate('Profile')
+              ? navigation.navigate('Profile', { useriId: uid })
               : navigation.navigate('FirstShows');
           }
         } catch (err) {
