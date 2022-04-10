@@ -12,14 +12,7 @@ import {
 } from '../services/shows-actions';
 
 const Episodes = ({ navigation, route }) => {
-  const {
-    season,
-    show,
-    userId,
-    followed,
-    totalWatchedEpisodes,
-    numberOfEpisodes,
-  } = route.params;
+  const { season, show, userId, followed, numberOfEpisodes } = route.params;
   const dispatch = useDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -78,14 +71,12 @@ const Episodes = ({ navigation, route }) => {
         {/* Back button */}
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('Details', {
+            navigation.replace('Details', {
               selectedShow: show,
-              changedSeason: season[0]?.season,
-              episodesChanged: watchedEpisodes.length,
+              isFollowed: true,
             })
           }
         >
-          {/* <TouchableOpacity onPress={() => navigation.goBack()}> */}
           <Ionicons name="arrow-back-sharp" size={30} color={COLORS.white} />
         </TouchableOpacity>
         <Text
@@ -108,10 +99,11 @@ const Episodes = ({ navigation, route }) => {
       >
         <View
           style={{
-            width: '10%',
+            width: (watchedEpisodes.length / season.length) * 100 + '%',
             height: SIZES.xl,
             backgroundColor: COLORS.primaryLighter,
-            // borderRadius: isFullyWatched ? SIZES.l : 0,
+            borderRadius:
+              watchedEpisodes.length === season.length ? SIZES.l : 0,
             borderBottomLeftRadius: SIZES.l,
             borderTopLeftRadius: SIZES.l,
           }}

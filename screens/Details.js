@@ -18,8 +18,7 @@ import { COLORS, SIZES } from '../constants/theme';
 import { useSelector } from 'react-redux';
 
 const Details = ({ navigation, route }) => {
-  const { selectedShow, userId, changedSeason, episodesChanged, isFollowed } =
-    route.params;
+  const { selectedShow, userId, isFollowed } = route.params;
   const showsIdList = useSelector((state) => state.shows.showsIdList);
 
   const [activeTab, setActiveTab] = useState(isFollowed ? 'seasons' : 'info');
@@ -96,8 +95,6 @@ const Details = ({ navigation, route }) => {
                 navigation={navigation}
                 userId={userId}
                 followed={showsIdList.includes(selectedShow?.id)}
-                changedSeason={changedSeason}
-                episodesChanged={episodesChanged}
                 numberOfEpisodes={loadedSeasons.episodesCount}
               />
             )}

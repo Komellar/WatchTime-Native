@@ -7,7 +7,6 @@ import {
   getWatchedEpisodes,
   addSeasonToDB,
   addShowToDB,
-  getWatchCount,
 } from '../../../services/shows-actions';
 import { useDispatch } from 'react-redux';
 
@@ -17,12 +16,9 @@ const SeasonsTab = ({
   navigation,
   userId,
   followed,
-  changedSeason,
-  episodesChanged,
   numberOfEpisodes,
 }) => {
   const [watchedEpisodes, setWatchedEpisodes] = useState({});
-  const [totalWatchedEpisodes, setTotalWatchedEpisodes] = useState(0);
   const dispatch = useDispatch();
 
   // add whole season to database and watchedEpisodes object
@@ -35,9 +31,6 @@ const SeasonsTab = ({
       (episode) => !watchedEpisodes[`s${seasonNum}`]?.includes(episode.id)
     );
     addSeasonToDB(userId, show, unseenEpisodes);
-
-    const { watchedCount } = getWatchCount(userId, show);
-    setTotalWatchedEpisodes(watchedCount);
 
     const episodes = getWatchedEpisodes(userId, show, season[0]?.season);
     setWatchedEpisodes({
@@ -56,34 +49,7 @@ const SeasonsTab = ({
       };
     });
     setWatchedEpisodes(watchedSeasons);
-
-    // total of watched episodes
-    const { watchedCount } = getWatchCount(userId, show);
-    setTotalWatchedEpisodes(watchedCount);
   }, [userId, show, seasons, getWatchedEpisodes]);
-
-  // if user has watched episode in season - get the data and assign it to watchedEpisodes object
-  useEffect(() => {
-    if (changedSeason) {
-      let watchedSeasons = {};
-      watchedSeasons = {
-        ...watchedEpisodes,
-        [`s${changedSeason}`]: getWatchedEpisodes(userId, show, changedSeason),
-      };
-      setWatchedEpisodes(watchedSeasons);
-
-      // total of watched episodes
-      const { watchedCount } = getWatchCount(userId, show);
-      setTotalWatchedEpisodes(watchedCount);
-    }
-  }, [
-    userId,
-    show,
-    seasons,
-    getWatchedEpisodes,
-    changedSeason,
-    episodesChanged,
-  ]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -123,12 +89,11 @@ const SeasonsTab = ({
                   {/* Rest of season row */}
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate('Episodes', {
+                      navigation.replace('Episodes', {
                         season: season,
                         show: show,
                         userId: userId,
                         followed: followed,
-                        totalWatchedEpisodes: totalWatchedEpisodes,
                         numberOfEpisodes: numberOfEpisodes,
                       });
                     }}
