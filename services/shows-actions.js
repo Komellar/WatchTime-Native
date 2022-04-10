@@ -335,7 +335,6 @@ export const getWatchedEpisodes = (userId, show, season) => {
 export const getWatchCount = (userId, show) => {
   const db = getDatabase();
   let watchedCount = 0;
-  let runtime = 0;
   let timeSpent = 0;
 
   const watchedCountRef = ref(db, `users/${userId}/followed/${show.id}`);
@@ -343,8 +342,7 @@ export const getWatchCount = (userId, show) => {
     const data = snapshot.val();
     if (data) {
       watchedCount = parseInt(data.watchedCount);
-      runtime = parseInt(data.runtime);
-      timeSpent = runtime * watchedCount;
+      timeSpent = parseInt(data.timeSpent);
     }
   });
   return { watchedCount, timeSpent };

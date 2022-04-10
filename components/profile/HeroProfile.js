@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import heroImage from '../../assets/heroProfile.jpg';
 import { useDispatch, useSelector } from 'react-redux';
 import { SvgUri } from 'react-native-svg';
@@ -20,21 +20,25 @@ import { getWatchCount } from '../../services/shows-actions';
 const HeroProfile = ({ userId, myShows }) => {
   const userImg = useSelector((state) => state.auth.userImg);
   const userName = useSelector((state) => state.auth.userName);
+  const [watchedEpisodes, setWatchedEpisodes] = useState(0);
+  const [timeSpent, setTimeSpent] = useState(0);
 
-  let statsEpisodesCount = 0;
-  let statsTimeSpent = 0;
+  useEffect(() => {
+    let statsEpisodesCount = 0;
+    let statsTimeSpent = 0;
 
-  if (myShows.length > 0) {
     myShows.forEach((show) => {
       const statistics = getWatchCount(userId, show);
       statsEpisodesCount += statistics.watchedCount;
       statsTimeSpent += statistics.timeSpent;
     });
-  }
+    setWatchedEpisodes(statsEpisodesCount);
+    setTimeSpent(statsTimeSpent);
+  }, [myShows, userId]);
 
-  const convertedTimeSpent = `${Math.floor(statsTimeSpent / 60)}h ${
-    statsTimeSpent % 60
-  }min`;
+  // const convertedTimeSpent = `${Math.floor(statsTimeSpent / 60)}h ${
+  //   statsTimeSpent % 60
+  // }min`;
 
   const createTwoButtonAlert = () =>
     Alert.alert(
@@ -139,10 +143,9 @@ const HeroProfile = ({ userId, myShows }) => {
                 Watched episodes
               </Text>
               <Text style={{ ...FONTS.h1, color: COLORS.primaryLight }}>
-                {statsEpisodesCount}
+                {watchedEpisodes}
               </Text>
             </View>
-            {/*  */}
             <View
               style={{
                 width: (SIZES.width * 85) / 100,
@@ -164,7 +167,7 @@ const HeroProfile = ({ userId, myShows }) => {
                 Time spent on watching
               </Text>
               <Text style={{ ...FONTS.h1, color: COLORS.primaryLight }}>
-                {convertedTimeSpent}
+                {timeSpent}min
               </Text>
             </View>
           </View>
