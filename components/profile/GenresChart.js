@@ -45,21 +45,27 @@ const GenresChart = ({ userId }) => {
         alignItems: 'center',
       }}
     >
-      <Text style={{ color: COLORS.white, ...FONTS.h3, paddingTop: SIZES.l }}>
-        Favourite genres
-      </Text>
-      <PieChart
-        data={sortedGenres}
-        width={SIZES.width}
-        height={180}
-        chartConfig={{
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        }}
-        accessor={'count'}
-        backgroundColor={'transparent'}
-        // paddingLeft={'15'}
-        absolute
-      />
+      {sortedGenres.length > 0 && (
+        <>
+          <Text
+            style={{ color: COLORS.white, ...FONTS.h3, paddingTop: SIZES.l }}
+          >
+            Favourite genres
+          </Text>
+          <PieChart
+            data={sortedGenres}
+            width={SIZES.width}
+            height={180}
+            chartConfig={{
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            }}
+            accessor={'count'}
+            backgroundColor={'transparent'}
+            // paddingLeft={'15'}
+            absolute
+          />
+        </>
+      )}
     </View>
   );
 };

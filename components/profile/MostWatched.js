@@ -15,19 +15,19 @@ const MostWatched = ({ userId }) => {
   }, [userId, getMostWatchedShow]);
 
   return (
-    <View
-      style={{
-        backgroundColor: COLORS.backgroundLight,
-        width: (SIZES.width * 95) / 100,
-        alignSelf: 'center',
-        alignItems: 'center',
-        marginVertical: SIZES.xl,
-        paddingVertical: SIZES.xl,
-        borderRadius: SIZES.s,
-      }}
-    >
+    <>
       {mostWatched && (
-        <View style={{}}>
+        <View
+          style={{
+            backgroundColor: COLORS.backgroundLight,
+            width: (SIZES.width * 95) / 100,
+            alignSelf: 'center',
+            alignItems: 'center',
+            marginVertical: SIZES.xl,
+            paddingVertical: SIZES.xl,
+            borderRadius: SIZES.s,
+          }}
+        >
           <Text
             style={{
               color: COLORS.white,
@@ -77,7 +77,7 @@ const MostWatched = ({ userId }) => {
           </View>
         </View>
       )}
-    </View>
+    </>
   );
 };
 

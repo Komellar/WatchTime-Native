@@ -135,6 +135,7 @@ export const addShowToDB = (userId, show, numberOfEpisodes) => {
       runtime: show.averageRuntime,
       watchStatus: 'notStarted',
       episodes: numberOfEpisodes,
+      timeSpent: 0,
     });
 
     updateGenres(userId, show.genres, true);
@@ -223,6 +224,40 @@ const updateWatchedCountAndStatus = (userId, show, add) => {
   });
 };
 
+const updateTimeSpent = (userId, show, add, episodeDuration) => {
+  const db = getDatabase();
+  const watchedCountRef = ref(db, `users/${userId}/followed/${show.id}`);
+  let timeSpent = 0;
+
+  // get show data from database
+  onValue(watchedCountRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      timeSpent = parseInt(data.timeSpent);
+    }
+  });
+
+  add ? (timeSpent += episodeDuration) : (timeSpent -= episodeDuration);
+  // update watchedCount in database
+  update(ref(db, `users/${userId}/followed/${show.id}`), {
+    timeSpent: timeSpent,
+  });
+  // .then(() => {
+  // add ? watchedCount-- : watchedCount++;
+
+  // change watching status
+  // const updateRef = ref(db, `users/${userId}/followed/${show.id}`);
+
+  // if (watchedCount === episodes) {
+  // update(updateRef, { watchStatus: 'finished' });
+  // } else if (watchedCount === 0) {
+  // update(updateRef, { watchStatus: 'notStarted' });
+  // } else if (watchedCount > 0) {
+  // update(updateRef, { watchStatus: 'started' });
+  // }
+  // });
+};
+
 export const addEpisodeToDB = (userId, show, episode) => {
   const db = getDatabase();
   set(
@@ -236,6 +271,7 @@ export const addEpisodeToDB = (userId, show, episode) => {
     }
   );
   updateWatchedCountAndStatus(userId, show, true);
+  updateTimeSpent(userId, show, true, episode.runtime);
 };
 
 export const removeEpisodeFromDB = (userId, show, episode) => {
@@ -248,6 +284,7 @@ export const removeEpisodeFromDB = (userId, show, episode) => {
     {}
   );
   updateWatchedCountAndStatus(userId, show, false);
+  updateTimeSpent(userId, show, false, episode.runtime);
 };
 
 export const addSeasonToDB = (userId, show, season) => {
