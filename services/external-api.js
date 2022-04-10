@@ -107,7 +107,6 @@ export async function getSeasons(requestData) {
   if (!response.ok) {
     throw new Error(data.error.message || 'Could not get products.');
   }
-
   const loadedEpisodes = data.map((show) => {
     return {
       id: show.id,
@@ -132,7 +131,21 @@ export async function getSeasons(requestData) {
     allSeasons.push(season);
   }
 
-  return allSeasons;
+  return { seasons: allSeasons, episodesCount: loadedEpisodes?.length ?? 0 };
+}
+
+export async function getEpisodesCount(requestData) {
+  const response = await fetch(
+    `https://api.tvmaze.com/shows/${requestData}/episodes`
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error.message || 'Could not get products.');
+  }
+
+  return data?.length ?? 0;
 }
 
 export async function getCast(requestData) {

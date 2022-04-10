@@ -48,12 +48,6 @@ const Details = ({ navigation, route }) => {
     error: castError,
   } = useFetch(getCast, selectedShow?.id);
 
-  let numberOfEpisodes = 0;
-
-  loadedSeasons?.forEach((season) => {
-    numberOfEpisodes += season.length;
-  });
-
   const tabClickHandler = (tabName) => {
     setActiveTab(tabName);
   };
@@ -78,11 +72,11 @@ const Details = ({ navigation, route }) => {
             {/* Hero */}
             <HeroDetails
               loadedImages={loadedImages}
-              loadedSeasons={loadedSeasons}
+              loadedSeasons={loadedSeasons.seasons}
               loadedShow={loadedShow}
               userId={userId}
               navigation={navigation}
-              numberOfEpisodes={numberOfEpisodes}
+              numberOfEpisodes={loadedSeasons.episodesCount}
             />
             {/* Tabs to navigate between details sections */}
             <Tabs activeTab={activeTab} tabClickHandler={tabClickHandler} />
@@ -91,20 +85,20 @@ const Details = ({ navigation, route }) => {
             {activeTab === 'info' && (
               <InfoTab
                 loadedShow={loadedShow}
-                loadedSeasons={loadedSeasons}
+                loadedSeasons={loadedSeasons.seasons}
                 loadedCast={loadedCast}
               />
             )}
             {activeTab === 'seasons' && (
               <SeasonsTab
-                seasons={loadedSeasons}
+                seasons={loadedSeasons.seasons}
                 show={loadedShow}
                 navigation={navigation}
                 userId={userId}
                 followed={showsIdList.includes(selectedShow?.id)}
                 changedSeason={changedSeason}
                 episodesChanged={episodesChanged}
-                numberOfEpisodes={numberOfEpisodes}
+                numberOfEpisodes={loadedSeasons.episodesCount}
               />
             )}
             {activeTab === 'gallery' && <GalleryTab images={loadedImages} />}

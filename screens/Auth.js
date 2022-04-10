@@ -118,6 +118,7 @@ const Auth = ({ navigation }) => {
 
   // Handle submitting the form
   const submitFormHandler = async () => {
+    console.log('logging...');
     setAuthError(null);
     setShowErrors(true);
 
@@ -172,6 +173,7 @@ const Auth = ({ navigation }) => {
         }
       }
     } else {
+      console.log('auth form not valid');
       if (!isLogging && enteredPassword !== enteredPassword2) {
         setAuthError('PASSWORDS MUST BE THE SAME!');
       }

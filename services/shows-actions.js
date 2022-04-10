@@ -27,7 +27,7 @@ const updateGenres = (userId, genresList, add) => {
       if (snapshot.exists()) {
         loadedGenres = snapshot.val();
       } else {
-        console.log('No data available');
+        console.log('No data for genres chart');
       }
     })
     .then(() => {

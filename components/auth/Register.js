@@ -87,6 +87,9 @@ const Register = ({
             onBlur={() => setNameActive(false)}
           />
         </View>
+        {username.nameError && showErrors && (
+          <Text style={styles.input_error}>{username.nameError}</Text>
+        )}
       </View>
 
       {/* Email */}

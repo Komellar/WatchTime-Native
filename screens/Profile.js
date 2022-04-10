@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SIZES, FONTS, COLORS } from '../constants/theme';
 import HeroProfile from '../components/profile/HeroProfile';
 import ProfileSlider from '../components/profile/ProfileSlider';
-import { getGenres, getShowsList } from '../services/shows-actions';
+import { getShowsList } from '../services/shows-actions';
 import GenresChart from '../components/profile/GenresChart';
 import MostWatched from '../components/profile/MostWatched';
 

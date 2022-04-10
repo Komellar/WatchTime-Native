@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import { useFetch } from '../hooks/use-fetch';
-import { getAllShows } from '../services/external-api';
+import { getAllShows, getEpisodesCount } from '../services/external-api';
 import { COLORS, SIZES, FONTS } from '../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { addShowToDB, removeShowFromDB } from '../services/shows-actions';
@@ -31,9 +31,13 @@ const FirstShows = ({ navigation }) => {
   const bestRatedShows = loadedShows?.filter((show) => show?.popularity > 96);
   const dispatch = useDispatch();
 
-  const pickShowHandler = (show) => {
+  const pickShowHandler = async (show) => {
     if (!showsIdList?.includes(show?.id)) {
-      dispatch(addShowToDB(userId, show));
+      getEpisodesCount(show.id)
+        .then((response) => {
+          dispatch(addShowToDB(userId, show, response));
+        })
+        .catch((err) => console.log(err));
     } else {
       dispatch(removeShowFromDB(userId, show));
     }
