@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { PieChart } from 'react-native-chart-kit';
 import { getGenres } from '../../services/shows-actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,19 +23,25 @@ const GenresChart = ({ userId }) => {
     'rgb(220, 57, 18)',
   ];
 
-  const userGenresData = userGenres.map((genre, index) => {
-    return {
-      count: genre.count,
-      name: genre.name,
-      legendFontColor: COLORS.onDark,
-      legendFontSize: 14,
-      color: chartColors[index],
-    };
-  });
+  const sortedGenres = useMemo(
+    () =>
+      [...userGenres].sort((a, b) => (a.count > b.count ? -1 : 1)).slice(0, 5),
+    [userGenres]
+  );
 
-  const sortedGenres = userGenresData
-    .sort((a, b) => (a.count > b.count ? -1 : 1))
-    .slice(0, 5);
+  const userGenresData = useMemo(
+    () =>
+      sortedGenres?.map((genre, index) => {
+        return {
+          count: genre.count,
+          name: genre.name,
+          legendFontColor: COLORS.onDark,
+          legendFontSize: 14,
+          color: chartColors[index],
+        };
+      }),
+    [sortedGenres, chartColors]
+  );
 
   return (
     <View
@@ -45,7 +51,7 @@ const GenresChart = ({ userId }) => {
         alignItems: 'center',
       }}
     >
-      {sortedGenres.length > 0 && (
+      {userGenresData.length > 2 && (
         <>
           <Text
             style={{ color: COLORS.white, ...FONTS.h3, paddingTop: SIZES.l }}
@@ -53,7 +59,7 @@ const GenresChart = ({ userId }) => {
             Favourite genres
           </Text>
           <PieChart
-            data={sortedGenres}
+            data={userGenresData}
             width={SIZES.width}
             height={180}
             chartConfig={{
