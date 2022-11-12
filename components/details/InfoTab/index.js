@@ -1,12 +1,16 @@
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from 'react-native';
 import React, { useState } from 'react';
+
 import { COLORS, FONTS, SIZES } from '../../../constants';
 import Info from './Info';
 import Genres from './Genres';
 import Characters from './Characters';
 import Actors from './Actors';
+import StarRating from './StarRating';
+import { useSelector } from 'react-redux';
 
 const InfoTab = ({ loadedShow, loadedCast }) => {
+  const userId = useSelector((state) => state.auth.userId);
   const [storylineIsOpen, setStorylineIsOpen] = useState(false);
 
   const { actors, characters } = loadedCast;
@@ -78,6 +82,9 @@ const InfoTab = ({ loadedShow, loadedCast }) => {
 
       {/* Actors */}
       <Actors actors={actors} />
+
+      {/* Star Rating */}
+      {userId && <StarRating userId={userId} showId={loadedShow?.id} />}
     </View>
   );
 };

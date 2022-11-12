@@ -403,3 +403,23 @@ export const getMostWatchedShow = (userId) => {
     });
   };
 };
+
+//
+///////////// SHOW RATING ////////////
+//
+
+export const addRatingToDB = (userId, showId, stars) => {
+  const db = getDatabase();
+  set(ref(db, `shows/${showId}/ratings/${userId}`), {
+    userId,
+    stars,
+  });
+};
+
+export const getRatingByUser = async (userId, showId) => {
+  const dbRef = ref(getDatabase());
+
+  const snapshot = await get(child(dbRef, `shows/${showId}/ratings/${userId}`));
+
+  return snapshot.exists() ? snapshot.val().stars : 0;
+};
