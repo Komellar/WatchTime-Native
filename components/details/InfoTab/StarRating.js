@@ -7,18 +7,23 @@ import { COLORS, SIZES, FONTS } from '../../../constants';
 import {
   addRatingToDB,
   getRatingByUser,
+  getShowRatings,
 } from '../../../services/shows-actions';
 
 const StarRating = ({ userId, showId }) => {
   const [starsCount, setStarsCount] = useState(0);
+  const [averageRate, setAverageRate] = useState(0);
 
   useEffect(() => {
     const getStars = async () => {
       const stars = await getRatingByUser(userId, showId);
       setStarsCount(stars);
+
+      const average = await getShowRatings(showId);
+      setAverageRate(average);
     };
     getStars();
-  }, []);
+  }, [starsCount]);
 
   const handleStarsChange = useCallback(
     (stars) => {
@@ -51,6 +56,15 @@ const StarRating = ({ userId, showId }) => {
             }
           />
         </View>
+        {starsCount !== 0 && (
+          <View style={styles.usersRateContainer}>
+            <Text style={styles.header2}>Watch Time users rate</Text>
+            <View style={styles.starsContainer}>
+              <Text style={styles.starsCount}>{averageRate}</Text>
+              <FontAwesome name="star" size={32} color="#e3d924" />
+            </View>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -60,24 +74,33 @@ const styles = StyleSheet.create({
   container: {
     marginTop: SIZES.l,
     marginBottom: SIZES.xl,
-
-    // backgroundColor: COLORS.darkGray,
   },
-  //   row: {
-  //     flexDirection: 'row',
-  //     justifyContent: 'space-around',
-  //     marginBottom: SIZES.l,
-  //   },
-  //   row_item: {
-  //     flexDirection: 'row',
-  //     alignItems: 'center',
-  //   },
   header: {
-    // paddingHorizontal: SIZES.m,
     textAlign: 'center',
     paddingBottom: SIZES.l,
     color: COLORS.white,
-    ...FONTS.h3,
+    ...FONTS.body2,
+  },
+  usersRateContainer: {
+    paddingTop: SIZES.xxl,
+  },
+  header2: {
+    paddingBottom: SIZES.s,
+    textAlign: 'center',
+    color: COLORS.white,
+    ...FONTS.body2,
+  },
+  starsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  starsCount: {
+    paddingLeft: SIZES.s,
+    paddingRight: SIZES.xs,
+    color: COLORS.primaryLight,
+    ...FONTS.h2,
   },
 });
 

@@ -7,10 +7,6 @@ import {
   update,
   get,
   child,
-  orderByChild,
-  query,
-  orderByValue,
-  orderByKey,
 } from 'firebase/database';
 import { showsActions } from '../store/shows-slice';
 import { statsActions } from '../store/stats-slice';
@@ -422,4 +418,29 @@ export const getRatingByUser = async (userId, showId) => {
   const snapshot = await get(child(dbRef, `shows/${showId}/ratings/${userId}`));
 
   return snapshot.exists() ? snapshot.val().stars : 0;
+};
+
+export const getShowRatings = async (showId) => {
+  const dbRef = ref(getDatabase());
+
+  const snapshot = await get(child(dbRef, `shows/${showId}/ratings`));
+
+  if (snapshot.exists()) {
+    const data = snapshot.val();
+
+    if (data) {
+      // convert data to array
+      const convertedData = Object.values(data);
+
+      let sum = 0;
+      convertedData.forEach((rating) => {
+        sum += rating.stars;
+      });
+
+      const average = (sum / convertedData.length).toFixed(1);
+      return average;
+    }
+  }
+
+  return 0;
 };
