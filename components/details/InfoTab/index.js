@@ -1,15 +1,21 @@
-import { StyleSheet, View, Text, TouchableWithoutFeedback } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
 import React, { useState } from 'react';
+import { FontAwesome } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
 
 import { COLORS, FONTS, SIZES } from '../../../constants';
 import Info from './Info';
 import Genres from './Genres';
 import Characters from './Characters';
 import Actors from './Actors';
-import StarRating from './StarRating';
-import { useSelector } from 'react-redux';
 
-const InfoTab = ({ loadedShow, loadedCast }) => {
+const InfoTab = ({ navigation, loadedShow, loadedCast }) => {
   const userId = useSelector((state) => state.auth.userId);
   const [storylineIsOpen, setStorylineIsOpen] = useState(false);
 
@@ -77,14 +83,46 @@ const InfoTab = ({ loadedShow, loadedCast }) => {
         />
       </View>
 
+      {/* Comments */}
+      <View
+        style={{
+          paddingHorizontal: SIZES.l,
+          paddingVertical: SIZES.xl,
+        }}
+      >
+        <TouchableOpacity
+          style={{
+            alignContent: 'center',
+            marginLeft: SIZES.xl,
+          }}
+          onPress={() =>
+            navigation.navigate('Comments', { showId: loadedShow?.id })
+          }
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <FontAwesome
+              name="comments"
+              size={24}
+              color={COLORS.primaryLight}
+            />
+            <Text style={styles.comments_label}>Comments</Text>
+          </View>
+        </TouchableOpacity>
+        <View
+          style={{
+            height: 1,
+            width: '100%',
+            backgroundColor: COLORS.gray,
+            marginTop: SIZES.xl,
+          }}
+        />
+      </View>
+
       {/* Characters */}
       <Characters characters={characters} title={loadedShow?.title} />
 
       {/* Actors */}
       <Actors actors={actors} />
-
-      {/* Star Rating */}
-      {userId && <StarRating userId={userId} showId={loadedShow?.id} />}
     </View>
   );
 };
@@ -96,10 +134,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#333',
   },
-  text: {
-    // color: '#fff',
-    // fontSize: 16,
-  },
   row_item: {
     flexDirection: 'row',
     paddingVertical: 1,
@@ -109,5 +143,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     fontWeight: '700',
+  },
+  comments_label: {
+    width: 110,
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: '700',
+    marginLeft: SIZES.l,
   },
 });

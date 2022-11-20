@@ -86,6 +86,7 @@ const Details = ({ navigation, route }) => {
                 loadedShow={loadedShow}
                 loadedSeasons={loadedSeasons.seasons}
                 loadedCast={loadedCast}
+                navigation={navigation}
               />
             )}
             {activeTab === 'seasons' && (

@@ -404,26 +404,30 @@ export const getMostWatchedShow = (userId) => {
 ///////////// SHOW RATING ////////////
 //
 
-export const addRatingToDB = (userId, showId, stars) => {
+export const addComment = (user, showId, stars, comment, date) => {
   const db = getDatabase();
-  set(ref(db, `shows/${showId}/ratings/${userId}`), {
-    userId,
+  set(ref(db, `shows/${showId}/comments/${user.userId}`), {
+    userId: user.userId,
+    userName: user.userName,
+    userImg: user.userImg,
     stars,
+    comment,
+    date,
   });
 };
 
-export const getRatingByUser = async (userId, showId) => {
+export const getUserComment = async (userId, showId) => {
   const dbRef = ref(getDatabase());
-
-  const snapshot = await get(child(dbRef, `shows/${showId}/ratings/${userId}`));
-
-  return snapshot.exists() ? snapshot.val().stars : 0;
+  const snapshot = await get(
+    child(dbRef, `shows/${showId}/comments/${userId}`)
+  );
+  return snapshot.exists() ? snapshot.val() : null;
 };
 
-export const getShowRatings = async (showId) => {
+export const getShowComments = async (showId) => {
   const dbRef = ref(getDatabase());
 
-  const snapshot = await get(child(dbRef, `shows/${showId}/ratings`));
+  const snapshot = await get(child(dbRef, `shows/${showId}/comments`));
 
   if (snapshot.exists()) {
     const data = snapshot.val();
@@ -433,14 +437,40 @@ export const getShowRatings = async (showId) => {
       const convertedData = Object.values(data);
 
       let sum = 0;
-      convertedData.forEach((rating) => {
-        sum += rating.stars;
+      convertedData.forEach((comment) => {
+        sum += comment?.stars;
       });
 
-      const average = (sum / convertedData.length).toFixed(1);
-      return average;
+      const average = Number((sum / convertedData.length).toFixed(1));
+      return { comments: convertedData, average };
     }
   }
 
-  return 0;
+  return { comments: [], average: 0 };
+  // return 0;
 };
+
+// export const getShowRatings = async (showId) => {
+//   const dbRef = ref(getDatabase());
+
+//   const snapshot = await get(child(dbRef, `shows/${showId}/ratings`));
+
+//   if (snapshot.exists()) {
+//     const data = snapshot.val();
+
+//     if (data) {
+//       // convert data to array
+//       const convertedData = Object.values(data);
+
+//       let sum = 0;
+//       convertedData.forEach((rating) => {
+//         sum += rating.stars;
+//       });
+
+//       const average = (sum / convertedData.length).toFixed(1);
+//       return average;
+//     }
+//   }
+
+//   return 0;
+// };
