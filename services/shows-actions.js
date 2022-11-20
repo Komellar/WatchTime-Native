@@ -234,24 +234,11 @@ const updateTimeSpent = (userId, show, add, episodeDuration) => {
   });
 
   add ? (timeSpent += episodeDuration) : (timeSpent -= episodeDuration);
+
   // update watchedCount in database
   update(ref(db, `users/${userId}/followed/${show.id}`), {
     timeSpent: timeSpent,
   });
-  // .then(() => {
-  // add ? watchedCount-- : watchedCount++;
-
-  // change watching status
-  // const updateRef = ref(db, `users/${userId}/followed/${show.id}`);
-
-  // if (watchedCount === episodes) {
-  // update(updateRef, { watchStatus: 'finished' });
-  // } else if (watchedCount === 0) {
-  // update(updateRef, { watchStatus: 'notStarted' });
-  // } else if (watchedCount > 0) {
-  // update(updateRef, { watchStatus: 'started' });
-  // }
-  // });
 };
 
 export const addEpisodeToDB = (userId, show, episode) => {
@@ -396,11 +383,6 @@ export const getMostWatchedShow = (userId) => {
         convertedData.forEach((show) => {
           if (show.watchedCount > mostEpisodes) {
             mostEpisodes = show.watchedCount;
-            // mostWatchedShow = {
-            //   id: show.id,
-            //   title: show.title,
-            //   image: show.image,
-            // };
             mostWatchedShow = {
               id: show.id,
               watchedCount: show.watchedCount,
@@ -463,30 +445,4 @@ export const getShowComments = async (showId) => {
   }
 
   return { comments: [], average: 0 };
-  // return 0;
 };
-
-// export const getShowRatings = async (showId) => {
-//   const dbRef = ref(getDatabase());
-
-//   const snapshot = await get(child(dbRef, `shows/${showId}/ratings`));
-
-//   if (snapshot.exists()) {
-//     const data = snapshot.val();
-
-//     if (data) {
-//       // convert data to array
-//       const convertedData = Object.values(data);
-
-//       let sum = 0;
-//       convertedData.forEach((rating) => {
-//         sum += rating.stars;
-//       });
-
-//       const average = (sum / convertedData.length).toFixed(1);
-//       return average;
-//     }
-//   }
-
-//   return 0;
-// };
