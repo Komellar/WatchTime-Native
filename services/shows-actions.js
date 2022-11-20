@@ -299,6 +299,22 @@ export const addSeasonToDB = (userId, show, season) => {
       }
     );
     updateWatchedCountAndStatus(userId, show, true);
+    updateTimeSpent(userId, show, true, episode.runtime);
+  });
+};
+
+export const removeSeasonFromDB = (userId, show, season) => {
+  const db = getDatabase();
+  season.forEach((episode) => {
+    set(
+      ref(
+        db,
+        `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`
+      ),
+      {}
+    );
+    updateWatchedCountAndStatus(userId, show, false);
+    updateTimeSpent(userId, show, false, episode.runtime);
   });
 };
 

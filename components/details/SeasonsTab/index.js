@@ -7,6 +7,7 @@ import {
   getWatchedEpisodes,
   addSeasonToDB,
   addShowToDB,
+  removeSeasonFromDB,
 } from '../../../services/shows-actions';
 import { useDispatch } from 'react-redux';
 
@@ -30,7 +31,10 @@ const SeasonsTab = ({
     let unseenEpisodes = season.filter(
       (episode) => !watchedEpisodes[`s${seasonNum}`]?.includes(episode.id)
     );
-    addSeasonToDB(userId, show, unseenEpisodes);
+
+    unseenEpisodes.length === 0
+      ? removeSeasonFromDB(userId, show, season)
+      : addSeasonToDB(userId, show, unseenEpisodes);
 
     const episodes = getWatchedEpisodes(userId, show, season[0]?.season);
     setWatchedEpisodes({
