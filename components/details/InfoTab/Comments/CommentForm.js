@@ -35,8 +35,6 @@ const CommentForm = ({ user, showId, setIsFormOpen }) => {
     if (starsCount === 0) {
       setError('Please choose star rate');
     } else {
-      console.log('no err');
-      console.log(starsCount);
       const today = new Date();
       const date = [
         today.getFullYear(),

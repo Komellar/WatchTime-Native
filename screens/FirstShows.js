@@ -37,7 +37,7 @@ const FirstShows = ({ navigation }) => {
         .then((response) => {
           dispatch(addShowToDB(userId, show, response));
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     } else {
       dispatch(removeShowFromDB(userId, show));
     }

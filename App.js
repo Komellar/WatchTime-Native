@@ -49,7 +49,7 @@ export default function App() {
 
         // await new Promise((resolve) => setTimeout(resolve, 5000));
       } catch (e) {
-        console.warn(e);
+        console.error(e);
       } finally {
         // Tell the application to render
         setAppIsReady(true);

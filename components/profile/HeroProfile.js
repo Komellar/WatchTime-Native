@@ -64,7 +64,7 @@ const HeroProfile = ({ userId, myShows }) => {
       dispatch(authActions.removeCurrentUser());
       dispatch(showsActions.resetList());
     } catch (err) {
-      console.log(err);
+      console.error('logout error: ', err);
     }
   };
 

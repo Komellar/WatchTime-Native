@@ -128,9 +128,9 @@ const Auth = ({ navigation }) => {
           await signInWithEmailAndPassword(auth, enteredEmail, enteredPassword);
         } catch (err) {
           if (err.code === 'auth/user-not-found') {
-            setAuthError('USER NOT FOUND!!!');
+            setAuthError('USER NOT FOUND!');
           } else if (err.code === 'auth/wrong-password') {
-            setAuthError('WRONG PASSWORD!!!');
+            setAuthError('WRONG PASSWORD!');
           } else {
             setAuthError(err.message);
           }
@@ -148,7 +148,7 @@ const Auth = ({ navigation }) => {
           });
         } catch (err) {
           if (err.code === 'auth/email-already-in-use') {
-            setAuthError('EMAIL ALREADY EXISTS!!!');
+            setAuthError('EMAIL ALREADY EXISTS!');
           } else {
             setAuthError(err.message);
           }
@@ -168,7 +168,7 @@ const Auth = ({ navigation }) => {
           }
         } catch (err) {
           setAuthError('FAILED TO GET LOGIN');
-          console.log('error loging', err);
+          console.error('error loging', err);
         }
       }
     } else {
@@ -177,8 +177,6 @@ const Auth = ({ navigation }) => {
       }
     }
   };
-
-  if (authError) console.log(authError);
 
   return (
     <ScrollView style={styles.scroll}>

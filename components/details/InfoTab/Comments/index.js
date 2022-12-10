@@ -32,8 +32,6 @@ const Comments = ({ navigation, route }) => {
     getComments();
   }, [showId]);
 
-  console.log(comments);
-
   return (
     <View style={styles.container}>
       {isFormOpen && (
