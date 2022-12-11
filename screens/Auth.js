@@ -20,6 +20,7 @@ import Register from '../components/auth/Register';
 import AuthButtons from '../components/auth/AuthButtons';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../store/auth-slice';
+import { setNewUser } from '../services/auth-actions';
 
 const Auth = ({ navigation }) => {
   const [isLogging, setIsLogging] = useState(true);
@@ -161,6 +162,11 @@ const Auth = ({ navigation }) => {
             const displayName = user.displayName;
             const uid = user.uid;
             const userImg = user.photoURL;
+
+            if (!isLogging) {
+              await setNewUser(uid, displayName, userImg);
+            }
+
             dispatch(authActions.setCurrentUser({ displayName, uid, userImg }));
             isLogging
               ? navigation.navigate('Profile', { useriId: uid })

@@ -1,25 +1,17 @@
-import {
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import { View, Text, ImageBackground } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import heroImage from '../../assets/heroProfile.jpg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { SvgUri } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SIZES, FONTS, COLORS } from '../../constants/theme';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { getAuth, signOut } from 'firebase/auth';
-import { authActions } from '../../store/auth-slice';
-import { showsActions } from '../../store/shows-slice';
 import { getWatchCount } from '../../services/shows-actions';
+import SettingsDropdown from './Settings/Dropdown';
 
-const HeroProfile = ({ userId, myShows }) => {
+const HeroProfile = ({ userId, myShows, settingsOpen, setSettingsOpen }) => {
   const userImg = useSelector((state) => state.auth.userImg);
   const userName = useSelector((state) => state.auth.userName);
+
   const [watchedEpisodes, setWatchedEpisodes] = useState(0);
   const [timeSpent, setTimeSpent] = useState(0);
 
@@ -35,38 +27,6 @@ const HeroProfile = ({ userId, myShows }) => {
     setWatchedEpisodes(statsEpisodesCount);
     setTimeSpent(statsTimeSpent);
   }, [myShows, userId]);
-
-  // const convertedTimeSpent = `${Math.floor(statsTimeSpent / 60)}h ${
-  //   statsTimeSpent % 60
-  // }min`;
-
-  const createTwoButtonAlert = () =>
-    Alert.alert(
-      'Warning',
-      'Are you sure you want to log out?',
-      [
-        {
-          text: 'NO',
-        },
-        { text: 'YES', onPress: () => logoutHandler() },
-      ],
-      {
-        cancelable: true,
-      }
-    );
-
-  const dispatch = useDispatch();
-
-  const logoutHandler = async () => {
-    try {
-      const auth = getAuth();
-      await signOut(auth);
-      dispatch(authActions.removeCurrentUser());
-      dispatch(showsActions.resetList());
-    } catch (err) {
-      console.error('logout error: ', err);
-    }
-  };
 
   return (
     <View
@@ -97,14 +57,14 @@ const HeroProfile = ({ userId, myShows }) => {
               justifyContent: 'center',
             }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                createTwoButtonAlert();
-              }}
-              style={{ position: 'absolute', top: 30, right: 10 }}
-            >
-              <MaterialCommunityIcons name="logout" size={24} color="white" />
-            </TouchableOpacity>
+            {/* Settings */}
+            <SettingsDropdown
+              userId={userId}
+              settingsOpen={settingsOpen}
+              setSettingsOpen={setSettingsOpen}
+            />
+
+            {/* Avatar */}
             <View style={{ width: 120, height: 120 }}>
               {userImg && <SvgUri width="100%" height="100%" uri={userImg} />}
             </View>

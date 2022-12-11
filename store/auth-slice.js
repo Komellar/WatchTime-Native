@@ -8,6 +8,7 @@ const authSlice = createSlice({
     userName: null,
     userId: null,
     userImg: null,
+    isPremium: false,
   },
   reducers: {
     setCurrentUser(state, action) {
@@ -15,6 +16,7 @@ const authSlice = createSlice({
       state.userName = action.payload.displayName;
       state.userId = action.payload.uid;
       state.userImg = action.payload.userImg;
+      state.isPremium = action.payload.isPremium;
       AsyncStorage.setItem('isLogged', 'true');
     },
     removeCurrentUser(state) {
@@ -23,6 +25,9 @@ const authSlice = createSlice({
       state.userId = null;
       state.userImg = null;
       AsyncStorage.setItem('isLogged', 'false');
+    },
+    updateToPremium(state) {
+      state.isPremium = true;
     },
   },
 });
