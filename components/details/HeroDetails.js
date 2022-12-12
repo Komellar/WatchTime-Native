@@ -103,7 +103,7 @@ const HeroDetails = ({
           </View>
         </LinearGradient>
       </ImageBackground>
-      <View style={{}}>
+      <View>
         <TouchableOpacity
           style={{
             marginHorizontal: SIZES.m,

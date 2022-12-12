@@ -12,12 +12,15 @@ import Stars from 'react-native-stars';
 
 import { COLORS, FONTS, SIZES } from '../../../../constants';
 import { addComment, getUserComment } from '../../../../services/shows-actions';
+import PremiumButton from '../../../common/PremiumButton';
+import { useSelector } from 'react-redux';
 
 const CommentForm = ({ user, showId, setIsFormOpen }) => {
   const [enteredText, setEnteredText] = useState('');
   const [starsCount, setStarsCount] = useState(0);
   const [isFirstAdd, setIsFirstAdd] = useState(true);
   const [error, setError] = useState(null);
+  const isUserPremium = useSelector((state) => state.auth.isPremium);
 
   useEffect(() => {
     const getComment = async () => {
@@ -91,13 +94,17 @@ const CommentForm = ({ user, showId, setIsFormOpen }) => {
         />
       </View>
       {error && <Text style={styles.input_error}>&bull; {error}</Text>}
-      <TouchableOpacity
-        style={styles.btn}
-        onPress={handleFormSubmit}
-        disabled={!user?.isLoggedIn}
-      >
-        <Text style={styles.btnText}>Submit</Text>
-      </TouchableOpacity>
+      {isUserPremium ? (
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={handleFormSubmit}
+          disabled={!user?.isLoggedIn}
+        >
+          <Text style={styles.btnText}>Submit</Text>
+        </TouchableOpacity>
+      ) : (
+        <PremiumButton />
+      )}
       <View
         style={{
           height: 0,

@@ -67,7 +67,6 @@ const GenresChart = ({ userId }) => {
             }}
             accessor={'count'}
             backgroundColor={'transparent'}
-            // paddingLeft={'15'}
             absolute
           />
         </>
