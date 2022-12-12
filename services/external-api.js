@@ -2,25 +2,27 @@ const imageNotFound =
   'https://firebasestorage.googleapis.com/v0/b/borrowathing.appspot.com/o/images%2F2022-01-24%2011%3A05%3A10?alt=media&token=d4bb7b15-721b-4e45-b2de-826b72990e88';
 
 export async function getAllShows() {
-  const response = await fetch('https://api.tvmaze.com/shows?page=0');
+  const promises = [0, 1, 2, 3, 4, 5, 6, 7].map((i) =>
+    fetch(`https://api.tvmaze.com/shows?page=${i}`).then((resp) => resp.json())
+  );
 
-  const data = await response.json();
+  const data = await Promise.all(promises);
 
-  if (!response.ok) {
-    throw new Error(data.error.message || 'Could not get products.');
+  const loadedShows = [];
+  for (page of data) {
+    const showsList = page.map((show) => {
+      return {
+        id: show.id,
+        title: show.name,
+        image: show.image?.medium ?? imageNotFound,
+        rating: show.rating.average,
+        popularity: show.weight,
+        genres: show.genres,
+        averageRuntime: show.averageRuntime,
+      };
+    });
+    loadedShows.push(...showsList);
   }
-
-  const loadedShows = data.map((show) => {
-    return {
-      id: show.id,
-      title: show.name,
-      image: show.image?.medium ?? imageNotFound,
-      rating: show.rating.average,
-      popularity: show.weight,
-      genres: show.genres,
-      averageRuntime: show.averageRuntime,
-    };
-  });
 
   return loadedShows;
 }

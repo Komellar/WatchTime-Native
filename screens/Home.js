@@ -1,13 +1,5 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  ImageBackground,
-  ScrollView,
-} from 'react-native';
-import React from 'react';
+import { View, Text, ScrollView } from 'react-native';
+import React, { useMemo } from 'react';
 import { useFetch } from '../hooks/use-fetch';
 import {
   getAllShows,
@@ -15,14 +7,14 @@ import {
   getShowImages,
 } from '../services/external-api';
 import SliderShows from '../components/SliderShows';
-import { COLORS, SIZES, FONTS, homeData } from '../constants';
+import { COLORS, FONTS, homeData } from '../constants';
 import Hero from '../components/home/Hero';
 import Recommended from '../components/home/Recommended';
 
 const Home = ({ navigation }) => {
   const { data: shows, loading, error } = useFetch(getAllShows);
 
-  const randomId = Math.floor(Math.random() * 400 + 1);
+  const randomId = useMemo(() => Math.floor(Math.random() * 1917 + 1), []);
 
   const {
     data: loadedShow,
@@ -36,12 +28,35 @@ const Home = ({ navigation }) => {
     error: imagesError,
   } = useFetch(getShowImages, randomId);
 
-  const ofTheDayShows = shows?.slice(70, 90);
-  const popularShows = shows?.filter((show) => show.popularity > 97);
-  const bestRatedShows = shows?.filter((show) => show.rating > 8.5);
-  const actionShows = shows?.filter((show) => show.genres?.includes('Action'));
-  const comedyShows = shows?.filter((show) => show.genres?.includes('Comedy'));
-  const familyShows = shows?.filter((show) => show.genres?.includes('Family'));
+  const ofTheDayShows = useMemo(
+    () => shows?.slice(randomId, randomId + 20),
+    [shows]
+  );
+
+  const popularShows = useMemo(
+    () => shows?.filter((show) => show.popularity > 98),
+    [shows]
+  );
+
+  const bestRatedShows = useMemo(
+    () => shows?.filter((show) => show.rating > 8.4),
+    [shows]
+  );
+
+  const actionShows = useMemo(
+    () => shows?.filter((show) => show.genres?.includes('Action')),
+    [shows]
+  );
+
+  const comedyShows = useMemo(
+    () => shows?.filter((show) => show.genres?.includes('Comedy')),
+    [shows]
+  );
+
+  const familyShows = useMemo(
+    () => shows?.filter((show) => show.genres?.includes('Family')),
+    [shows]
+  );
 
   return (
     <View
