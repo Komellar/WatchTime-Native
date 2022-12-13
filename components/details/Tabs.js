@@ -57,7 +57,6 @@ const Tabs = ({ activeTab, tabClickHandler }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    // justifyContent: 'center',
     justifyContent: 'space-around',
     alignItems: 'center',
     marginTop: 12,

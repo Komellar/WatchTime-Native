@@ -24,6 +24,10 @@ const SeasonsTab = ({
 
   // add whole season to database and watchedEpisodes object
   const addAllEpisodesHandler = (season, seasonNum) => {
+    if (userId == null) {
+      navigation.push('Auth');
+      return;
+    }
     if (!followed) {
       dispatch(addShowToDB(userId, show, numberOfEpisodes));
     }
@@ -45,14 +49,20 @@ const SeasonsTab = ({
 
   // get watched episodes and assign them to watchedEpisodes object
   useEffect(() => {
-    let watchedSeasons = {};
-    seasons.forEach((season, index) => {
-      watchedSeasons = {
-        ...watchedSeasons,
-        [`s${index + 1}`]: getWatchedEpisodes(userId, show, season[0]?.season),
-      };
-    });
-    setWatchedEpisodes(watchedSeasons);
+    if (userId != null) {
+      let watchedSeasons = {};
+      seasons.forEach((season, index) => {
+        watchedSeasons = {
+          ...watchedSeasons,
+          [`s${index + 1}`]: getWatchedEpisodes(
+            userId,
+            show,
+            season[0]?.season
+          ),
+        };
+      });
+      setWatchedEpisodes(watchedSeasons);
+    }
   }, [userId, show, seasons, getWatchedEpisodes]);
 
   return (
@@ -93,7 +103,7 @@ const SeasonsTab = ({
                   {/* Rest of season row */}
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.replace('Episodes', {
+                      navigation.push('Episodes', {
                         season: season,
                         show: show,
                         userId: userId,

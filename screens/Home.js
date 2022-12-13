@@ -1,5 +1,7 @@
 import { View, Text, ScrollView } from 'react-native';
 import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
+
 import { useFetch } from '../hooks/use-fetch';
 import {
   getAllShows,
@@ -9,10 +11,12 @@ import {
 import SliderShows from '../components/SliderShows';
 import { COLORS, FONTS, homeData } from '../constants';
 import Hero from '../components/home/Hero';
+import StaticRecommendation from '../components/home/StaticRecommendation';
 import Recommended from '../components/home/Recommended';
 
 const Home = ({ navigation }) => {
   const { data: shows, loading, error } = useFetch(getAllShows);
+  const userGenres = useSelector((state) => state.stats.genres);
 
   const randomId = useMemo(() => Math.floor(Math.random() * 1917 + 1), []);
 
@@ -97,6 +101,15 @@ const Home = ({ navigation }) => {
             title="Shows of the day"
             navigation={navigation}
           />
+
+          {userGenres.length !== 0 && (
+            <Recommended
+              shows={shows}
+              navigation={navigation}
+              genres={userGenres}
+            />
+          )}
+
           <SliderShows
             data={popularShows}
             title="Most popular"
@@ -104,7 +117,10 @@ const Home = ({ navigation }) => {
           />
 
           {/* Recommended Mandalorian */}
-          <Recommended data={homeData.mandalorian} navigation={navigation} />
+          <StaticRecommendation
+            data={homeData.mandalorian}
+            navigation={navigation}
+          />
 
           {/* Sliders  */}
           <SliderShows
@@ -119,7 +135,10 @@ const Home = ({ navigation }) => {
           />
 
           {/* Recommended Witcher */}
-          <Recommended data={homeData.witcher} navigation={navigation} />
+          <StaticRecommendation
+            data={homeData.witcher}
+            navigation={navigation}
+          />
 
           {/* Sliders  */}
           <SliderShows

@@ -18,14 +18,13 @@ LogBox.ignoreLogs([
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  const [isFirstLaunch, setIsFirstLaunch] = useState(null);
 
   let fonts = {
     Roboto_400Regular: require('./assets/fonts/Roboto-Regular.ttf'),
     Roboto_500Medium: require('./assets/fonts/Roboto-Medium.ttf'),
     Roboto_700Bold: require('./assets/fonts/Roboto-Bold.ttf'),
   };
-
-  const [isFirstLaunch, setIsFirstLaunch] = useState(null);
 
   useEffect(() => {
     AsyncStorage.getItem('alreadyLaunched').then((value) => {
@@ -46,8 +45,6 @@ export default function App() {
 
         // Pre-load fonts, make any API calls you need to do here
         await Font.loadAsync(fonts);
-
-        // await new Promise((resolve) => setTimeout(resolve, 5000));
       } catch (e) {
         console.error(e);
       } finally {

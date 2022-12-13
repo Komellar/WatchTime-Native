@@ -26,10 +26,10 @@ const HeroDetails = ({
   const isFavourite = favShowsIdList.includes(loadedShow.id);
 
   let followButton;
-  if (userId === null) {
+  if (userId == null) {
     followButton = {
       title: 'Add to list',
-      action: () => navigation.navigate('Auth'),
+      action: () => navigation.push('Auth'),
     };
   } else if (showsIdList?.includes(loadedShow.id)) {
     followButton = {

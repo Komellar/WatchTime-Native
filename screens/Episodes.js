@@ -1,7 +1,7 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { COLORS, SIZES, FONTS } from '../constants';
-import EpisodeModal from '../components/episodes/EpisodeModal';
+import EpisodeModal from '../components/details/SeasonsTab/episodes/EpisodeModal';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import {
@@ -20,24 +20,30 @@ const Episodes = ({ navigation, route }) => {
   const [watchedEpisodes, setWatchedEpisodes] = useState([]);
 
   useEffect(() => {
-    setWatchedEpisodes(getWatchedEpisodes(userId, show, season[0]?.season));
+    if (userId != null) {
+      setWatchedEpisodes(getWatchedEpisodes(userId, show, season[0]?.season));
+    }
   }, [userId, show, season]);
 
   const pickEpisodeHandler = (show, episode) => {
-    if (!followed) {
-      dispatch(addShowToDB(userId, show, numberOfEpisodes));
-    }
-    if (!watchedEpisodes.includes(episode.id)) {
-      addEpisodeToDB(userId, show, episode);
-      let tempWatchedEpisodes = [...watchedEpisodes];
-      tempWatchedEpisodes.push(episode.id);
-      setWatchedEpisodes(tempWatchedEpisodes);
+    if (userId != null) {
+      if (!followed) {
+        dispatch(addShowToDB(userId, show, numberOfEpisodes));
+      }
+      if (!watchedEpisodes.includes(episode.id)) {
+        addEpisodeToDB(userId, show, episode);
+        let tempWatchedEpisodes = [...watchedEpisodes];
+        tempWatchedEpisodes.push(episode.id);
+        setWatchedEpisodes(tempWatchedEpisodes);
+      } else {
+        removeEpisodeFromDB(userId, show, episode);
+        let tempWatchedEpisodes = watchedEpisodes.filter((id) => {
+          return id !== episode.id;
+        });
+        setWatchedEpisodes(tempWatchedEpisodes);
+      }
     } else {
-      removeEpisodeFromDB(userId, show, episode);
-      let tempWatchedEpisodes = watchedEpisodes.filter((id) => {
-        return id !== episode.id;
-      });
-      setWatchedEpisodes(tempWatchedEpisodes);
+      navigation.push('Auth');
     }
   };
 

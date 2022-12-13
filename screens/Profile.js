@@ -18,6 +18,8 @@ const Profile = ({ navigation, route }) => {
 
   const dispatch = useDispatch();
 
+  // console.log(isUserPremium);
+
   useEffect(() => {
     if (userId !== null) {
       dispatch(getShowsList(userId));

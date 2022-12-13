@@ -1,18 +1,24 @@
-import { getDatabase, ref, set, onValue, update } from 'firebase/database';
+import { getDatabase, ref, set, get, child, update } from 'firebase/database';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { authActions } from '../store/auth-slice';
 
 const getUserPremiumStatus = async (userId) => {
-  const db = getDatabase();
-  const userRef = ref(db, `users/${userId}/info/`);
+  let premiumBoolean = false;
 
-  onValue(userRef, (snapshot) => {
-    const data = snapshot.val();
+  const dbRef = ref(getDatabase());
+  await get(child(dbRef, `users/${userId}/info/`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        premiumBoolean = snapshot.val().isPremium;
+      } else {
+        console.log('No user found');
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 
-    if (data) {
-      return data.isPremium;
-    }
-  });
+  return premiumBoolean;
 };
 
 export const getCurrentUser = () => {
@@ -24,6 +30,16 @@ export const getCurrentUser = () => {
         const isPremium = await getUserPremiumStatus(uid);
         dispatch(
           authActions.setCurrentUser({ displayName, uid, userImg, isPremium })
+        );
+      } else {
+        dispatch(
+          authActions.setCurrentUser({
+            displayName: null,
+            uid: null,
+            userImg: null,
+            isPremium: undefined,
+            isLoggedIn: false,
+          })
         );
       }
     });

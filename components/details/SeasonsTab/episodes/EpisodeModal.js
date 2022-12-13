@@ -2,7 +2,7 @@ import { View, Text, Modal, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SIZES, FONTS } from '../../constants';
+import { COLORS, SIZES, FONTS } from '../../../../constants';
 
 const EpisodeModal = ({
   pickedEpisode,

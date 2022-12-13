@@ -7,10 +7,6 @@ const showsSlice = createSlice({
     showsIdList: [],
     favShowsList: [],
     favShowsIdList: [],
-    // startedShowsList: [],
-    // startedShowsIdList: [],
-    // endedShowsList: [],
-    // endedShowsIdList: []
   },
   reducers: {
     addToList(state, action) {
