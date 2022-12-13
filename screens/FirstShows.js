@@ -5,7 +5,6 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
-  //   TouchableWithoutFeedback,
   TouchableWithoutFeedback,
   TouchableHighlight,
 } from 'react-native';
