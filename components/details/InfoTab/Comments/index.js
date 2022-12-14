@@ -39,6 +39,7 @@ const Comments = ({ navigation, route }) => {
           user={user}
           showId={showId}
           setIsFormOpen={setIsFormOpen}
+          navigation={navigation}
         />
       )}
       <Text style={styles.header}>Comments</Text>

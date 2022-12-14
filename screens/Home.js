@@ -111,14 +111,14 @@ const Home = ({ navigation }) => {
           )}
 
           <SliderShows
-            data={popularShows}
-            title="Most popular"
+            data={bestRatedShows}
+            title="Best rated"
             navigation={navigation}
           />
 
-          {/* Recommended Mandalorian */}
+          {/* Recommended Witcher */}
           <StaticRecommendation
-            data={homeData.mandalorian}
+            data={homeData.witcher}
             navigation={navigation}
           />
 
@@ -129,14 +129,14 @@ const Home = ({ navigation }) => {
             navigation={navigation}
           />
           <SliderShows
-            data={bestRatedShows}
-            title="Best rated"
+            data={popularShows}
+            title="Most popular"
             navigation={navigation}
           />
 
-          {/* Recommended Witcher */}
+          {/* Recommended Mandalorian */}
           <StaticRecommendation
-            data={homeData.witcher}
+            data={homeData.mandalorian}
             navigation={navigation}
           />
 

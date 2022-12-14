@@ -45,7 +45,14 @@ const RootNavigation = ({ isFirstLaunch }) => {
 
   if (isLoggedIn === undefined) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: COLORS.background,
+        }}
+      >
         <Text
           style={{
             textAlign: 'center',

@@ -15,7 +15,7 @@ import { addComment, getUserComment } from '../../../../services/shows-actions';
 import PremiumButton from '../../../common/PremiumButton';
 import { useSelector } from 'react-redux';
 
-const CommentForm = ({ user, showId, setIsFormOpen }) => {
+const CommentForm = ({ user, showId, setIsFormOpen, navigation }) => {
   const [enteredText, setEnteredText] = useState('');
   const [starsCount, setStarsCount] = useState(0);
   const [isFirstAdd, setIsFirstAdd] = useState(true);
@@ -49,6 +49,32 @@ const CommentForm = ({ user, showId, setIsFormOpen }) => {
       setIsFormOpen(false);
     }
   }, [user, showId, starsCount, enteredText]);
+
+  let button = <></>;
+  if (user.userId == null) {
+    button = (
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => navigation.push('Auth')}
+      >
+        <Text style={styles.btnText}>Log in to add</Text>
+      </TouchableOpacity>
+    );
+  } else {
+    if (isUserPremium) {
+      button = (
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={handleFormSubmit}
+          disabled={!user?.isLoggedIn}
+        >
+          <Text style={styles.btnText}>Submit</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      button = <PremiumButton />;
+    }
+  }
 
   return (
     <>
@@ -94,17 +120,7 @@ const CommentForm = ({ user, showId, setIsFormOpen }) => {
         />
       </View>
       {error && <Text style={styles.input_error}>&bull; {error}</Text>}
-      {isUserPremium ? (
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={handleFormSubmit}
-          disabled={!user?.isLoggedIn}
-        >
-          <Text style={styles.btnText}>Submit</Text>
-        </TouchableOpacity>
-      ) : (
-        <PremiumButton />
-      )}
+      {button}
       <View
         style={{
           height: 0,
