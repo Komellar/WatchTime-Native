@@ -1,5 +1,5 @@
 const imageNotFound =
-  'https://firebasestorage.googleapis.com/v0/b/borrowathing.appspot.com/o/images%2F2022-01-24%2011%3A05%3A10?alt=media&token=d4bb7b15-721b-4e45-b2de-826b72990e88';
+  'https://firebasestorage.googleapis.com/v0/b/watchtime-native.appspot.com/o/simone-secci-49uySSA678U-unsplash.jpg?alt=media&token=6d3d3f47-2924-42b5-8cdb-877982a64bbe';
 
 export async function getAllShows() {
   const promises = [0, 1, 2, 3, 4, 5, 6, 7].map((i) =>

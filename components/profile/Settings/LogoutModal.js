@@ -3,9 +3,10 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { getAuth, signOut } from 'firebase/auth';
 
-import { SIZES, FONTS, COLORS } from '../../../constants/theme';
+import { SIZES, FONTS } from '../../../constants/theme';
 import { authActions } from '../../../store/auth-slice';
 import { showsActions } from '../../../store/shows-slice';
+import { statsActions } from '../../../store/stats-slice';
 
 const LogoutModal = ({ modalVisible, setModalVisible }) => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const LogoutModal = ({ modalVisible, setModalVisible }) => {
       await signOut(auth);
       dispatch(authActions.removeCurrentUser());
       dispatch(showsActions.resetList());
+      dispatch(statsActions.resetGenres());
     } catch (err) {
       console.error('logout error: ', err);
     }
