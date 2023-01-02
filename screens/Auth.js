@@ -117,6 +117,59 @@ const Auth = ({ navigation }) => {
     return () => (mounted = false);
   }, [isLogging, nameIsValid, emailIsValid, passwordIsValid, password2IsValid]);
 
+  const login = async (auth) => {
+    try {
+      await signInWithEmailAndPassword(auth, enteredEmail, enteredPassword);
+    } catch (err) {
+      if (err.code === 'auth/user-not-found') {
+        setAuthError('USER NOT FOUND!');
+      } else if (err.code === 'auth/wrong-password') {
+        setAuthError('WRONG PASSWORD!');
+      } else {
+        setAuthError(err.message);
+      }
+    }
+  };
+
+  const register = async (auth) => {
+    try {
+      await createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword);
+      await updateProfile(auth.currentUser, {
+        displayName: enteredName,
+        photoURL: avatarImage,
+      });
+    } catch (err) {
+      if (err.code === 'auth/email-already-in-use') {
+        setAuthError('EMAIL ALREADY EXISTS!');
+      } else {
+        setAuthError(err.message);
+      }
+    }
+  };
+
+  const setCurrentUser = async (auth) => {
+    try {
+      const user = auth.currentUser;
+      if (user !== null) {
+        const displayName = user.displayName;
+        const uid = user.uid;
+        const userImg = user.photoURL;
+
+        if (!isLogging) {
+          await setNewUser(uid, displayName, userImg);
+        }
+
+        dispatch(authActions.setCurrentUser({ displayName, uid, userImg }));
+        isLogging
+          ? navigation.navigate('Profile', { useriId: uid })
+          : navigation.navigate('FirstShows');
+      }
+    } catch (err) {
+      setAuthError('FAILED TO GET LOGIN');
+      console.error('error loging', err);
+    }
+  };
+
   // Handle submitting the form
   const submitFormHandler = async () => {
     setAuthError(null);
@@ -125,57 +178,12 @@ const Auth = ({ navigation }) => {
     if (formIsValid) {
       const auth = getAuth();
       if (isLogging) {
-        try {
-          await signInWithEmailAndPassword(auth, enteredEmail, enteredPassword);
-        } catch (err) {
-          if (err.code === 'auth/user-not-found') {
-            setAuthError('USER NOT FOUND!');
-          } else if (err.code === 'auth/wrong-password') {
-            setAuthError('WRONG PASSWORD!');
-          } else {
-            setAuthError(err.message);
-          }
-        }
+        await login(auth);
       } else {
-        try {
-          await createUserWithEmailAndPassword(
-            auth,
-            enteredEmail,
-            enteredPassword
-          );
-          await updateProfile(auth.currentUser, {
-            displayName: enteredName,
-            photoURL: avatarImage,
-          });
-        } catch (err) {
-          if (err.code === 'auth/email-already-in-use') {
-            setAuthError('EMAIL ALREADY EXISTS!');
-          } else {
-            setAuthError(err.message);
-          }
-        }
+        await register(auth);
       }
       if (!authError) {
-        try {
-          const user = auth.currentUser;
-          if (user !== null) {
-            const displayName = user.displayName;
-            const uid = user.uid;
-            const userImg = user.photoURL;
-
-            if (!isLogging) {
-              await setNewUser(uid, displayName, userImg);
-            }
-
-            dispatch(authActions.setCurrentUser({ displayName, uid, userImg }));
-            isLogging
-              ? navigation.navigate('Profile', { useriId: uid })
-              : navigation.navigate('FirstShows');
-          }
-        } catch (err) {
-          setAuthError('FAILED TO GET LOGIN');
-          console.error('error loging', err);
-        }
+        await setCurrentUser(auth);
       }
     } else {
       if (!isLogging && enteredPassword !== enteredPassword2) {
