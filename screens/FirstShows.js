@@ -2,24 +2,25 @@ import {
   View,
   Text,
   FlatList,
-  Image,
   TouchableOpacity,
   ImageBackground,
-  TouchableWithoutFeedback,
   TouchableHighlight,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
+
 import { useFetch } from '../hooks/use-fetch';
 import { getAllShows, getEpisodesCount } from '../services/external-api';
 import { COLORS, SIZES, FONTS } from '../constants';
-import { useDispatch, useSelector } from 'react-redux';
 import { addShowToDB, removeShowFromDB } from '../services/shows-actions';
-import { Ionicons } from '@expo/vector-icons';
+import Loader from '../components/firstShows/Loader';
 
 const FirstShows = ({ navigation }) => {
   const userName = useSelector((state) => state.auth.userName);
   const userId = useSelector((state) => state.auth.userId);
   const showsIdList = useSelector((state) => state.shows.showsIdList);
+  const [loadingShow, setLoadingShow] = useState(null);
 
   const {
     data: loadedShows,
@@ -30,15 +31,29 @@ const FirstShows = ({ navigation }) => {
   const bestRatedShows = loadedShows?.filter((show) => show?.popularity > 96);
   const dispatch = useDispatch();
 
-  const pickShowHandler = async (show) => {
-    if (!showsIdList?.includes(show?.id)) {
-      getEpisodesCount(show.id)
-        .then((response) => {
-          dispatch(addShowToDB(userId, show, response));
-        })
-        .catch((err) => console.error(err));
-    } else {
-      dispatch(removeShowFromDB(userId, show));
+  const pickShowHandler = (show) => {
+    if (show?.id) {
+      if (!showsIdList.includes(show.id)) {
+        setLoadingShow(show.id);
+
+        getEpisodesCount(show.id)
+          .then((response) => {
+            dispatch(addShowToDB(userId, show, response));
+          })
+          .catch((err) => console.error(err))
+          .finally(() => {
+            setLoadingShow(null);
+          });
+      }
+      if (showsIdList.includes(show.id)) {
+        setLoadingShow(show.id);
+
+        dispatch(removeShowFromDB(userId, show))
+          .then(() => {
+            setLoadingShow(null);
+          })
+          .catch((e) => console.error(e));
+      }
     }
   };
 
@@ -145,6 +160,7 @@ const FirstShows = ({ navigation }) => {
               <TouchableHighlight
                 activeOpacity={0.95}
                 style={{ paddingHorizontal: 2, paddingVertical: 2 }}
+                disabled={loadingShow !== null}
                 onPress={() => {
                   pickShowHandler(item);
                 }}
@@ -156,7 +172,8 @@ const FirstShows = ({ navigation }) => {
                     width: (SIZES.width * 32) / 100,
                   }}
                 >
-                  {/* if show is checked add shadow and icon */}
+                  {loadingShow === item?.id && <Loader />}
+
                   {showsIdList.includes(item?.id) && (
                     <View
                       style={{

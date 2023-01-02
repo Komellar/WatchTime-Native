@@ -11,7 +11,7 @@ import {
 import { showsActions } from '../store/shows-slice';
 import { statsActions } from '../store/stats-slice';
 
-const updateGenres = (userId, genresList, add) => {
+const updateGenres = async (userId, genresList, add) => {
   const db = getDatabase();
   const dbRef = ref(db);
 
@@ -53,17 +53,17 @@ const updateGenres = (userId, genresList, add) => {
 ///////////// FAVOURITE SHOWS ////////////
 //
 export const addToFavourite = (userId, show) => {
-  return (dispatch) => {
-    // add show to favourite list in app state in store
-    dispatch(showsActions.addToFav(show));
-
+  return async (dispatch) => {
     // add to database
     const db = getDatabase();
-    set(ref(db, `users/${userId}/favourite/${show.id}`), {
+    await set(ref(db, `users/${userId}/favourite/${show.id}`), {
       id: show.id,
       title: show.title,
       image: show.image,
     });
+
+    // add show to favourite list in app state in store
+    dispatch(showsActions.addToFav(show));
   };
 };
 
@@ -137,16 +137,16 @@ export const addShowToDB = (userId, show, numberOfEpisodes) => {
 };
 
 export const removeShowFromDB = (userId, show) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     // remove show from showsList and favourites shows in app state in store
     dispatch(showsActions.removeFromList(show));
 
     // remove show from database
     const db = getDatabase();
-    remove(ref(db, `users/${userId}/followed/${show.id}`));
-    dispatch(removeShowFromFav(userId, show));
+    await remove(ref(db, `users/${userId}/followed/${show.id}`));
+    await updateGenres(userId, show.genres, false);
 
-    updateGenres(userId, show.genres, false);
+    dispatch(removeShowFromFav(userId, show));
   };
 };
 
