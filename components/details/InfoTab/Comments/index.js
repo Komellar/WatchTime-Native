@@ -44,34 +44,12 @@ const Comments = ({ navigation, route }) => {
       )}
       <Text style={styles.header}>Comments</Text>
       {comments.comments.length == 0 ? (
-        <Text style={{ color: COLORS.onDark, ...FONTS.body2 }}>
-          No comments added
-        </Text>
+        <Text style={styles.noCommentsText}>No comments added</Text>
       ) : (
         <>
-          <View style={{ flexDirection: 'row', marginBottom: SIZES.xl }}>
-            <Text
-              style={{
-                ...FONTS.h3,
-                fontSize: 25,
-                color: COLORS.white,
-                marginRight: SIZES.s,
-              }}
-            >
-              Average rate
-            </Text>
-            <Text
-              style={{
-                ...FONTS.h3,
-                fontSize: 25,
-                color: COLORS.primaryLight,
-                marginRight: SIZES.s,
-                fontStyle: 'italic',
-                fontWeight: 'bold',
-              }}
-            >
-              {comments?.average}/5
-            </Text>
+          <View style={styles.row}>
+            <Text style={styles.rateLabel}>Average rate</Text>
+            <Text style={styles.rate}>{comments?.average}/5</Text>
             <FontAwesome name="star" size={24} color="#d1c828" />
           </View>
           <FlatList
@@ -79,50 +57,12 @@ const Comments = ({ navigation, route }) => {
             keyExtractor={(item) => item.userId}
             renderItem={({ item }) => (
               <>
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    paddingVertical: SIZES.xs,
-                    marginBottom: SIZES.s,
-                  }}
-                >
+                <View style={styles.rowItem}>
                   <SvgUri width={40} height={40} uri={item.userImg} />
-                  <View
-                    style={{
-                      marginLeft: SIZES.s,
-                      paddingTop: 2,
-                      marginRight: SIZES.xl,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        ...FONTS.body3,
-                        fontSize: 18,
-                        fontWeight: '700',
-                        color: COLORS.onDark,
-                      }}
-                    >
-                      {item.userName}
-                    </Text>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        paddingTop: 2,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          ...FONTS.body5,
-                          color: COLORS.onDark,
-                          marginRight: SIZES.xs,
-                        }}
-                      >
-                        {item.date}
-                      </Text>
+                  <View style={styles.col}>
+                    <Text style={styles.username}>{item.userName}</Text>
+                    <View style={styles.bottomRow}>
+                      <Text style={styles.date}>{item.date}</Text>
                       <Stars
                         default={item.stars}
                         disabled={true}
@@ -152,19 +92,10 @@ const Comments = ({ navigation, route }) => {
                 </View>
                 {item.comment && (
                   <View>
-                    <Text style={{ color: COLORS.white, ...FONTS.body3 }}>
-                      {item.comment}
-                    </Text>
+                    <Text style={styles.comment}>{item.comment}</Text>
                   </View>
                 )}
-                <View
-                  style={{
-                    height: 1,
-                    width: '100%',
-                    backgroundColor: COLORS.gray,
-                    marginVertical: SIZES.xl,
-                  }}
-                />
+                <View style={styles.divider} />
               </>
             )}
           />
@@ -194,6 +125,58 @@ const styles = StyleSheet.create({
     ...FONTS.h2,
     color: COLORS.white,
     marginBottom: SIZES.xl,
+  },
+  noCommentsText: { color: COLORS.onDark, ...FONTS.body2 },
+  row: { flexDirection: 'row', marginBottom: SIZES.xl },
+  rateLabel: {
+    ...FONTS.h3,
+    fontSize: 25,
+    color: COLORS.white,
+    marginRight: SIZES.s,
+  },
+  rate: {
+    ...FONTS.h3,
+    fontSize: 25,
+    color: COLORS.primaryLight,
+    marginRight: SIZES.s,
+    fontStyle: 'italic',
+    fontWeight: 'bold',
+  },
+  rowItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: SIZES.xs,
+    marginBottom: SIZES.s,
+  },
+  col: {
+    marginLeft: SIZES.s,
+    paddingTop: 2,
+    marginRight: SIZES.xl,
+  },
+  username: {
+    ...FONTS.body3,
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.onDark,
+  },
+  bottomRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 2,
+    marginRight: SIZES.xs,
+  },
+  date: {
+    ...FONTS.body5,
+    color: COLORS.onDark,
+  },
+  comment: { color: COLORS.white, ...FONTS.body3 },
+  divider: {
+    height: 1,
+    width: '100%',
+    backgroundColor: COLORS.gray,
+    marginVertical: SIZES.xl,
   },
   addBtn: {
     position: 'absolute',

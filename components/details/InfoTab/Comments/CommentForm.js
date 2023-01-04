@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import Stars from 'react-native-stars';
+import { useSelector } from 'react-redux';
 
 import { COLORS, FONTS, SIZES } from '../../../../constants';
 import { addComment, getUserComment } from '../../../../services/shows-actions';
 import PremiumButton from '../../../common/PremiumButton';
-import { useSelector } from 'react-redux';
 
 const CommentForm = ({ user, showId, setIsFormOpen, navigation }) => {
   const [enteredText, setEnteredText] = useState('');
@@ -121,15 +121,7 @@ const CommentForm = ({ user, showId, setIsFormOpen, navigation }) => {
       </View>
       {error && <Text style={styles.input_error}>&bull; {error}</Text>}
       {button}
-      <View
-        style={{
-          height: 0,
-          width: '100%',
-          backgroundColor: COLORS.gray,
-          marginTop: SIZES.l,
-          marginBottom: 120,
-        }}
-      />
+      <View style={styles.space} />
     </>
   );
 };
@@ -169,5 +161,10 @@ const styles = StyleSheet.create({
   btnText: {
     ...FONTS.h4,
     color: COLORS.onDark,
+  },
+  space: {
+    width: '100%',
+    marginTop: SIZES.l,
+    marginBottom: 120,
   },
 });

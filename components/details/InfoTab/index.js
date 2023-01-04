@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 import React, { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
 
 import { COLORS, FONTS, SIZES } from '../../../constants';
 import Info from './Info';
@@ -16,7 +15,6 @@ import Characters from './Characters';
 import Actors from './Actors';
 
 const InfoTab = ({ navigation, loadedShow, loadedCast }) => {
-  const userId = useSelector((state) => state.auth.userId);
   const [storylineIsOpen, setStorylineIsOpen] = useState(false);
 
   const { actors, characters } = loadedCast;
@@ -29,48 +27,24 @@ const InfoTab = ({ navigation, loadedShow, loadedCast }) => {
 
   return (
     <View style={{ marginBottom: SIZES.xxl }}>
-      <View
-        style={{
-          paddingHorizontal: SIZES.l,
-        }}
-      >
+      <View style={{ paddingHorizontal: SIZES.l }}>
         {/* Storyline */}
-        <View style={{ marginTop: SIZES.xl }}>
-          <Text
-            style={{
-              color: COLORS.white,
-              ...FONTS.h2,
-            }}
-          >
-            Storyline
-          </Text>
+        <View>
+          <Text style={styles.storylineHeader}>Storyline</Text>
           {!storylineIsOpen && (
-            <Text style={{ color: COLORS.white, ...FONTS.body4 }}>
-              {convertedDesc}
-            </Text>
+            <Text style={styles.storyline}>{convertedDesc}</Text>
           )}
-          {storylineIsOpen && (
-            <Text style={{ color: COLORS.white, ...FONTS.body4 }}>{desc}</Text>
-          )}
+          {storylineIsOpen && <Text style={styles.storyline}>{desc}</Text>}
           <TouchableWithoutFeedback
             onPress={() => {
               setStorylineIsOpen(!storylineIsOpen);
             }}
           >
-            <Text
-              style={{
-                paddingTop: SIZES.s,
-                paddingBottom: SIZES.l,
-                color: COLORS.primaryLight,
-                ...FONTS.h4,
-              }}
-            >
+            <Text style={styles.readMoreBtn}>
               {storylineIsOpen ? 'Read less' : 'Read more'}
             </Text>
           </TouchableWithoutFeedback>
-          <View
-            style={{ height: 1, width: '100%', backgroundColor: COLORS.gray }}
-          />
+          <View style={styles.divider} />
         </View>
 
         {/* Genres */}
@@ -78,28 +52,18 @@ const InfoTab = ({ navigation, loadedShow, loadedCast }) => {
 
         {/* Show Info  */}
         <Info loadedShow={loadedShow ?? {}} />
-        <View
-          style={{ height: 1, width: '100%', backgroundColor: COLORS.gray }}
-        />
+        <View style={styles.divider} />
       </View>
 
       {/* Comments */}
-      <View
-        style={{
-          paddingHorizontal: SIZES.l,
-          paddingVertical: SIZES.xl,
-        }}
-      >
+      <View style={styles.commentsSection}>
         <TouchableOpacity
-          style={{
-            alignContent: 'center',
-            marginLeft: SIZES.xl,
-          }}
+          style={styles.commentsBtn}
           onPress={() =>
             navigation.navigate('Comments', { showId: loadedShow?.id })
           }
         >
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={styles.commentsIcon}>
             <FontAwesome
               name="comments"
               size={24}
@@ -108,14 +72,7 @@ const InfoTab = ({ navigation, loadedShow, loadedCast }) => {
             <Text style={styles.comments_label}>Comments</Text>
           </View>
         </TouchableOpacity>
-        <View
-          style={{
-            height: 1,
-            width: '100%',
-            backgroundColor: COLORS.gray,
-            marginTop: SIZES.xl,
-          }}
-        />
+        <View style={styles.divider2} />
       </View>
 
       {/* Characters */}
@@ -134,16 +91,35 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#333',
   },
-  row_item: {
-    flexDirection: 'row',
-    paddingVertical: 1,
+  divider: { height: 1, width: '100%', backgroundColor: COLORS.gray },
+  divider2: {
+    height: 1,
+    width: '100%',
+    backgroundColor: COLORS.gray,
+    marginTop: SIZES.xl,
   },
-  stats_label: {
-    width: 110,
-    fontSize: 16,
-    color: '#fff',
-    fontWeight: '700',
+  storylineHeader: {
+    marginTop: SIZES.xl,
+    color: COLORS.white,
+    ...FONTS.h2,
   },
+  storyline: { color: COLORS.white, ...FONTS.body4 },
+  readMoreBtn: {
+    paddingTop: SIZES.s,
+    paddingBottom: SIZES.l,
+    color: COLORS.primaryLight,
+    ...FONTS.h4,
+  },
+  divider: { height: 1, width: '100%', backgroundColor: COLORS.gray },
+  commentsSection: {
+    paddingHorizontal: SIZES.l,
+    paddingVertical: SIZES.xl,
+  },
+  commentsBtn: {
+    alignContent: 'center',
+    marginLeft: SIZES.xl,
+  },
+  commentsIcon: { flexDirection: 'row', alignItems: 'center' },
   comments_label: {
     width: 110,
     fontSize: 16,

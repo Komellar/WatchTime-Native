@@ -1,5 +1,6 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Tabs from '../components/details/Tabs';
 import InfoTab from '../components/details/InfoTab';
@@ -14,8 +15,7 @@ import {
   getSingleShow,
 } from '../services/external-api';
 import { useFetch } from '../hooks/use-fetch';
-import { COLORS, SIZES } from '../constants/theme';
-import { useSelector } from 'react-redux';
+import { COLORS } from '../constants/theme';
 
 const Details = ({ navigation, route }) => {
   const { selectedShow, userId, isFollowed } = route.params;

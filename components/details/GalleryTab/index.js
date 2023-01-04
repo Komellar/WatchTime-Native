@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import { SIZES, COLORS, FONTS } from '../../../constants';
 
@@ -10,50 +10,24 @@ const GalleryTab = ({ images }) => {
 
   return (
     <View style={{ marginBottom: SIZES.xl }}>
-      <Text
-        style={{
-          color: COLORS.white,
-          ...FONTS.h3,
-          paddingLeft: SIZES.m,
-          paddingTop: SIZES.xl,
-          paddingBottom: SIZES.m,
-        }}
-      >
-        Posters
-      </Text>
+      <Text style={styles.headerPosters}>Posters</Text>
       <FlatList
         data={posters}
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item?.imgId}
         renderItem={({ item }) => (
-          <Image
-            source={{ uri: item?.url }}
-            style={{ width: 150, height: 220, marginHorizontal: 3 }}
-          />
+          <Image source={{ uri: item?.url }} style={styles.imageVertical} />
         )}
       />
-      <Text
-        style={{
-          color: COLORS.white,
-          ...FONTS.h3,
-          paddingLeft: SIZES.m,
-          paddingTop: SIZES.xxl,
-          paddingBottom: SIZES.m,
-        }}
-      >
-        Backgrounds
-      </Text>
+      <Text style={styles.headerBackgrounds}>Backgrounds</Text>
       <FlatList
         data={backgrounds}
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item?.imgId}
         renderItem={({ item }) => (
-          <Image
-            source={{ uri: item?.url }}
-            style={{ width: 220, height: 150, marginHorizontal: 3 }}
-          />
+          <Image source={{ uri: item?.url }} style={styles.imageHorizontal} />
         )}
       />
     </View>
@@ -61,3 +35,22 @@ const GalleryTab = ({ images }) => {
 };
 
 export default GalleryTab;
+
+const styles = StyleSheet.create({
+  headerPosters: {
+    color: COLORS.white,
+    ...FONTS.h3,
+    paddingLeft: SIZES.m,
+    paddingTop: SIZES.xl,
+    paddingBottom: SIZES.m,
+  },
+  imageVertical: { width: 150, height: 220, marginHorizontal: 3 },
+  headerBackgrounds: {
+    color: COLORS.white,
+    ...FONTS.h3,
+    paddingLeft: SIZES.m,
+    paddingTop: SIZES.xxl,
+    paddingBottom: SIZES.m,
+  },
+  imageHorizontal: { width: 220, height: 150, marginHorizontal: 3 },
+});

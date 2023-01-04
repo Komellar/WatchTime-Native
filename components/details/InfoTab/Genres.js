@@ -26,9 +26,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pill: {
-    backgroundColor: COLORS.primaryDark,
+    backgroundColor: COLORS.gray,
     borderRadius: SIZES.xl,
-    paddingHorizontal: SIZES.xl,
+    paddingHorizontal: 20,
     paddingVertical: SIZES.s,
     marginRight: SIZES.s,
   },

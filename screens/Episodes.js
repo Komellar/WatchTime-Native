@@ -1,9 +1,16 @@
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { COLORS, SIZES, FONTS } from '../constants';
-import EpisodeModal from '../components/details/SeasonsTab/episodes/EpisodeModal';
 import { Ionicons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
+
+import { COLORS, SIZES, FONTS } from '../constants';
+import EpisodeModal from '../components/details/SeasonsTab/episodes/EpisodeModal';
 import {
   addShowToDB,
   addEpisodeToDB,
@@ -48,13 +55,7 @@ const Episodes = ({ navigation, route }) => {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: COLORS.background,
-        paddingHorizontal: SIZES.l,
-      }}
-    >
+    <View style={styles.container}>
       {/* Modal with episode detail info */}
       <EpisodeModal
         pickedEpisode={pickedEpisode}
@@ -67,13 +68,7 @@ const Episodes = ({ navigation, route }) => {
       />
 
       {/* Header */}
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginTop: SIZES.m,
-        }}
-      >
+      <View style={styles.header}>
         {/* Back button */}
         <TouchableOpacity
           onPress={() =>
@@ -85,33 +80,17 @@ const Episodes = ({ navigation, route }) => {
         >
           <Ionicons name="arrow-back-sharp" size={30} color={COLORS.white} />
         </TouchableOpacity>
-        <Text
-          style={{ paddingLeft: SIZES.m, color: COLORS.white, ...FONTS.h3 }}
-        >
-          Season {season[0]?.season}
-        </Text>
+        <Text style={styles.headerText}>Season {season[0]?.season}</Text>
       </View>
 
       {/* Progress bar */}
-      <View
-        style={{
-          width: '80%',
-          height: SIZES.xl,
-          alignSelf: 'center',
-          marginVertical: SIZES.l,
-          backgroundColor: COLORS.gray,
-          borderRadius: SIZES.l,
-        }}
-      >
+      <View style={styles.progressBarWrapper}>
         <View
           style={{
+            ...styles.progressBarFill,
             width: (watchedEpisodes.length / season.length) * 100 + '%',
-            height: SIZES.xl,
-            backgroundColor: COLORS.primaryLighter,
             borderRadius:
               watchedEpisodes.length === season.length ? SIZES.l : 0,
-            borderBottomLeftRadius: SIZES.l,
-            borderTopLeftRadius: SIZES.l,
           }}
         />
       </View>
@@ -122,13 +101,7 @@ const Episodes = ({ navigation, route }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginVertical: SIZES.m,
-              }}
-            >
+            <View style={styles.item}>
               <TouchableOpacity
                 onPress={() => {
                   setPickedEpisode(item);
@@ -136,17 +109,8 @@ const Episodes = ({ navigation, route }) => {
                 }}
                 style={{ flex: 1 }}
               >
-                <Text
-                  style={{
-                    color: COLORS.onDark,
-                    ...FONTS.h4,
-                    fontSize: 18,
-                    paddingBottom: 2,
-                  }}
-                >
-                  {item?.title}
-                </Text>
-                <Text style={{ color: COLORS.lightGray, ...FONTS.body3 }}>
+                <Text style={styles.title}>{item?.title}</Text>
+                <Text style={styles.number}>
                   S{item?.season}E{item?.episode}
                 </Text>
               </TouchableOpacity>
@@ -162,13 +126,7 @@ const Episodes = ({ navigation, route }) => {
                 />
               </TouchableOpacity>
             </View>
-            <View
-              style={{
-                height: 1,
-                width: '100%',
-                backgroundColor: COLORS.gray,
-              }}
-            />
+            <View style={styles.divider} />
           </View>
         )}
       />
@@ -177,3 +135,48 @@ const Episodes = ({ navigation, route }) => {
 };
 
 export default Episodes;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    paddingHorizontal: SIZES.l,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: SIZES.m,
+  },
+  headerText: { paddingLeft: SIZES.m, color: COLORS.white, ...FONTS.h3 },
+  progressBarWrapper: {
+    width: '80%',
+    height: SIZES.xl,
+    alignSelf: 'center',
+    marginVertical: SIZES.l,
+    backgroundColor: COLORS.gray,
+    borderRadius: SIZES.l,
+  },
+  progressBarFill: {
+    height: SIZES.xl,
+    backgroundColor: COLORS.primaryLighter,
+    borderBottomLeftRadius: SIZES.l,
+    borderTopLeftRadius: SIZES.l,
+  },
+  item: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: SIZES.m,
+  },
+  title: {
+    color: COLORS.onDark,
+    ...FONTS.h4,
+    fontSize: 18,
+    paddingBottom: 2,
+  },
+  number: { color: COLORS.lightGray, ...FONTS.body3 },
+  divider: {
+    height: 1,
+    width: '100%',
+    backgroundColor: COLORS.gray,
+  },
+});

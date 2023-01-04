@@ -1,20 +1,11 @@
-import { View, Text, FlatList, Image } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import { COLORS, FONTS, SIZES } from '../../../constants';
 
 const Characters = ({ characters, title }) => {
   return (
     <View style={{ marginTop: SIZES.xl }}>
-      <Text
-        style={{
-          paddingHorizontal: SIZES.m,
-          paddingBottom: SIZES.s,
-          color: COLORS.white,
-          ...FONTS.h3,
-        }}
-      >
-        Charaters from {title}
-      </Text>
+      <Text style={styles.header}>Charaters from {title}</Text>
       <FlatList
         data={characters}
         horizontal
@@ -30,23 +21,9 @@ const Characters = ({ characters, title }) => {
             <Image
               source={{ uri: item?.characterImage }}
               resizeMode="cover"
-              style={{
-                height: 200,
-                width: 135,
-                marginBottom: SIZES.xs,
-                borderRadius: 3,
-              }}
+              style={styles.image}
             />
-            <Text
-              style={{
-                width: 135,
-                textAlign: 'center',
-                color: COLORS.onDark,
-                ...FONTS.body4,
-              }}
-            >
-              {item?.characterName}
-            </Text>
+            <Text style={styles.text}>{item?.characterName}</Text>
           </View>
         )}
       />
@@ -55,3 +32,24 @@ const Characters = ({ characters, title }) => {
 };
 
 export default Characters;
+
+const styles = StyleSheet.create({
+  header: {
+    paddingHorizontal: SIZES.m,
+    paddingBottom: SIZES.s,
+    color: COLORS.white,
+    ...FONTS.h3,
+  },
+  image: {
+    height: 200,
+    width: 135,
+    marginBottom: SIZES.xs,
+    borderRadius: 3,
+  },
+  text: {
+    width: 135,
+    textAlign: 'center',
+    color: COLORS.onDark,
+    ...FONTS.body4,
+  },
+});

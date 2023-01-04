@@ -1,4 +1,10 @@
-import { View, Text, ImageBackground, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  ImageBackground,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, FONTS, SIZES } from '../../constants/theme';
@@ -55,18 +61,17 @@ const HeroDetails = ({
     <View>
       <ImageBackground
         source={{ uri: loadedImages?.backgroundImg?.url }}
-        style={{ width: '100%', height: 220 }}
+        style={styles.imgBackground}
       >
         <LinearGradient
           colors={['transparent', 'rgba(0,0,0,0.9)']}
-          start={{ x: 0.0, y: 0.4 }}
           locations={[0.0, 0.9]}
-          style={{ width: '100%', height: '100%' }}
+          style={styles.gradient}
         >
           {showsIdList.includes(loadedShow?.id) && (
             <TouchableOpacity
               onPress={() => favouriteClickHandler()}
-              style={{ alignSelf: 'flex-end', margin: SIZES.m }}
+              style={styles.heartIcon}
             >
               <Ionicons
                 name="heart"
@@ -75,29 +80,9 @@ const HeroDetails = ({
               />
             </TouchableOpacity>
           )}
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'flex-start',
-              justifyContent: 'flex-end',
-              paddingLeft: SIZES.l,
-            }}
-          >
-            <Text
-              style={{
-                color: COLORS.white,
-                ...FONTS.h2,
-              }}
-            >
-              {loadedShow?.title}
-            </Text>
-            <Text
-              style={{
-                color: COLORS.onDark,
-                paddingBottom: SIZES.s,
-                ...FONTS.body3,
-              }}
-            >
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{loadedShow?.title}</Text>
+            <Text style={styles.seasons}>
               {loadedSeasons?.length} seasons | {loadedShow?.status}
             </Text>
           </View>
@@ -105,24 +90,12 @@ const HeroDetails = ({
       </ImageBackground>
       <View>
         <TouchableOpacity
-          style={{
-            marginHorizontal: SIZES.m,
-            marginVertical: SIZES.xs,
-            paddingHorizontal: SIZES.l,
-            paddingVertical: SIZES.xs,
-            borderWidth: 1,
-            borderColor: COLORS.primary,
-            borderRadius: SIZES.s,
-            backgroundColor: COLORS.primary,
-            alignItems: 'center',
-          }}
+          style={styles.button}
           onPress={() => {
             followButton.action();
           }}
         >
-          <Text style={{ color: COLORS.white, ...FONTS.h4 }}>
-            {followButton.title}
-          </Text>
+          <Text style={styles.btnText}>{followButton.title}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -130,3 +103,36 @@ const HeroDetails = ({
 };
 
 export default HeroDetails;
+
+const styles = StyleSheet.create({
+  imgBackground: { width: '100%', height: 220 },
+  gradient: { width: '100%', height: '100%' },
+  heartIcon: { alignSelf: 'flex-end', margin: SIZES.m },
+  textContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
+    paddingLeft: SIZES.l,
+  },
+  title: {
+    color: COLORS.white,
+    ...FONTS.h2,
+  },
+  seasons: {
+    color: COLORS.onDark,
+    paddingBottom: SIZES.s,
+    ...FONTS.body3,
+  },
+  button: {
+    marginHorizontal: SIZES.m,
+    marginVertical: SIZES.xs,
+    paddingHorizontal: SIZES.l,
+    paddingVertical: SIZES.xs,
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    borderRadius: SIZES.s,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+  },
+  btnText: { color: COLORS.white, ...FONTS.h4 },
+});

@@ -1,20 +1,11 @@
-import { View, Text, FlatList, Image } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
 import React from 'react';
 import { COLORS, FONTS, SIZES } from '../../../constants';
 
 const Actors = ({ actors }) => {
   return (
     <View style={{ marginTop: SIZES.xl }}>
-      <Text
-        style={{
-          paddingHorizontal: SIZES.m,
-          paddingBottom: SIZES.s,
-          color: COLORS.white,
-          ...FONTS.h3,
-        }}
-      >
-        Cast
-      </Text>
+      <Text style={styles.header}>Cast</Text>
       <FlatList
         data={actors}
         horizontal
@@ -30,23 +21,9 @@ const Actors = ({ actors }) => {
             <Image
               source={{ uri: item?.actorImage }}
               resizeMode="cover"
-              style={{
-                height: 130,
-                width: 90,
-                marginBottom: SIZES.xs,
-                borderRadius: 10,
-              }}
+              style={styles.image}
             />
-            <Text
-              style={{
-                width: 90,
-                textAlign: 'center',
-                color: COLORS.lightGray,
-                ...FONTS.body5,
-              }}
-            >
-              {item?.actorName}
-            </Text>
+            <Text style={styles.text}>{item?.actorName}</Text>
           </View>
         )}
       />
@@ -55,3 +32,24 @@ const Actors = ({ actors }) => {
 };
 
 export default Actors;
+
+const styles = StyleSheet.create({
+  header: {
+    paddingHorizontal: SIZES.m,
+    paddingBottom: SIZES.s,
+    color: COLORS.white,
+    ...FONTS.h3,
+  },
+  image: {
+    height: 130,
+    width: 90,
+    marginBottom: SIZES.xs,
+    borderRadius: 10,
+  },
+  text: {
+    width: 90,
+    textAlign: 'center',
+    color: COLORS.lightGray,
+    ...FONTS.body5,
+  },
+});

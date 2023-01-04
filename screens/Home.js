@@ -20,17 +20,15 @@ const Home = ({ navigation }) => {
 
   const randomId = useMemo(() => Math.floor(Math.random() * 1917 + 1), []);
 
-  const {
-    data: loadedShow,
-    loading: showLoading,
-    error: showError,
-  } = useFetch(getSingleShow, randomId);
+  const { data: loadedShow, loading: showLoading } = useFetch(
+    getSingleShow,
+    randomId
+  );
 
-  const {
-    data: loadedImages,
-    loading: imagesLoading,
-    error: imagesError,
-  } = useFetch(getShowImages, randomId);
+  const { data: loadedImages, loading: imagesLoading } = useFetch(
+    getShowImages,
+    randomId
+  );
 
   const ofTheDayShows = useMemo(
     () => shows?.slice(randomId, randomId + 20),
@@ -71,22 +69,24 @@ const Home = ({ navigation }) => {
         backgroundColor: COLORS.background,
       }}
     >
-      {loading && (
-        <View
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-        >
-          <Text
-            style={{
-              textAlign: 'center',
-              color: COLORS.onDark,
-              ...FONTS.h1,
-            }}
+      {loading ||
+        showLoading ||
+        (imagesLoading && (
+          <View
+            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
           >
-            Loading data...
-          </Text>
-        </View>
-      )}
-      {!loading && shows && !error && (
+            <Text
+              style={{
+                textAlign: 'center',
+                color: COLORS.onDark,
+                ...FONTS.h1,
+              }}
+            >
+              Loading data...
+            </Text>
+          </View>
+        ))}
+      {!loading && !showLoading && !imagesLoading && shows && !error && (
         <ScrollView showsVerticalScrollIndicator={true}>
           {/* Hero */}
           <Hero

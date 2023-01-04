@@ -1,4 +1,11 @@
-import { View, Text, Modal, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+} from 'react-native';
 import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -27,52 +34,20 @@ const EpisodeModal = ({
         onPress={() => {
           setModalVisible(!modalVisible);
         }}
-        style={{
-          flex: 1,
-          justifyContent: 'flex-start',
-          backgroundColor: COLORS.transparentBlack,
-        }}
+        style={styles.background}
       />
-      <View
-        style={{
-          justifyContent: 'flex-end',
-          backgroundColor: COLORS.background,
-        }}
-      >
+      <View style={styles.foreground}>
         <Image
           source={{ uri: pickedEpisode?.images?.original }}
-          style={{
-            height: 200,
-            width: '100%',
-          }}
+          style={styles.image}
         />
-        <View
-          style={{
-            paddingHorizontal: SIZES.l,
-            paddingTop: SIZES.m,
-            paddingBottom: SIZES.l,
-          }}
-        >
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-          >
+        <View style={styles.content}>
+          <View style={styles.row}>
             <View>
-              <Text
-                style={{
-                  color: COLORS.primaryLight,
-                  ...FONTS.h4,
-                }}
-              >
+              <Text style={styles.seasonAndEpisode}>
                 S{pickedEpisode?.season}E{pickedEpisode?.episode}
               </Text>
-              <Text
-                style={{
-                  color: COLORS.white,
-                  ...FONTS.h3,
-                }}
-              >
-                {pickedEpisode?.title}
-              </Text>
+              <Text style={styles.title}>{pickedEpisode?.title}</Text>
             </View>
             <TouchableOpacity
               onPress={() => {
@@ -80,24 +55,12 @@ const EpisodeModal = ({
               }}
             >
               {!isChecked && (
-                <View
-                  style={{
-                    backgroundColor: COLORS.lightGray,
-                    borderRadius: 50,
-                    padding: SIZES.s,
-                  }}
-                >
+                <View style={styles.notCheckedIcon}>
                   <AntDesign name="eye" size={30} color={COLORS.background} />
                 </View>
               )}
               {isChecked && (
-                <View
-                  style={{
-                    backgroundColor: COLORS.primary,
-                    borderRadius: 50,
-                    padding: SIZES.xs,
-                  }}
-                >
+                <View style={styles.checkedIcon}>
                   <Ionicons
                     name="md-checkmark-sharp"
                     size={35}
@@ -107,62 +70,21 @@ const EpisodeModal = ({
               )}
             </TouchableOpacity>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginTop: SIZES.s,
-              marginBottom: SIZES.xs,
-            }}
-          >
+          <View style={styles.infoRow}>
             <AntDesign name="calendar" size={20} color={COLORS.primaryLight} />
-            <Text
-              style={{
-                color: COLORS.lightGray,
-                ...FONTS.body4,
-                paddingLeft: SIZES.xs,
-              }}
-            >
-              {pickedEpisode?.premiered}
-            </Text>
-            <View
-              style={{
-                width: SIZES.xl,
-              }}
-            />
+            <Text style={styles.premiere}>{pickedEpisode?.premiered}</Text>
+            <View style={{ width: SIZES.xl }} />
             <Ionicons
               name="ios-time-outline"
               size={20}
               color={COLORS.primaryLight}
             />
-            <Text
-              style={{
-                color: COLORS.lightGray,
-                ...FONTS.body4,
-                paddingLeft: SIZES.xs,
-              }}
-            >
-              {pickedEpisode?.runtime} min
-            </Text>
-            <View
-              style={{
-                width: SIZES.xl,
-              }}
-            />
+            <Text style={styles.runtime}>{pickedEpisode?.runtime} min</Text>
+            <View style={{ width: SIZES.xl }} />
             <AntDesign name="star" size={16} color={COLORS.primaryLight} />
-            <Text
-              style={{
-                color: COLORS.lightGray,
-                ...FONTS.body4,
-                paddingLeft: SIZES.xs,
-              }}
-            >
-              {pickedEpisode?.rating}
-            </Text>
+            <Text style={styles.rating}>{pickedEpisode?.rating}</Text>
           </View>
-          <Text style={{ color: COLORS.onDark, ...FONTS.body4 }}>
-            {pickedEpisode?.desc}
-          </Text>
+          <Text style={styles.desc}>{pickedEpisode?.desc}</Text>
         </View>
       </View>
     </Modal>
@@ -170,3 +92,65 @@ const EpisodeModal = ({
 };
 
 export default EpisodeModal;
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    backgroundColor: COLORS.transparentBlack,
+  },
+  foreground: {
+    justifyContent: 'flex-end',
+    backgroundColor: COLORS.background,
+  },
+  image: {
+    height: 200,
+    width: '100%',
+  },
+  content: {
+    paddingHorizontal: SIZES.l,
+    paddingTop: SIZES.m,
+    paddingBottom: SIZES.l,
+  },
+  row: { flexDirection: 'row', justifyContent: 'space-between' },
+  seasonAndEpisode: {
+    color: COLORS.primaryLight,
+    ...FONTS.h4,
+  },
+  title: {
+    color: COLORS.white,
+    ...FONTS.h3,
+  },
+  notCheckedIcon: {
+    backgroundColor: COLORS.lightGray,
+    borderRadius: 50,
+    padding: SIZES.s,
+  },
+  checkedIcon: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 50,
+    padding: SIZES.xs,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: SIZES.s,
+    marginBottom: SIZES.xs,
+  },
+  premiere: {
+    color: COLORS.lightGray,
+    ...FONTS.body4,
+    paddingLeft: SIZES.xs,
+  },
+  runtime: {
+    color: COLORS.lightGray,
+    ...FONTS.body4,
+    paddingLeft: SIZES.xs,
+  },
+  rating: {
+    color: COLORS.lightGray,
+    ...FONTS.body4,
+    paddingLeft: SIZES.xs,
+  },
+  desc: { color: COLORS.onDark, ...FONTS.body4, marginBottom: SIZES.s },
+});
