@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   TouchableHighlight,
+  StyleSheet,
 } from 'react-native';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -58,63 +59,22 @@ const FirstShows = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
+    <View style={styles.container}>
       {showsLoading && <Text style={{ color: COLORS.onDark }}>Loading...</Text>}
       {showsError && <Text style={{ color: COLORS.onDark }}>{showsError}</Text>}
       {!showsError && !showsLoading && loadedShows && (
         <>
-          <View
-            style={{ marginHorizontal: SIZES.xxl, marginVertical: SIZES.xl }}
-          >
+          <View style={styles.headerWrapper}>
             {/* Welcome text */}
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: SIZES.s,
-              }}
-            >
-              <Text
-                style={{
-                  color: COLORS.white,
-                  ...FONTS.h2,
-                  fontSize: 28,
-                  textAlign: 'center',
-                }}
-              >
-                Hi
-              </Text>
-              <Text
-                style={{
-                  paddingLeft: SIZES.xs,
-                  color: COLORS.primaryLight,
-                  ...FONTS.h2,
-                  fontSize: 28,
-                  textAlign: 'center',
-                }}
-              >
-                {userName ?? 'new user'}
-              </Text>
+            <View style={styles.greetingWrapper}>
+              <Text style={styles.greeting}>Hi</Text>
+              <Text style={styles.username}>{userName ?? 'new user'}</Text>
             </View>
 
-            <Text
-              style={{
-                color: COLORS.onDark,
-                ...FONTS.h4,
-                textAlign: 'center',
-                marginBottom: SIZES.xs,
-              }}
-            >
+            <Text style={styles.chooseTxt}>
               Choose 3 TV shows you want to watch or have like
             </Text>
-            <Text
-              style={{
-                color: COLORS.lightGray,
-                ...FONTS.body4,
-                textAlign: 'center',
-              }}
-            >
+            <Text style={styles.desc}>
               It will help us find TV shows you'll love!
             </Text>
 
@@ -124,24 +84,9 @@ const FirstShows = ({ navigation }) => {
                 onPress={() => {
                   navigation.navigate('Profile');
                 }}
-                style={{
-                  backgroundColor: COLORS.primary,
-                  paddingVertical: SIZES.s,
-                  marginTop: SIZES.xl,
-                  width: '50%',
-                  alignSelf: 'center',
-                  borderRadius: SIZES.xs,
-                }}
+                style={styles.btn}
               >
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: COLORS.white,
-                    ...FONTS.h4,
-                  }}
-                >
-                  Continue
-                </Text>
+                <Text style={styles.btnTxt}>Continue</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -150,16 +95,12 @@ const FirstShows = ({ navigation }) => {
           <FlatList
             data={bestRatedShows}
             numColumns={3}
-            ListFooterComponent={
-              <View
-                style={{ backgroundColor: COLORS.background, height: 60 }}
-              />
-            }
+            ListFooterComponent={<View style={styles.footer} />}
             keyExtractor={(item) => item?.id}
             renderItem={({ item }) => (
               <TouchableHighlight
                 activeOpacity={0.95}
-                style={{ paddingHorizontal: 2, paddingVertical: 2 }}
+                style={styles.item}
                 disabled={loadingShow !== null}
                 onPress={() => {
                   pickShowHandler(item);
@@ -167,23 +108,12 @@ const FirstShows = ({ navigation }) => {
               >
                 <ImageBackground
                   source={{ uri: item?.image }}
-                  style={{
-                    height: ((SIZES.width * 32) / 100) * 1.41,
-                    width: (SIZES.width * 32) / 100,
-                  }}
+                  style={styles.img}
                 >
                   {loadingShow === item?.id && <Loader />}
 
                   {showsIdList.includes(item?.id) && (
-                    <View
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'rgba(0,0,0,0.8)',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                    >
+                    <View style={styles.darkBg}>
                       <Ionicons
                         name="ios-checkmark-circle"
                         size={50}
@@ -202,3 +132,64 @@ const FirstShows = ({ navigation }) => {
 };
 
 export default FirstShows;
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: COLORS.background },
+  headerWrapper: { marginHorizontal: SIZES.xxl, marginVertical: SIZES.xl },
+  greetingWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: SIZES.s,
+  },
+  greeting: {
+    color: COLORS.white,
+    ...FONTS.h2,
+    fontSize: 28,
+    textAlign: 'center',
+  },
+  username: {
+    paddingLeft: SIZES.xs,
+    color: COLORS.primaryLight,
+    ...FONTS.h2,
+    fontSize: 28,
+    textAlign: 'center',
+  },
+  chooseTxt: {
+    color: COLORS.onDark,
+    ...FONTS.h4,
+    textAlign: 'center',
+    marginBottom: SIZES.xs,
+  },
+  desc: {
+    color: COLORS.lightGray,
+    ...FONTS.body4,
+    textAlign: 'center',
+  },
+  btn: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: SIZES.s,
+    marginTop: SIZES.xl,
+    width: '50%',
+    alignSelf: 'center',
+    borderRadius: SIZES.xs,
+  },
+  btnTxt: {
+    textAlign: 'center',
+    color: COLORS.white,
+    ...FONTS.h4,
+  },
+  footer: { backgroundColor: COLORS.background, height: 60 },
+  item: { paddingHorizontal: 2, paddingVertical: 2 },
+  img: {
+    height: ((SIZES.width * 32) / 100) * 1.41,
+    width: (SIZES.width * 32) / 100,
+  },
+  darkBg: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

@@ -1,8 +1,9 @@
 import { View, Text } from 'react-native';
 import React, { useEffect, useMemo } from 'react';
 import { PieChart } from 'react-native-chart-kit';
-import { getGenres } from '../../services/shows-actions';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { getGenres } from '../../services/shows-actions';
 import { COLORS, SIZES, FONTS } from '../../constants/index';
 
 const GenresChart = ({ userId }) => {
@@ -44,20 +45,10 @@ const GenresChart = ({ userId }) => {
   );
 
   return (
-    <View
-      style={{
-        borderRadius: 15,
-        backgroundColor: '#121212',
-        alignItems: 'center',
-      }}
-    >
+    <View style={styles.container}>
       {userGenresData.length > 2 && (
         <>
-          <Text
-            style={{ color: COLORS.white, ...FONTS.h3, paddingTop: SIZES.l }}
-          >
-            Favourite genres
-          </Text>
+          <Text style={styles.header}>Favourite genres</Text>
           <PieChart
             data={userGenresData}
             width={SIZES.width}
@@ -76,3 +67,12 @@ const GenresChart = ({ userId }) => {
 };
 
 export default GenresChart;
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 15,
+    backgroundColor: '#121212',
+    alignItems: 'center',
+  },
+  header: { color: COLORS.white, ...FONTS.h3, paddingTop: SIZES.l },
+});

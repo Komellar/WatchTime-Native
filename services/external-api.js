@@ -10,17 +10,15 @@ export async function getAllShows() {
 
   const loadedShows = [];
   for (page of data) {
-    const showsList = page.map((show) => {
-      return {
-        id: show.id,
-        title: show.name,
-        image: show.image?.medium ?? imageNotFound,
-        rating: show.rating.average,
-        popularity: show.weight,
-        genres: show.genres,
-        averageRuntime: show.averageRuntime,
-      };
-    });
+    const showsList = page.map((show) => ({
+      id: show.id,
+      title: show.name,
+      image: show.image?.medium ?? imageNotFound,
+      rating: show.rating.average,
+      popularity: show.weight,
+      genres: show.genres,
+      averageRuntime: show.averageRuntime,
+    }));
     loadedShows.push(...showsList);
   }
 
@@ -33,7 +31,7 @@ export async function getSingleShow(requestData) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error.message || 'Could not get products.');
+    throw new Error(data.error.message || 'Could not get show.');
   }
 
   const loadedShow = {
@@ -65,22 +63,18 @@ export async function getShowImages(requestData) {
     throw new Error(data.error.message || 'Could not get images.');
   }
 
-  const loadedImages = data.map((show) => {
-    return {
-      showId: requestData,
-      imgId: show.id,
-      type: show.type,
-      url: show.resolutions.original.url,
-    };
-  });
+  const loadedImages = data.map((show) => ({
+    showId: requestData,
+    imgId: show.id,
+    type: show.type,
+    url: show.resolutions.original.url,
+  }));
 
-  const backgroundImg = loadedImages.filter((show) => {
-    return show.type === 'background';
-  });
+  const backgroundImg = loadedImages.filter(
+    (show) => show.type === 'background'
+  );
 
-  const posterImg = loadedImages.filter((show) => {
-    return show.type === 'poster';
-  });
+  const posterImg = loadedImages.filter((show) => show.type === 'poster');
 
   return {
     backgroundImg:
@@ -107,7 +101,7 @@ export async function getSeasons(requestData) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error.message || 'Could not get products.');
+    throw new Error(data.error.message || 'Could not get data.');
   }
   const loadedEpisodes = data.map((show) => {
     return {
@@ -144,7 +138,7 @@ export async function getEpisodesCount(requestData) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error.message || 'Could not get products.');
+    throw new Error(data.error.message || 'Could not get episodes.');
   }
 
   return data?.length ?? 0;
@@ -158,19 +152,17 @@ export async function getCast(requestData) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error.message || 'Could not get products.');
+    throw new Error(data.error.message || 'Could not get cast.');
   }
 
-  const loadedData = data.map((result) => {
-    return {
-      id: result.person.id,
-      idCharacter: result.character.id,
-      actorName: result.person.name,
-      actorImage: result.person.image?.original ?? imageNotFound,
-      characterName: result.character.name,
-      characterImage: result.character.image?.original ?? imageNotFound,
-    };
-  });
+  const loadedData = data.map((result) => ({
+    id: result.person.id,
+    idCharacter: result.character.id,
+    actorName: result.person.name,
+    actorImage: result.person.image?.original ?? imageNotFound,
+    characterName: result.character.name,
+    characterImage: result.character.image?.original ?? imageNotFound,
+  }));
 
   let characters = [];
   let actors = [];
@@ -191,9 +183,7 @@ export async function getCast(requestData) {
   loadedData.forEach((person) => {
     let repeated = false;
     actors.forEach((comparison) => {
-      if (comparison.id === person.id) {
-        repeated = true;
-      }
+      if (comparison.id === person.id) repeated = true;
     });
 
     if (!repeated) {
@@ -212,16 +202,14 @@ export async function getSearchResult(requestData) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error.message || 'Could not get products.');
+    throw new Error(data.error.message || 'Could not find show.');
   }
 
-  const loadedShows = data.map((result) => {
-    return {
-      id: result.show.id,
-      title: result.show.name,
-      image: result.show.image?.medium ?? imageNotFound,
-    };
-  });
+  const loadedShows = data.map((result) => ({
+    id: result.show.id,
+    title: result.show.name,
+    image: result.show.image?.medium ?? imageNotFound,
+  }));
 
   return loadedShows;
 }

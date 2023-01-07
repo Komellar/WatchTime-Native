@@ -1,37 +1,31 @@
-import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  StyleSheet,
+} from 'react-native';
 import React from 'react';
 import { Feather } from '@expo/vector-icons';
 import { SIZES, FONTS, COLORS } from '../../constants/theme';
 
 const ProfileSlider = ({ title, showsList, navigation }) => {
   return (
-    <View style={{ marginVertical: SIZES.l }}>
+    <View style={styles.container}>
       <TouchableOpacity
         onPress={() =>
           navigation.navigate('UserShows', { shows: showsList, title: title })
         }
-        style={{
-          width: SIZES.width,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
+        style={styles.contentWrapper}
       >
-        <Text
-          style={{
-            color: COLORS.white,
-            ...FONTS.h3,
-            paddingLeft: SIZES.m,
-            paddingVertical: SIZES.m,
-          }}
-        >
-          {title}
-        </Text>
+        <Text style={styles.header}>{title}</Text>
 
         <Feather
           name="chevrons-right"
           size={30}
           color="white"
-          style={{ paddingHorizontal: SIZES.m }}
+          style={styles.backIcon}
         />
       </TouchableOpacity>
 
@@ -49,21 +43,8 @@ const ProfileSlider = ({ title, showsList, navigation }) => {
               })
             }
           >
-            <View
-              style={{
-                marginHorizontal: 3,
-                alignItems: 'center',
-              }}
-            >
-              <Image
-                source={{ uri: item?.image }}
-                style={{
-                  height: ((SIZES.width * 32) / 100) * 1.41,
-                  width: (SIZES.width * 32) / 100,
-                  borderRadius: 3,
-                  resizeMode: 'contain',
-                }}
-              />
+            <View style={styles.item}>
+              <Image source={{ uri: item?.image }} style={styles.img} />
             </View>
           </TouchableOpacity>
         )}
@@ -73,3 +54,29 @@ const ProfileSlider = ({ title, showsList, navigation }) => {
 };
 
 export default ProfileSlider;
+
+const styles = StyleSheet.create({
+  container: { marginVertical: SIZES.l },
+  contentWrapper: {
+    width: SIZES.width,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  header: {
+    color: COLORS.white,
+    ...FONTS.h3,
+    paddingLeft: SIZES.m,
+    paddingVertical: SIZES.m,
+  },
+  backIcon: { paddingHorizontal: SIZES.m },
+  item: {
+    marginHorizontal: 3,
+    alignItems: 'center',
+  },
+  img: {
+    height: ((SIZES.width * 32) / 100) * 1.41,
+    width: (SIZES.width * 32) / 100,
+    borderRadius: 3,
+    resizeMode: 'contain',
+  },
+});

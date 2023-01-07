@@ -11,7 +11,7 @@ import {
 import { showsActions } from '../store/shows-slice';
 import { statsActions } from '../store/stats-slice';
 
-const updateGenres = async (userId, genresList, add) => {
+const updateGenres = (userId, genresList, add) => {
   const db = getDatabase();
   const dbRef = ref(db);
 
@@ -115,13 +115,13 @@ export const getFavShowsList = (userId) => {
 //
 
 export const addShowToDB = (userId, show, numberOfEpisodes) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     // add show to app state in store
     dispatch(showsActions.addToList(show));
 
     // add show to database
     const db = getDatabase();
-    set(ref(db, `users/${userId}/followed/${show.id}`), {
+    await set(ref(db, `users/${userId}/followed/${show.id}`), {
       id: show.id,
       title: show.title,
       image: show.image,
@@ -144,7 +144,7 @@ export const removeShowFromDB = (userId, show) => {
     // remove show from database
     const db = getDatabase();
     await remove(ref(db, `users/${userId}/followed/${show.id}`));
-    await updateGenres(userId, show.genres, false);
+    updateGenres(userId, show.genres, false);
 
     dispatch(removeShowFromFav(userId, show));
   };
@@ -239,9 +239,9 @@ const updateTimeSpent = (userId, show, add, episodeDuration) => {
   });
 };
 
-export const addEpisodeToDB = (userId, show, episode) => {
+export const addEpisodeToDB = async (userId, show, episode) => {
   const db = getDatabase();
-  set(
+  await set(
     ref(
       db,
       `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`
@@ -255,9 +255,9 @@ export const addEpisodeToDB = (userId, show, episode) => {
   updateTimeSpent(userId, show, true, episode.runtime);
 };
 
-export const removeEpisodeFromDB = (userId, show, episode) => {
+export const removeEpisodeFromDB = async (userId, show, episode) => {
   const db = getDatabase();
-  set(
+  await set(
     ref(
       db,
       `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`
@@ -272,8 +272,8 @@ export const addSeasonToDB = (userId, show, season) => {
   const db = getDatabase();
 
   // for each episode in season add it to database
-  season.forEach((episode) => {
-    set(
+  season.forEach(async (episode) => {
+    await set(
       ref(
         db,
         `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`
@@ -290,8 +290,8 @@ export const addSeasonToDB = (userId, show, season) => {
 
 export const removeSeasonFromDB = (userId, show, season) => {
   const db = getDatabase();
-  season.forEach((episode) => {
-    set(
+  season.forEach(async (episode) => {
+    await set(
       ref(
         db,
         `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`

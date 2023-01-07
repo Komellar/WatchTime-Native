@@ -34,27 +34,18 @@ const LogoutModal = ({ modalVisible, setModalVisible }) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={{ ...FONTS.body3, marginBottom: SIZES.xs }}>
+          <Text style={styles.description}>
             Are you sure you want to log out?
           </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: 120,
-              justifyContent: 'space-between',
-            }}
-          >
+          <View style={styles.buttonsWrapper}>
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
-              style={{ margin: SIZES.m }}
+              style={styles.btn}
             >
-              <Text style={{ ...FONTS.h4 }}>NO</Text>
+              <Text style={styles.btnText}>NO</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={logoutHandler}
-              style={{ margin: SIZES.m }}
-            >
-              <Text style={{ ...FONTS.h4 }}>YES</Text>
+            <TouchableOpacity onPress={logoutHandler} style={styles.btn}>
+              <Text style={styles.btnText}>YES</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -76,6 +67,14 @@ const styles = StyleSheet.create({
     paddingBottom: SIZES.l,
     alignItems: 'center',
   },
+  description: { ...FONTS.body3, marginBottom: SIZES.xs },
+  buttonsWrapper: {
+    flexDirection: 'row',
+    width: 120,
+    justifyContent: 'space-between',
+  },
+  btn: { margin: SIZES.m },
+  btnText: { ...FONTS.h4 },
 });
 
 export default LogoutModal;

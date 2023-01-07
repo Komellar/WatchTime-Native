@@ -7,16 +7,16 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { SIZES, COLORS, FONTS } from '../constants';
 import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+
+import { SIZES, COLORS, FONTS } from '../constants';
 import { getSearchResult } from '../services/external-api';
+import { useFetch } from '../hooks/use-fetch';
 
 const Search = ({ navigation }) => {
   const [enteredQuery, setEnteredQuery] = useState('');
-  const [searchData, setSearchData] = useState([]);
-  const [searchLoading, setSearchLoading] = useState(false);
-  const [searchError, setSearchError] = useState(null);
+  const { data, loading, error } = useFetch(getSearchResult, enteredQuery);
 
   const queryChangeHandler = (text) => {
     const isValid = /^(?!\s)[A-Za-z_][A-Za-z0-9_():'"&.?,!\s]+$/.test(text);
@@ -25,48 +25,9 @@ const Search = ({ navigation }) => {
     }
   };
 
-  useEffect(() => {
-    let mounted = true;
-    if (mounted) {
-      setSearchLoading(true);
-      (async () => {
-        try {
-          const responseData = await getSearchResult(enteredQuery);
-          setSearchData(responseData);
-        } catch (err) {
-          setSearchError(err);
-        } finally {
-          setSearchLoading(false);
-        }
-      })();
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [getSearchResult, enteredQuery]);
-
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: COLORS.background,
-      }}
-    >
-      <View
-        style={{
-          backgroundColor: '#1a1a1a',
-          borderRadius: SIZES.xs,
-          marginTop: SIZES.xl,
-          marginBottom: SIZES.m,
-          paddingVertical: SIZES.xs,
-          paddingHorizontal: SIZES.l,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          width: '80%',
-        }}
-      >
+    <View style={styles.container}>
+      <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           placeholderTextColor={COLORS.lightGray}
@@ -77,25 +38,16 @@ const Search = ({ navigation }) => {
         />
         <Ionicons name="search" size={24} color="white" />
       </View>
-      {searchError && (
-        <Text style={{ color: COLORS.white, ...FONTS.h2, textAlign: 'center' }}>
-          {searchError}
-        </Text>
-      )}
-      {searchLoading && (
+      {error && <Text style={styles.error}>{error}</Text>}
+      {loading && (
         <Text style={{ color: COLORS.white, ...FONTS.h2, textAlign: 'center' }}>
           Loading...
         </Text>
       )}
-      {!searchLoading && !searchError && searchData && (
-        <View
-          style={{
-            alignItems: 'center',
-            backgroundColor: COLORS.background,
-          }}
-        >
+      {!loading && !error && data && (
+        <View style={styles.listWrapper}>
           <FlatList
-            data={searchData}
+            data={data}
             numColumns={2}
             ListFooterComponent={<View style={{ height: 120 }} />}
             keyExtractor={(item) => item?.id}
@@ -104,15 +56,9 @@ const Search = ({ navigation }) => {
                 onPress={() =>
                   navigation.navigate('Details', { selectedShow: item })
                 }
-                style={{ paddingHorizontal: 2, paddingVertical: 2 }}
+                style={styles.item}
               >
-                <Image
-                  source={{ uri: item?.image }}
-                  style={{
-                    height: ((SIZES.width * 50) / 100) * 1.41,
-                    width: (SIZES.width * 50) / 100,
-                  }}
-                />
+                <Image source={{ uri: item?.image }} style={styles.image} />
               </TouchableOpacity>
             )}
           />
@@ -123,12 +69,39 @@ const Search = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: COLORS.background,
+  },
+  inputContainer: {
+    backgroundColor: '#1a1a1a',
+    borderRadius: SIZES.xs,
+    marginTop: SIZES.xl,
+    marginBottom: SIZES.m,
+    paddingVertical: SIZES.xs,
+    paddingHorizontal: SIZES.l,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '80%',
+  },
   input: {
     width: '80%',
     height: 40,
     ...FONTS.body3,
     letterSpacing: 0.2,
     color: COLORS.white,
+  },
+  error: { color: COLORS.white, ...FONTS.h2, textAlign: 'center' },
+  listWrapper: {
+    alignItems: 'center',
+    backgroundColor: COLORS.background,
+  },
+  item: { paddingHorizontal: 2, paddingVertical: 2 },
+  image: {
+    height: ((SIZES.width * 50) / 100) * 1.41,
+    width: (SIZES.width * 50) / 100,
   },
 });
 

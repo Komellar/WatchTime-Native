@@ -54,33 +54,20 @@ const PremiumModal = ({ userId, modalVisible, setModalVisible }) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={{ ...FONTS.body3, marginBottom: SIZES.xs }}>
+          <Text style={styles.description}>
             Do you want to upgrade your account to&nbsp;
-            <Text style={{ ...FONTS.body3, fontWeight: 'bold' }}>
-              premium
-            </Text>{' '}
-            for only&nbsp;
-            <Text style={{ ...FONTS.body3, fontWeight: 'bold' }}>9.99 PLN</Text>
-            ?
+            <Text style={styles.boldText}>premium</Text> for only&nbsp;
+            <Text style={styles.boldText}>9.99 PLN</Text>?
           </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: 120,
-              justifyContent: 'space-between',
-            }}
-          >
+          <View style={styles.buttonsWrapper}>
             <TouchableOpacity
               onPress={() => setModalVisible(false)}
-              style={{ margin: SIZES.m }}
+              style={styles.button}
             >
-              <Text style={{ ...FONTS.h4 }}>NO</Text>
+              <Text style={styles.buttonTxt}>NO</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleBuyPremium}
-              style={{ margin: SIZES.m }}
-            >
-              <Text style={{ ...FONTS.h4 }}>YES</Text>
+            <TouchableOpacity onPress={handleBuyPremium} style={styles.button}>
+              <Text style={styles.buttonTxt}>YES</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -102,6 +89,15 @@ const styles = StyleSheet.create({
     paddingBottom: SIZES.l,
     alignItems: 'center',
   },
+  description: { ...FONTS.body3, marginBottom: SIZES.xs },
+  boldText: { ...FONTS.body3, fontWeight: 'bold' },
+  buttonsWrapper: {
+    flexDirection: 'row',
+    width: 120,
+    justifyContent: 'space-between',
+  },
+  button: { margin: SIZES.m },
+  buttonTxt: { ...FONTS.h4 },
 });
 
 export default PremiumModal;

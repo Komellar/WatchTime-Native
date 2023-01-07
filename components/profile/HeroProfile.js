@@ -1,9 +1,10 @@
-import { View, Text, ImageBackground } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import heroImage from '../../assets/heroProfile.jpg';
 import { useSelector } from 'react-redux';
 import { SvgUri } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
+
+import heroImage from '../../assets/heroProfile.jpg';
 import { SIZES, FONTS, COLORS } from '../../constants/theme';
 import { getWatchCount } from '../../services/shows-actions';
 import SettingsDropdown from './Settings/Dropdown';
@@ -29,34 +30,14 @@ const HeroProfile = ({ userId, myShows, settingsOpen, setSettingsOpen }) => {
   }, [myShows, userId]);
 
   return (
-    <View
-      style={{
-        width: SIZES.width,
-        height: 450,
-        marginBottom: SIZES.m,
-      }}
-    >
-      <ImageBackground
-        source={heroImage}
-        style={{
-          width: '100%',
-          height: '100%',
-          overflow: 'hidden',
-        }}
-      >
+    <View style={styles.container}>
+      <ImageBackground source={heroImage} style={styles.backgroundImg}>
         <LinearGradient
           colors={['rgba(0,0,0,0.6)', 'rgba(0,0,0,0.7)', COLORS.background]}
           locations={[0.0, 0.9, 1]}
-          style={{ flex: 1, width: '100%', height: '100%' }}
+          style={styles.gradient}
         >
-          <View
-            style={{
-              width: '100%',
-              height: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <View style={styles.contentWrapper}>
             {/* Settings */}
             <SettingsDropdown
               userId={userId}
@@ -65,70 +46,21 @@ const HeroProfile = ({ userId, myShows, settingsOpen, setSettingsOpen }) => {
             />
 
             {/* Avatar */}
-            <View style={{ width: 120, height: 120 }}>
+            <View style={styles.avatar}>
               {userImg && <SvgUri width="100%" height="100%" uri={userImg} />}
             </View>
-            <Text
-              style={{
-                color: COLORS.white,
-                ...FONTS.h3,
-                textShadowColor: '#000',
-                textShadowOffset: { width: 0, height: 0 },
-                textShadowRadius: 20,
-              }}
-            >
-              {userName ?? ''}
-            </Text>
+            <Text style={styles.username}>{userName ?? ''}</Text>
 
             {/* Stats */}
-            <View
-              style={{
-                backgroundColor: COLORS.gray,
-                width: (SIZES.width * 85) / 100,
-                marginVertical: SIZES.xs,
-                marginTop: SIZES.l,
-                paddingVertical: SIZES.m,
-                alignItems: 'center',
-                justifyContent: 'space-around',
-                borderRadius: SIZES.m,
-              }}
-            >
-              <Text
-                style={{
-                  ...FONTS.h3,
-                  color: COLORS.white,
-                  marginBottom: SIZES.xs,
-                }}
-              >
-                Watched episodes
-              </Text>
+            <View style={statsWrapper}>
+              <Text style={styles.stats}>Watched episodes</Text>
               <Text style={{ ...FONTS.h1, color: COLORS.primaryLight }}>
                 {watchedEpisodes}
               </Text>
             </View>
-            <View
-              style={{
-                width: (SIZES.width * 85) / 100,
-                backgroundColor: COLORS.gray,
-                marginVertical: SIZES.xs,
-                paddingVertical: SIZES.m,
-                alignItems: 'center',
-                justifyContent: 'space-around',
-                borderRadius: SIZES.m,
-              }}
-            >
-              <Text
-                style={{
-                  ...FONTS.h3,
-                  color: COLORS.white,
-                  marginBottom: SIZES.xs,
-                }}
-              >
-                Time spent on watching
-              </Text>
-              <Text style={{ ...FONTS.h1, color: COLORS.primaryLight }}>
-                {timeSpent}min
-              </Text>
+            <View style={styles.statsWrapper}>
+              <Text style={styles.stats}>Time spent on watching</Text>
+              <Text style={styles.timeSpent}>{timeSpent}min</Text>
             </View>
           </View>
         </LinearGradient>
@@ -138,3 +70,47 @@ const HeroProfile = ({ userId, myShows, settingsOpen, setSettingsOpen }) => {
 };
 
 export default HeroProfile;
+
+const styles = StyleSheet.create({
+  container: {
+    width: SIZES.width,
+    height: 450,
+    marginBottom: SIZES.m,
+  },
+  backgroundImg: {
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+  },
+  gradient: { flex: 1, width: '100%', height: '100%' },
+  contentWrapper: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatar: { width: 120, height: 120 },
+  username: {
+    color: COLORS.white,
+    ...FONTS.h3,
+    textShadowColor: '#000',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 20,
+  },
+  statsWrapper: {
+    backgroundColor: COLORS.gray,
+    width: (SIZES.width * 85) / 100,
+    marginVertical: SIZES.xs,
+    marginTop: SIZES.l,
+    paddingVertical: SIZES.m,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    borderRadius: SIZES.m,
+  },
+  stats: {
+    ...FONTS.h3,
+    color: COLORS.white,
+    marginBottom: SIZES.xs,
+  },
+  timeSpent: { ...FONTS.h1, color: COLORS.primaryLight },
+});

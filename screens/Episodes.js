@@ -39,8 +39,7 @@ const Episodes = ({ navigation, route }) => {
       }
       if (!watchedEpisodes.includes(episode.id)) {
         addEpisodeToDB(userId, show, episode);
-        let tempWatchedEpisodes = [...watchedEpisodes];
-        tempWatchedEpisodes.push(episode.id);
+        const tempWatchedEpisodes = [...watchedEpisodes, episode.id];
         setWatchedEpisodes(tempWatchedEpisodes);
       } else {
         removeEpisodeFromDB(userId, show, episode);

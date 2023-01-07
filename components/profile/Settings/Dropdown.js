@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
-import { SIZES, FONTS, COLORS } from '../../../constants/theme';
+import { FONTS, COLORS } from '../../../constants/theme';
 import LogoutModal from './LogoutModal';
 import PremiumModal from './PremiumModal';
 
@@ -27,7 +27,7 @@ const SettingsDropdown = ({ userId, settingsOpen, setSettingsOpen }) => {
         onPress={() => {
           setSettingsOpen((prev) => !prev);
         }}
-        style={{ position: 'absolute', top: 0, right: 0, padding: 20 }}
+        style={styles.settingIcon}
       >
         <Feather name="settings" size={24} color="white" />
       </TouchableOpacity>
@@ -38,42 +38,20 @@ const SettingsDropdown = ({ userId, settingsOpen, setSettingsOpen }) => {
               setLogoutModalVisible(true);
               setSettingsOpen(false);
             }}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingBottom: 5,
-            }}
+            style={styles.item}
           >
             <MaterialCommunityIcons name="logout" size={24} color="black" />
-            <Text
-              style={{
-                ...FONTS.h4,
-                paddingLeft: 3,
-              }}
-            >
-              Logout
-            </Text>
+            <Text style={styles.itemLabel}>Logout</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setPremiumModalVisible(true);
               setSettingsOpen(false);
             }}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingTop: 5,
-            }}
+            style={styles.item}
           >
             <MaterialIcons name="attach-money" size={24} color="black" />
-            <Text
-              style={{
-                ...FONTS.h4,
-                paddingLeft: 3,
-              }}
-            >
-              Get premium
-            </Text>
+            <Text style={styles.itemLabel}>Get premium</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -82,6 +60,7 @@ const SettingsDropdown = ({ userId, settingsOpen, setSettingsOpen }) => {
 };
 
 const styles = StyleSheet.create({
+  settingIcon: { position: 'absolute', top: 0, right: 0, padding: 20 },
   menuContainer: {
     position: 'absolute',
     top: 50,
@@ -93,17 +72,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.onDark,
     zIndex: 999,
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
+  item: {
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingBottom: 5,
   },
-  modalView: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: SIZES.xxl,
-    paddingBottom: SIZES.l,
-    alignItems: 'center',
+  itemLabel: {
+    ...FONTS.h4,
+    paddingLeft: 3,
   },
 });
 

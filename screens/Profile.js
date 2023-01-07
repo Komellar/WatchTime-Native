@@ -1,4 +1,10 @@
-import { View, ScrollView, TouchableWithoutFeedback, Text } from 'react-native';
+import {
+  View,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Text,
+  StyleSheet,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, FONTS, SIZES } from '../constants/theme';
@@ -37,14 +43,14 @@ const Profile = ({ navigation, route }) => {
   );
 
   return (
-    <ScrollView style={{ backgroundColor: COLORS.background }}>
+    <ScrollView style={styles.container}>
       <TouchableWithoutFeedback
-        style={{ flex: 1, marginBottom: 60 }}
+        style={styles.closeSettingsArea}
         onPress={() => {
           settingsOpen && setSettingsOpen(false);
         }}
       >
-        <View style={{ flex: 1, marginBottom: 60 }}>
+        <View style={styles.contentWrapper}>
           <HeroProfile
             userId={userId}
             myShows={myShows}
@@ -54,16 +60,8 @@ const Profile = ({ navigation, route }) => {
           {isUserPremium ? (
             <MostWatched userId={userId} />
           ) : (
-            <View style={{ marginLeft: SIZES.m }}>
-              <Text
-                style={{
-                  color: COLORS.white,
-                  ...FONTS.h3,
-                  paddingTop: SIZES.l,
-                }}
-              >
-                Most watched show
-              </Text>
+            <View style={styles.marginLeft}>
+              <Text style={styles.sectionHeader}>Most watched show</Text>
               <PremiumButton />
             </View>
           )}
@@ -71,16 +69,8 @@ const Profile = ({ navigation, route }) => {
           {isUserPremium ? (
             <GenresChart userId={userId} />
           ) : (
-            <View style={{ marginLeft: SIZES.m }}>
-              <Text
-                style={{
-                  color: COLORS.white,
-                  ...FONTS.h3,
-                  paddingTop: SIZES.l,
-                }}
-              >
-                Favourite genres
-              </Text>
+            <View style={styles.marginLeft}>
+              <Text style={styles.sectionHeader}>Favourite genres</Text>
               <PremiumButton />
             </View>
           )}
@@ -126,3 +116,18 @@ const Profile = ({ navigation, route }) => {
 };
 
 export default Profile;
+
+const styles = StyleSheet.create({
+  container: { backgroundColor: COLORS.background },
+  closeSettingsArea: {
+    height: ((SIZES.width * 32) / 100) * 1.41,
+    width: (SIZES.width * 32) / 100,
+  },
+  contentWrapper: { backgroundColor: COLORS.background },
+  marginLeft: { backgroundColor: COLORS.background },
+  sectionHeader: {
+    color: COLORS.white,
+    ...FONTS.h3,
+    paddingTop: SIZES.l,
+  },
+});

@@ -22,6 +22,7 @@ export const useFetch = (requestFunction, requestData = undefined) => {
     return () => {
       mounted = false;
     };
-  }, [requestFunction]);
+  }, [requestFunction, requestData]);
+
   return { loading, data, error };
 };
