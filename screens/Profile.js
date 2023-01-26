@@ -57,6 +57,7 @@ const Profile = ({ navigation, route }) => {
             settingsOpen={settingsOpen}
             setSettingsOpen={setSettingsOpen}
           />
+
           {isUserPremium ? (
             <MostWatched userId={userId} />
           ) : (
@@ -74,6 +75,7 @@ const Profile = ({ navigation, route }) => {
               <PremiumButton />
             </View>
           )}
+
           {myFavShows.length > 0 && (
             <ProfileSlider
               title="Favourite"
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
     height: ((SIZES.width * 32) / 100) * 1.41,
     width: (SIZES.width * 32) / 100,
   },
-  contentWrapper: { backgroundColor: COLORS.background },
+  contentWrapper: { backgroundColor: COLORS.background, marginBottom: 60 },
   marginLeft: { backgroundColor: COLORS.background },
   sectionHeader: {
     color: COLORS.white,

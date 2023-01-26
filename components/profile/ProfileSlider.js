@@ -33,7 +33,7 @@ const ProfileSlider = ({ title, showsList, navigation }) => {
         data={showsList}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item?.id}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() =>

@@ -239,9 +239,9 @@ const updateTimeSpent = (userId, show, add, episodeDuration) => {
   });
 };
 
-export const addEpisodeToDB = async (userId, show, episode) => {
+export const addEpisodeToDB = (userId, show, episode) => {
   const db = getDatabase();
-  await set(
+  set(
     ref(
       db,
       `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`
@@ -272,8 +272,8 @@ export const addSeasonToDB = (userId, show, season) => {
   const db = getDatabase();
 
   // for each episode in season add it to database
-  season.forEach(async (episode) => {
-    await set(
+  season.forEach((episode) => {
+    set(
       ref(
         db,
         `users/${userId}/followed/${show.id}/seasons/${episode.season}/${episode.id}`

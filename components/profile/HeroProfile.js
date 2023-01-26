@@ -18,13 +18,18 @@ const HeroProfile = ({ userId, myShows, settingsOpen, setSettingsOpen }) => {
 
   useEffect(() => {
     let statsEpisodesCount = 0;
-    let statsTimeSpent = 0;
+    let totalMinutes = 0;
 
     myShows.forEach((show) => {
       const statistics = getWatchCount(userId, show);
       statsEpisodesCount += statistics.watchedCount;
-      statsTimeSpent += statistics.timeSpent;
+      totalMinutes += statistics.timeSpent;
     });
+
+    const minutes = totalMinutes % 60;
+    const hours = Math.floor(totalMinutes / 60);
+    const statsTimeSpent = `${hours}h ${minutes}min`;
+
     setWatchedEpisodes(statsEpisodesCount);
     setTimeSpent(statsTimeSpent);
   }, [myShows, userId]);
@@ -52,7 +57,7 @@ const HeroProfile = ({ userId, myShows, settingsOpen, setSettingsOpen }) => {
             <Text style={styles.username}>{userName ?? ''}</Text>
 
             {/* Stats */}
-            <View style={statsWrapper}>
+            <View style={styles.statsWrapper}>
               <Text style={styles.stats}>Watched episodes</Text>
               <Text style={{ ...FONTS.h1, color: COLORS.primaryLight }}>
                 {watchedEpisodes}
@@ -60,7 +65,7 @@ const HeroProfile = ({ userId, myShows, settingsOpen, setSettingsOpen }) => {
             </View>
             <View style={styles.statsWrapper}>
               <Text style={styles.stats}>Time spent on watching</Text>
-              <Text style={styles.timeSpent}>{timeSpent}min</Text>
+              <Text style={styles.timeSpent}>{timeSpent}</Text>
             </View>
           </View>
         </LinearGradient>
