@@ -22,7 +22,7 @@ const Recommended = ({ shows, navigation, genres }) => {
       parsedGenres &&
       shows?.filter(
         (show) =>
-          show.genres?.includes(...parsedGenres) &
+          show.genres?.some((s) => parsedGenres.includes(s)) &
           (show.popularity > 94) &
           (show.rating > 8)
       ),
